@@ -27,6 +27,10 @@ val targetJavaVersion = Integer.parseInt(project.property("java_version").toStri
 
 repositories {
 	mavenCentral()
+	maven {
+		name = "Gegy"
+		url = uri("https://maven.gegy.dev/releases/")
+	}
 }
 
 loom {
