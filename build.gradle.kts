@@ -99,7 +99,6 @@ val README = ModUtils.parseReadme(
 	project, "https://raw.githubusercontent.com/LambdAurora/AurorasLanterns/1.20/\$2"
 )
 val CHANGELOG_CONTENT = ModUtils.fetchChangelog(project, VERSION)
-logger.lifecycle("{}", CHANGELOG_CONTENT)
 
 val packageModrinth by tasks.registering(PackageModrinthTask::class) {
 	this.group = "publishing"
