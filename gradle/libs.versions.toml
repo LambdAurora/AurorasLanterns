@@ -1,0 +1,28 @@
+[versions]
+minecraft = "1.20.1"
+fabric-loader = "0.16.14"
+fabric-api = "0.86.1+1.20.1"
+mappings-yalmm = "8"
+
+# Dependencies
+yumi-commons = "1.0.0-beta.1"
+
+# Gradle
+gradle-licenser = "2.1.+"
+gradle-loom = "1.11.+"
+gradle-lambdamcdev = "1.4.+"
+
+[libraries]
+minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
+fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }
+fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
+
+# Dependencies
+yumi-commons-core = { module = "dev.yumi.commons:yumi-commons-core", version.ref = "yumi-commons" }
+yumi-commons-collections = { module = "dev.yumi.commons:yumi-commons-collections", version.ref = "yumi-commons" }
+yumi-commons-event = { module = "dev.yumi.commons:yumi-commons-event", version.ref = "yumi-commons" }
+
+[plugins]
+licenser = { id = "dev.yumi.gradle.licenser", version.ref = "gradle-licenser" }
+loom = { id = "fabric-loom", version.ref = "gradle-loom" }
+lambdamcdev = { id = "dev.lambdaurora.mcdev", version.ref = "gradle-lambdamcdev" }

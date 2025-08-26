@@ -1,0 +1,46 @@
+/*
+ * Copyright © 2025 LambdAurora <email@lambdaurora.dev>
+ *
+ * This file is part of Aurora's Lanterns.
+ *
+ * Licensed under the Lambda License. For more information,
+ * see the LICENSE file.
+ */
+
+package dev.lambdaurora.auroraslanterns.resource;
+
+import com.mojang.logging.LogUtils;
+import dev.lambdaurora.auroraslanterns.AurorasLanterns;
+import dev.yumi.commons.collections.YumiCollections;
+import dev.yumi.commons.event.Event;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.io.ResourceType;
+import net.minecraft.server.packs.PackResources;
+import org.slf4j.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+
+public final class AurorasLanternsRuntimeDatagen {
+	private static final Logger LOGGER = LogUtils.getLogger();
+	public static final Event<Identifier, DataGenerator> CLIENT_DATAGEN
+			= AurorasLanterns.EVENT_MANAGER.create(DataGenerator.class);
+	public static final Event<Identifier, DataGenerator> DATA_DATAGEN
+			= AurorasLanterns.EVENT_MANAGER.create(DataGenerator.class);
+
+	private AurorasLanternsRuntimeDatagen() {
+		throw new UnsupportedOperationException("AurorasLanternsRuntimeDatagen only contains static definitions.");
+	}
+
+	public static List<PackResources> inject(ResourceType type, List<PackResources> resources) {
+		var list = new ArrayList<PackResources>();
+		(type == ResourceType.CLIENT_RESOURCES ? CLIENT_DATAGEN : DATA_DATAGEN).invoker().inject(list::add);
+		return YumiCollections.concat(list, resources);
+	}
+
+	@FunctionalInterface
+	public interface DataGenerator {
+		void inject(Consumer<PackResources> registrar);
+	}
+}

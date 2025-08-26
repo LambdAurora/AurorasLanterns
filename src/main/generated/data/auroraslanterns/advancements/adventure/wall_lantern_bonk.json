@@ -1,0 +1,30 @@
+{
+  "parent": "minecraft:adventure/root",
+  "criteria": {
+    "bonk": {
+      "conditions": {},
+      "trigger": "auroraslanterns:wall_lantern_bonk"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.auroraslanterns.adventure.wall_lantern_bonk.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:lantern"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.auroraslanterns.adventure.wall_lantern_bonk.title"
+    }
+  },
+  "requirements": [
+    [
+      "bonk"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

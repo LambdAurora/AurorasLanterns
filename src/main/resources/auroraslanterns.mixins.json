@@ -1,0 +1,22 @@
+{
+	"required": true,
+	"package": "dev.lambdaurora.auroraslanterns.mixin",
+	"plugin": "dev.lambdaurora.auroraslanterns.AurorasLanternsMixinPlugin",
+	"compatibilityLevel": "JAVA_17",
+	"mixins": [
+		"AvoidAmethystLanternMixin",
+		"BlockAccessor",
+		"BlockEntityMixin",
+		"BlockEntityTypeMixin",
+		"BlockItemMixin",
+		"IdentifierMixin",
+		"NaturalSpawnerMixin",
+		"ReloadableResourceManagerMixin",
+		"StateDefinitionBuilderAccessor",
+		"ZombieVillagerEntityMixin",
+		"compat.AmendmentsConfigMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

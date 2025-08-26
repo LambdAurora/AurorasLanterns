@@ -1,0 +1,55 @@
+{
+	"schemaVersion": 1,
+	"id": "auroraslanterns",
+	"name": "Aurora's Lanterns",
+	"version": "${version}",
+	"description": "A mod all about lanterns, focusing on small details.",
+	"authors": [
+		"LambdAurora"
+	],
+	"contact": {
+		"homepage": "https://lambdaurora.dev/projects/auroraslanterns",
+		"sources": "https://github.com/LambdAurora/AurorasLanterns.git",
+		"issues": "https://github.com/LambdAurora/AurorasLanterns/issues"
+	},
+	"license": "Lambda License",
+	"icon": "assets/auroraslanterns/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"dev.lambdaurora.auroraslanterns.AurorasLanterns"
+		],
+		"client": [
+			"dev.lambdaurora.auroraslanterns.client.AurorasLanternsClient"
+		],
+		"fabric-datagen": [
+			"dev.lambdaurora.auroraslanterns.resource.AurorasLanternsStaticDatagen"
+		],
+		"fabric-gametest": [
+			"dev.lambdaurora.auroraslanterns.test.RedstoneLanternTest"
+		]
+	},
+	"mixins": [
+		"auroraslanterns.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16.9",
+		"minecraft": "~1.20 <1.20.2-",
+		"java": ">=17",
+		"fabric-api": ">=0.86.1"
+	},
+	"breaks": {
+		"aurorasdeco": "<=1.0.0-beta.22"
+	},
+	"custom": {
+		"modmenu": {
+			"links": {
+				"modmenu.curseforge": "https://www.curseforge.com/minecraft/mc-mods/auroraslanterns",
+				"modmenu.discord": "https://discord.lambdaurora.dev/",
+				"modmenu.github_releases": "https://github.com/LambdAurora/AurorasLanterns/releases",
+				"modmenu.modrinth": "https://modrinth.com/mod/auroraslanterns",
+				"modmenu.bluesky": "https://bsky.app/profile/lambdaurora.dev"
+			}
+		}
+	}
+}

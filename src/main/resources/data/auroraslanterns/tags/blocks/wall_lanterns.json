@@ -1,0 +1,9 @@
+{
+	"replace": false,
+	"values": [
+		"auroraslanterns:wall_lantern/amethyst",
+		"auroraslanterns:wall_lantern/soul",
+		"auroraslanterns:wall_lantern/redstone",
+		"auroraslanterns:wall_lantern"
+	]
+}

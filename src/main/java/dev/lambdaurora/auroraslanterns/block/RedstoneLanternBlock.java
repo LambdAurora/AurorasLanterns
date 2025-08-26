@@ -1,0 +1,112 @@
+/*
+ * Copyright © 2025 LambdAurora <email@lambdaurora.dev>
+ *
+ * This file is part of Aurora's Lanterns.
+ *
+ * Licensed under the Lambda License. For more information,
+ * see the LICENSE file.
+ */
+
+package dev.lambdaurora.auroraslanterns.block;
+
+import dev.lambdaurora.auroraslanterns.util.Utils;
+import dev.lambdaurora.auroraslanterns.block.behavior.RedstoneLanternBehavior;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LanternBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+
+/**
+ * Represents a redstone lantern block.
+ *
+ * @author LambdAurora
+ * @version 1.0.0
+ * @since 1.0.0
+ */
+@SuppressWarnings("deprecation")
+public class RedstoneLanternBlock extends LanternBlock {
+	private final RedstoneLanternBehavior behavior
+			= new RedstoneLanternBehavior(state -> state.get(HANGING) ? Direction.DOWN : Direction.UP);
+
+	public RedstoneLanternBlock() {
+		super(FabricBlockSettings.copyOf(Blocks.LANTERN).luminance(state -> state.get(RedstoneLanternBehavior.LIT) ? 7 : 0));
+
+		this.setDefaultState(this.defaultState().with(RedstoneLanternBehavior.LIT, true));
+	}
+
+	@Override
+	protected void createStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		super.createStateDefinition(builder);
+		builder.add(RedstoneLanternBehavior.LIT);
+	}
+
+	/* Updates */
+
+	@Override
+	public void onPlace(BlockState state, Level world, BlockPos pos, BlockState oldState, boolean notify) {
+		for (var direction : Utils.DIRECTIONS) {
+			world.updateNeighborsAt(pos.relative(direction), this);
+		}
+	}
+
+	@Override
+	public void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean moved) {
+		if (!moved) {
+			for (var direction : Utils.DIRECTIONS) {
+				world.updateNeighborsAt(pos.relative(direction), this);
+			}
+		}
+	}
+
+	@Override
+	public void neighborChanged(BlockState state, Level world, BlockPos pos, Block block, BlockPos fromPos, boolean notify) {
+		super.neighborChanged(state, world, pos, block, fromPos, notify);
+		this.behavior.neighborChanged(state, world, pos);
+	}
+
+	/* Ticking */
+
+	@Override
+	public void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
+		super.tick(state, world, pos, random);
+		this.behavior.scheduledTick(state, world, pos);
+	}
+
+	/* Redstone */
+
+	@Override
+	public boolean isSignalSource(BlockState state) {
+		return true;
+	}
+
+	@Override
+	public int getSignal(BlockState state, BlockGetter world, BlockPos pos, Direction direction) {
+		return this.behavior.getWeakRedstonePower(state, world, pos, direction);
+	}
+
+	@Override
+	public int getDirectSignal(BlockState state, BlockGetter world, BlockPos pos, Direction direction) {
+		return this.behavior.getStrongRedstonePower(state, world, pos, direction);
+	}
+
+	/* Visual */
+
+	@Override
+	public void animateTick(BlockState state, Level world, BlockPos pos, RandomSource random) {
+		if (RedstoneLanternBehavior.isLit(state)) {
+			double x = (double) pos.getX() + 0.5 + (random.nextDouble() - 0.5) * 0.75;
+			double y = (double) pos.getY() + 0.25 + (random.nextDouble() - 0.5) * 0.4;
+			double z = (double) pos.getZ() + 0.5 + (random.nextDouble() - 0.5) * 0.75;
+			world.addParticle(DustParticleOptions.REDSTONE, x, y, z, 0.0, 0.0, 0.0);
+		}
+	}
+}
