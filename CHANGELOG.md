@@ -12,3 +12,4 @@
 - Added Wall Lanterns.
   - Any registered lantern block will have a wall variant.
   - Wall Lanterns can be placed on a full block, a wall, or a fence.
+- Added a "Beware- Bonk!" advancement.
