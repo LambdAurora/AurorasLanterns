@@ -10,12 +10,12 @@
 package dev.lambdaurora.auroraslanterns;
 
 import dev.lambdaurora.auroraslanterns.accessor.BlockItemAccessor;
+import dev.lambdaurora.auroraslanterns.accessor.RegistryEventStorage;
 import dev.lambdaurora.auroraslanterns.advancement.WallLanternBonkTrigger;
 import dev.lambdaurora.auroraslanterns.block.AmethystLanternBlock;
 import dev.lambdaurora.auroraslanterns.block.RedstoneLanternBlock;
 import dev.lambdaurora.auroraslanterns.block.WallLanternBlock;
 import dev.lambdaurora.auroraslanterns.block.entity.WallLanternBlockEntity;
-import net.fabricmc.fabric.api.event.registry.RegistryEntryAddedCallback;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
@@ -140,11 +140,13 @@ public final class AurorasLanternsRegistry {
 				.filter(holder -> !holder.key().value().namespace().equals(AurorasLanterns.NAMESPACE))
 				.toList() // Ensure we operate on an immutable copy of the known blocks.
 				.forEach(holder -> handleRegisteredBlock(holder.key().value(), holder.value()));
-		RegistryEntryAddedCallback.event(BuiltInRegistries.BLOCK)
-				.register((rawId, id, block) -> handleRegisteredBlock(id, block));
+		RegistryEventStorage.of(BuiltInRegistries.BLOCK)
+				.auroraslanterns$getAddEvent()
+				.register(AurorasLanternsRegistry::handleRegisteredBlock);
 
 		BuiltInRegistries.ITEM.forEach(AurorasLanternsRegistry::handleRegisteredItem);
-		RegistryEntryAddedCallback.event(BuiltInRegistries.ITEM)
-				.register((rawId, id, item) -> handleRegisteredItem(item));
+		RegistryEventStorage.of(BuiltInRegistries.ITEM)
+				.auroraslanterns$getAddEvent()
+				.register((id, item) -> handleRegisteredItem(item));
 	}
 }

@@ -10,9 +10,12 @@
 package dev.lambdaurora.auroraslanterns.item;
 
 import dev.lambdaurora.auroraslanterns.AurorasLanterns;
+import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.block.LanternBlock;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +25,7 @@ import static dev.lambdaurora.auroraslanterns.AurorasLanternsRegistry.AMETHYST_L
 import static dev.lambdaurora.auroraslanterns.AurorasLanternsRegistry.REDSTONE_LANTERN_BLOCK;
 
 public class ItemTree extends ItemTreeGroupNode {
+	private static final Identifier PHASE = AurorasLanterns.id("phase");
 	private static final Identifier ROOT = AurorasLanterns.id("root");
 
 	public ItemTree() {super(ROOT);}
@@ -61,8 +65,14 @@ public class ItemTree extends ItemTreeGroupNode {
 	}
 
 	public static void init() {
-		ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(modifyItems(ItemTree::modifyFunctionalBlocks));
-		ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.REDSTONE_BLOCKS).register(modifyItems(ItemTree::modifyRedstoneBlocks));
+		register(CreativeModeTabs.FUNCTIONAL_BLOCKS, ItemTree::modifyFunctionalBlocks);
+		register(CreativeModeTabs.REDSTONE_BLOCKS, ItemTree::modifyRedstoneBlocks);
+	}
+
+	private static void register(ResourceKey<CreativeModeTab> tab, Consumer<ItemTree> modifier) {
+		var event = ItemGroupEvents.modifyEntriesEvent(tab);
+		event.addPhaseOrdering(Event.DEFAULT_PHASE, PHASE);
+		event.register(PHASE, modifyItems(modifier));
 	}
 
 	@SuppressWarnings("UnstableApiUsage")
@@ -81,7 +91,8 @@ public class ItemTree extends ItemTreeGroupNode {
 
 	private static void modifyFunctionalBlocks(ItemTree tree) {
 		var lanterns = tree.collectItemsAsGroup(new Identifier(Identifier.DEFAULT_NAMESPACE, "lantern"),
-				stack -> stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof net.minecraft.world.level.block.LanternBlock
+				stack -> stack.getItem() instanceof BlockItem blockItem
+						&& blockItem.getBlock() instanceof LanternBlock
 		);
 
 		lanterns.add(AMETHYST_LANTERN_BLOCK);

@@ -23,7 +23,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
  * Represents a Lantern Block Entity for the wall lanterns.
  *
  * @author LambdAurora
- * @version 1.0.0
+ * @version 1.0.1
  * @since 1.0.0
  */
 public class WallLanternBlockEntity extends SwayingBlockEntity {
@@ -92,13 +92,16 @@ public class WallLanternBlockEntity extends SwayingBlockEntity {
 		super.tickClient(world);
 
 		this.prevAngle = this.angle;
+		this.angle = this.computeAngle();
+	}
 
+	public float computeAngle() {
 		if (this.isSwinging() || this.isColliding()) {
 			float ticks = this.getAdjustedSwingTicks();
 			float shiftedTicks = ticks - 100;
-			this.angle = (shiftedTicks * shiftedTicks) / 5000 * MathHelper.sin(ticks / MathHelper.PI) / (4 + ticks / 3);
+			return (shiftedTicks * shiftedTicks) / 5000 * MathHelper.sin(ticks / MathHelper.PI) / (4 + ticks / 3);
 		} else {
-			this.angle = this.getNaturalSwayingAngle();
+			return this.getNaturalSwayingAngle();
 		}
 	}
 

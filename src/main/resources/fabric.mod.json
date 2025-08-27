@@ -29,6 +29,7 @@
 			"dev.lambdaurora.auroraslanterns.test.RedstoneLanternTest"
 		]
 	},
+	"accessWidener": "auroraslanterns.accesswidener",
 	"mixins": [
 		"auroraslanterns.mixins.json"
 	],

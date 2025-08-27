@@ -13,3 +13,8 @@
   - Any registered lantern block will have a wall variant.
   - Wall Lanterns can be placed on a full block, a wall, or a fence.
 - Added a "Beware- Bonk!" advancement.
+
+### 1.0.1
+
+- Added better integration of Adorn's Candlelit Lanterns.
+- Fixed some cases where block state IDs would not be able to sync back up.

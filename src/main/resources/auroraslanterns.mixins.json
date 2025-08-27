@@ -10,6 +10,7 @@
 		"BlockEntityTypeMixin",
 		"BlockItemMixin",
 		"IdentifierMixin",
+		"MappedRegistryMixin",
 		"NaturalSpawnerMixin",
 		"ReloadableResourceManagerMixin",
 		"StateDefinitionBuilderAccessor",

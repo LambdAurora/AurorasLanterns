@@ -34,6 +34,7 @@ repositories {
 }
 
 loom {
+	accessWidenerPath = file("src/main/resources/auroraslanterns.accesswidener")
 	splitEnvironmentSourceSets()
 	mixin {
 		useLegacyMixinAp = false

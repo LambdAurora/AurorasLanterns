@@ -15,6 +15,7 @@ import dev.lambdaurora.auroraslanterns.AurorasLanterns;
 import dev.lambdaurora.auroraslanterns.AurorasLanternsRegistry;
 import dev.lambdaurora.auroraslanterns.ExtensionType;
 import dev.lambdaurora.auroraslanterns.accessor.BlockItemAccessor;
+import dev.lambdaurora.auroraslanterns.block.behavior.AnimateTickBehavior;
 import dev.lambdaurora.auroraslanterns.block.entity.SwayingBlockEntity;
 import dev.lambdaurora.auroraslanterns.mixin.BlockAccessor;
 import dev.lambdaurora.auroraslanterns.util.CustomStateBuilder;
@@ -69,7 +70,7 @@ import java.util.Map;
  *
  * @param <L> the type of the underlying lantern
  * @author LambdAurora
- * @version 1.0.0
+ * @version 1.0.1
  * @since 1.0.0
  */
 @SuppressWarnings("deprecation")
@@ -93,6 +94,7 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 	public static final Identifier BETTERGRASS_DATA = AurorasLanterns.id("bettergrass/data/wall_lantern");
 
 	protected final L lanternBlock;
+	private final AnimateTickBehavior<L> animateTickBehavior;
 
 	public WallLanternBlock(L lantern) {
 		super(settings(lantern));
@@ -108,9 +110,11 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 		if (item instanceof BlockItemAccessor blockItem) {
 			blockItem.auroraslanterns$setWallBlock(this);
 		}
+
+		this.animateTickBehavior = AnimateTickBehavior.lanternBehavior(lanternBlock);
 	}
 
-	public LanternBlock getLanternBlock() {
+	public L getLanternBlock() {
 		return this.lanternBlock;
 	}
 
@@ -407,7 +411,7 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 
 	@Override
 	public void animateTick(BlockState state, Level world, BlockPos pos, RandomSource random) {
-		this.getLanternBlock().animateTick(this.getLanternState(state), world, pos, random);
+		this.animateTickBehavior.animateTick(this.getLanternBlock(), this.getLanternState(state), world, pos, random);
 	}
 
 	private static FabricBlockSettings settings(LanternBlock lanternBlock) {
