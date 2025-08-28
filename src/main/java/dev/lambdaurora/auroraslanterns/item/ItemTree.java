@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static dev.lambdaurora.auroraslanterns.AurorasLanternsRegistry.AMETHYST_LANTERN_BLOCK;
-import static dev.lambdaurora.auroraslanterns.AurorasLanternsRegistry.REDSTONE_LANTERN_BLOCK;
+import static dev.lambdaurora.auroraslanterns.AurorasLanternsRegistry.AMETHYST_LANTERN_ITEM;
+import static dev.lambdaurora.auroraslanterns.AurorasLanternsRegistry.REDSTONE_LANTERN_ITEM;
 
 public class ItemTree extends ItemTreeGroupNode {
 	private static final Identifier PHASE = AurorasLanterns.id("phase");
@@ -46,11 +46,11 @@ public class ItemTree extends ItemTreeGroupNode {
 			for (int j = 0; j < nodes.size(); j++) {
 				ItemTreeItemNode node = nodes.get(j);
 
-				if (ItemStack.isSameItemSameTags(node.stack(), current)) {
+				if (ItemStack.isSameItemSameComponents(node.stack(), current)) {
 					node.setVisibility(CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
 					foundIndex = -1;
 					break;
-				} else if (previous != null && ItemStack.isSameItemSameTags(node.stack(), previous)) {
+				} else if (previous != null && ItemStack.isSameItemSameComponents(node.stack(), previous)) {
 					foundIndex = j + 1;
 				}
 			}
@@ -75,7 +75,6 @@ public class ItemTree extends ItemTreeGroupNode {
 		event.register(PHASE, modifyItems(modifier));
 	}
 
-	@SuppressWarnings("UnstableApiUsage")
 	private static ItemGroupEvents.ModifyEntries modifyItems(Consumer<ItemTree> modifier) {
 		return entries -> {
 			var tree = fromStacks(entries.getDisplayStacks(), entries.getSearchTabStacks());
@@ -90,16 +89,16 @@ public class ItemTree extends ItemTreeGroupNode {
 	}
 
 	private static void modifyFunctionalBlocks(ItemTree tree) {
-		var lanterns = tree.collectItemsAsGroup(new Identifier(Identifier.DEFAULT_NAMESPACE, "lantern"),
+		var lanterns = tree.collectItemsAsGroup(Identifier.ofDefault("lantern"),
 				stack -> stack.getItem() instanceof BlockItem blockItem
 						&& blockItem.getBlock() instanceof LanternBlock
 		);
 
-		lanterns.add(AMETHYST_LANTERN_BLOCK);
-		lanterns.add(REDSTONE_LANTERN_BLOCK);
+		lanterns.add(AMETHYST_LANTERN_ITEM);
+		lanterns.add(REDSTONE_LANTERN_ITEM);
 	}
 
 	private static void modifyRedstoneBlocks(ItemTree tree) {
-		tree.addAfter(Items.REDSTONE_TORCH, REDSTONE_LANTERN_BLOCK);
+		tree.addAfter(Items.REDSTONE_TORCH, REDSTONE_LANTERN_ITEM);
 	}
 }

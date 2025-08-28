@@ -18,3 +18,8 @@
 
 - Added better integration of Adorn's Candlelit Lanterns.
 - Fixed some cases where block state IDs would not be able to sync back up.
+
+## 1.1.0
+
+- Ported to Minecraft 1.21.1.
+- Improved stability of Aurora's Decorations backwards compatibility.

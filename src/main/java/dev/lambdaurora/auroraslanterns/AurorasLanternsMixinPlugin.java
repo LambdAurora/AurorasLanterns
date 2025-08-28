@@ -9,9 +9,9 @@
 
 package dev.lambdaurora.auroraslanterns;
 
+import dev.yumi.mc.core.api.YumiMods;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
-import net.fabricmc.loader.api.FabricLoader;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -25,7 +25,7 @@ public final class AurorasLanternsMixinPlugin implements IMixinConfigPlugin {
 	public AurorasLanternsMixinPlugin() {
 		this.conditionalMixins.put(
 				"dev.lambdaurora.auroraslanterns.mixin.compat.AmendmentsConfigMixin",
-				FabricLoader.getInstance().isModLoaded("amendments")
+				YumiMods.get().isModLoaded("amendments")
 		);
 	}
 

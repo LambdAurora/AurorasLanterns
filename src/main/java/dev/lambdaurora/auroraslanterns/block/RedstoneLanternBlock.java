@@ -9,9 +9,9 @@
 
 package dev.lambdaurora.auroraslanterns.block;
 
-import dev.lambdaurora.auroraslanterns.util.Utils;
+import com.mojang.serialization.MapCodec;
 import dev.lambdaurora.auroraslanterns.block.behavior.RedstoneLanternBehavior;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import dev.lambdaurora.auroraslanterns.util.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -20,27 +20,34 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LanternBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a redstone lantern block.
  *
  * @author LambdAurora
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0
  */
-@SuppressWarnings("deprecation")
 public class RedstoneLanternBlock extends LanternBlock {
+	public static final MapCodec<RedstoneLanternBlock> CODEC = simpleCodec(RedstoneLanternBlock::new);
+
 	private final RedstoneLanternBehavior behavior
 			= new RedstoneLanternBehavior(state -> state.get(HANGING) ? Direction.DOWN : Direction.UP);
 
-	public RedstoneLanternBlock() {
-		super(FabricBlockSettings.copyOf(Blocks.LANTERN).luminance(state -> state.get(RedstoneLanternBehavior.LIT) ? 7 : 0));
+	public RedstoneLanternBlock(Properties properties) {
+		super(properties);
 
 		this.setDefaultState(this.defaultState().with(RedstoneLanternBehavior.LIT, true));
+	}
+
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	@Override
+	public @NotNull MapCodec<LanternBlock> codec() {
+		return (MapCodec) CODEC;
 	}
 
 	@Override
@@ -68,7 +75,7 @@ public class RedstoneLanternBlock extends LanternBlock {
 	}
 
 	@Override
-	public void neighborChanged(BlockState state, Level world, BlockPos pos, Block block, BlockPos fromPos, boolean notify) {
+	protected void neighborChanged(BlockState state, Level world, BlockPos pos, Block block, BlockPos fromPos, boolean notify) {
 		super.neighborChanged(state, world, pos, block, fromPos, notify);
 		this.behavior.neighborChanged(state, world, pos);
 	}
@@ -76,7 +83,7 @@ public class RedstoneLanternBlock extends LanternBlock {
 	/* Ticking */
 
 	@Override
-	public void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
+	protected void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
 		super.tick(state, world, pos, random);
 		this.behavior.scheduledTick(state, world, pos);
 	}
@@ -84,17 +91,17 @@ public class RedstoneLanternBlock extends LanternBlock {
 	/* Redstone */
 
 	@Override
-	public boolean isSignalSource(BlockState state) {
+	protected boolean isSignalSource(BlockState state) {
 		return true;
 	}
 
 	@Override
-	public int getSignal(BlockState state, BlockGetter world, BlockPos pos, Direction direction) {
+	protected int getSignal(BlockState state, BlockGetter world, BlockPos pos, Direction direction) {
 		return this.behavior.getWeakRedstonePower(state, world, pos, direction);
 	}
 
 	@Override
-	public int getDirectSignal(BlockState state, BlockGetter world, BlockPos pos, Direction direction) {
+	protected int getDirectSignal(BlockState state, BlockGetter world, BlockPos pos, Direction direction) {
 		return this.behavior.getStrongRedstonePower(state, world, pos, direction);
 	}
 

@@ -14,6 +14,7 @@ import dev.lambdaurora.auroraslanterns.block.RedstoneLanternBlock;
 import dev.lambdaurora.auroraslanterns.block.RedstoneWallLanternBlock;
 import dev.lambdaurora.auroraslanterns.block.WallLanternBlock;
 import dev.yumi.commons.event.Event;
+import dev.yumi.mc.core.api.YumiEvents;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.minecraft.core.Registry;
@@ -35,7 +36,7 @@ public final class LanternRegistry {
 	private static final Map<LanternBlock, WallLanternBlock<?>> WALL_LANTERN_BLOCK_MAP = new Reference2ObjectOpenHashMap<>();
 
 	public static final Event<Identifier, OnLanternRegistration> REGISTRATION_EVENT
-			= AurorasLanterns.EVENT_MANAGER.create(OnLanternRegistration.class);
+			= YumiEvents.EVENTS.create(OnLanternRegistration.class);
 
 	public static Stream<Identifier> streamIds() {
 		return WALL_LANTERNS.keySet().stream();
@@ -46,7 +47,7 @@ public final class LanternRegistry {
 	}
 
 	public static void forEachAndFuture(OnLanternRegistration listener) {
-		WALL_LANTERNS.values().forEach(listener::onRegisterWallLantern);
+		WALL_LANTERNS.forEach(listener::onRegisterWallLantern);
 		REGISTRATION_EVENT.register(listener);
 	}
 
@@ -79,7 +80,7 @@ public final class LanternRegistry {
 		WALL_LANTERNS.put(wallLanternId, wallLanternBlock);
 		WALL_LANTERN_BLOCK_MAP.put(block, wallLanternBlock);
 
-		REGISTRATION_EVENT.invoker().onRegisterWallLantern(wallLanternBlock);
+		REGISTRATION_EVENT.invoker().onRegisterWallLantern(wallLanternId, wallLanternBlock);
 
 		return wallLanternBlock;
 	}
@@ -118,6 +119,6 @@ public final class LanternRegistry {
 
 	@FunctionalInterface
 	public interface OnLanternRegistration {
-		void onRegisterWallLantern(WallLanternBlock<?> wallLanternBlock);
+		void onRegisterWallLantern(Identifier id, WallLanternBlock<?> wallLanternBlock);
 	}
 }

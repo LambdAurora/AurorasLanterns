@@ -10,17 +10,16 @@
 package dev.lambdaurora.auroraslanterns;
 
 import dev.lambdaurora.auroraslanterns.accessor.BlockItemAccessor;
-import dev.lambdaurora.auroraslanterns.accessor.RegistryEventStorage;
 import dev.lambdaurora.auroraslanterns.advancement.WallLanternBonkTrigger;
 import dev.lambdaurora.auroraslanterns.block.AmethystLanternBlock;
 import dev.lambdaurora.auroraslanterns.block.RedstoneLanternBlock;
 import dev.lambdaurora.auroraslanterns.block.WallLanternBlock;
+import dev.lambdaurora.auroraslanterns.block.behavior.RedstoneLanternBehavior;
 import dev.lambdaurora.auroraslanterns.block.entity.WallLanternBlockEntity;
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
-import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
+import dev.lambdaurora.auroraslanterns.compat.AurorasDecoDataUpper;
+import net.fabricmc.fabric.api.event.registry.RegistryEntryAddedCallback;
 import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -29,12 +28,12 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LanternBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-
-import java.util.function.BiFunction;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public final class AurorasLanternsRegistry {
 	private AurorasLanternsRegistry() {
@@ -57,32 +56,47 @@ public final class AurorasLanternsRegistry {
 	//endregion
 
 	//region Advancement Triggers
-	public static final WallLanternBonkTrigger WALL_LANTERN_BONK_TRIGGER
-			= CriteriaTriggers.register(new WallLanternBonkTrigger());
+	public static final WallLanternBonkTrigger WALL_LANTERN_BONK_TRIGGER = Registry.register(
+			BuiltInRegistries.TRIGGER_TYPES,
+			AurorasLanterns.id("wall_lantern_bonk"),
+			new WallLanternBonkTrigger()
+	);
 	//endregion
 
 	//region Lanterns
-	public static final AmethystLanternBlock AMETHYST_LANTERN_BLOCK = registerWithItem("amethyst_lantern",
-			new AmethystLanternBlock(), new FabricItemSettings()
+	public static final Identifier AMETHYST_LANTERN_ID = AurorasLanterns.id("amethyst_lantern");
+	public static final AmethystLanternBlock AMETHYST_LANTERN_BLOCK = registerBlock(AMETHYST_LANTERN_ID,
+			new AmethystLanternBlock(
+					BlockBehaviour.Properties.ofFullCopy(Blocks.LANTERN)
+							.lightLevel(state -> 14)
+			)
 	);
-	public static final RedstoneLanternBlock REDSTONE_LANTERN_BLOCK = registerWithItem("redstone_lantern",
-			new RedstoneLanternBlock(), new FabricItemSettings()
+	public static final Item AMETHYST_LANTERN_ITEM = Items.registerBlock(AMETHYST_LANTERN_BLOCK);
+
+	public static final Identifier REDSTONE_LANTERN_ID = AurorasLanterns.id("redstone_lantern");
+	public static final RedstoneLanternBlock REDSTONE_LANTERN_BLOCK = registerBlock(REDSTONE_LANTERN_ID,
+			new RedstoneLanternBlock(
+					Block.Properties.ofFullCopy(Blocks.LANTERN)
+							.lightLevel(state -> state.get(RedstoneLanternBehavior.LIT) ? 7 : 0)
+			)
 	);
+	public static final Item REDSTONE_LANTERN_ITEM = Items.registerBlock(REDSTONE_LANTERN_BLOCK);
 	//endregion
 
 	//region Wall Lanterns
 	public static final WallLanternBlock<LanternBlock> WALL_LANTERN_BLOCK = registerBlock(
-			"wall_lantern", new WallLanternBlock<>((LanternBlock) Blocks.LANTERN)
+			AurorasLanterns.id("wall_lantern"), new WallLanternBlock<>((LanternBlock) Blocks.LANTERN)
 	);
 	public static final WallLanternBlock<LanternBlock> SOUL_WALL_LANTERN_BLOCK = registerBlock(
-			"wall_lantern/soul", new WallLanternBlock<>((LanternBlock) Blocks.SOUL_LANTERN)
+			AurorasLanterns.id("wall_lantern/soul"), new WallLanternBlock<>((LanternBlock) Blocks.SOUL_LANTERN)
 	);
 	public static final WallLanternBlock<RedstoneLanternBlock> REDSTONE_WALL_LANTERN_BLOCK
 			= LanternRegistry.registerWallLantern(REDSTONE_LANTERN_BLOCK);
+	public static final Identifier WALL_LANTERN_BLOCK_ENTITY_TYPE_ID = AurorasLanterns.id("wall_lantern");
 	public static final BlockEntityType<WallLanternBlockEntity> WALL_LANTERN_BLOCK_ENTITY_TYPE = Registry.register(
 			BuiltInRegistries.BLOCK_ENTITY_TYPE,
-			AurorasLanterns.id("wall_lantern"),
-			FabricBlockEntityTypeBuilder.create(
+			WALL_LANTERN_BLOCK_ENTITY_TYPE_ID,
+			BlockEntityType.Builder.of(
 					WallLanternBlockEntity::new, WALL_LANTERN_BLOCK, SOUL_WALL_LANTERN_BLOCK, REDSTONE_WALL_LANTERN_BLOCK
 			).build()
 	);
@@ -98,24 +112,12 @@ public final class AurorasLanternsRegistry {
 	);
 	//endregion
 
-	static <T extends Block> T registerBlock(String name, T block) {
-		return Registry.register(BuiltInRegistries.BLOCK, AurorasLanterns.id(name), block);
+	static <T extends Block> T registerBlock(Identifier id, T block) {
+		return Registry.register(BuiltInRegistries.BLOCK, id, block);
 	}
 
-	static <T extends Item> T registerItem(String name, T item) {
-		return Registry.register(BuiltInRegistries.ITEM, AurorasLanterns.id(name), item);
-	}
-
-	static <T extends Block> T registerWithItem(String name, T block, Item.Properties properties) {
-		return registerWithItem(name, block, properties, BlockItem::new);
-	}
-
-	static <T extends Block> T registerWithItem(
-			String name, T block, Item.Properties properties,
-			BiFunction<T, Item.Properties, BlockItem> factory
-	) {
-		registerItem(name, factory.apply(registerBlock(name, block), properties));
-		return block;
+	static <T extends Item> T registerItem(Identifier id, T item) {
+		return Registry.register(BuiltInRegistries.ITEM, id, item);
 	}
 
 	private static void handleRegisteredBlock(Identifier id, Block block) {
@@ -140,13 +142,13 @@ public final class AurorasLanternsRegistry {
 				.filter(holder -> !holder.key().value().namespace().equals(AurorasLanterns.NAMESPACE))
 				.toList() // Ensure we operate on an immutable copy of the known blocks.
 				.forEach(holder -> handleRegisteredBlock(holder.key().value(), holder.value()));
-		RegistryEventStorage.of(BuiltInRegistries.BLOCK)
-				.auroraslanterns$getAddEvent()
-				.register(AurorasLanternsRegistry::handleRegisteredBlock);
+		RegistryEntryAddedCallback.event(BuiltInRegistries.BLOCK)
+				.register((rawId, id, block) -> handleRegisteredBlock(id, block));
 
 		BuiltInRegistries.ITEM.forEach(AurorasLanternsRegistry::handleRegisteredItem);
-		RegistryEventStorage.of(BuiltInRegistries.ITEM)
-				.auroraslanterns$getAddEvent()
-				.register((id, item) -> handleRegisteredItem(item));
+		RegistryEntryAddedCallback.event(BuiltInRegistries.ITEM)
+				.register((rawId, id, item) -> handleRegisteredItem(item));
+
+		AurorasDecoDataUpper.init();
 	}
 }

@@ -60,10 +60,8 @@ dependencies {
 	modImplementation(libs.fabric.loader)
 	modImplementation(libs.fabric.api)
 
-	implementation(libs.yumi.commons.event)
-	include(libs.yumi.commons.core)
-	include(libs.yumi.commons.collections)
-	include(libs.yumi.commons.event)
+	modImplementation(libs.yumi.mc.foundation)
+	include(libs.yumi.mc.foundation)
 }
 
 java {

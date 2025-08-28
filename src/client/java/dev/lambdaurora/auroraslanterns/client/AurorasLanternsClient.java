@@ -18,7 +18,8 @@ import dev.lambdaurora.auroraslanterns.client.particle.AmethystGlintParticle;
 import dev.lambdaurora.auroraslanterns.client.renderer.WallLanternBlockEntityRenderer;
 import dev.lambdaurora.auroraslanterns.resource.AurorasLanternsRuntimeDatagen;
 import dev.lambdaurora.auroraslanterns.resource.InMemoryPackResources;
-import net.fabricmc.api.ClientModInitializer;
+import dev.yumi.mc.core.api.ModContainer;
+import dev.yumi.mc.core.api.entrypoint.client.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -35,7 +36,7 @@ public final class AurorasLanternsClient implements ClientModInitializer {
 	private static final Logger LOGGER = LogUtils.getLogger();
 
 	@Override
-	public void onInitializeClient() {
+	public void onInitializeClient(ModContainer mod) {
 		ParticleFactoryRegistry.getInstance().register(
 				AurorasLanternsRegistry.AMETHYST_GLINT_PARTICLE_TYPE, AmethystGlintParticle.Provider::new
 		);
@@ -45,7 +46,7 @@ public final class AurorasLanternsClient implements ClientModInitializer {
 				AurorasLanternsRegistry.REDSTONE_LANTERN_BLOCK
 		);
 
-		LanternRegistry.forEachAndFuture(wallLanternBlock -> {
+		LanternRegistry.forEachAndFuture((id, wallLanternBlock) -> {
 			BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(), wallLanternBlock);
 		});
 

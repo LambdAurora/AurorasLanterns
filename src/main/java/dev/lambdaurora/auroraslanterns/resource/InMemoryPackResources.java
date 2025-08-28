@@ -15,11 +15,14 @@ import com.google.gson.JsonParser;
 import com.mojang.logging.LogUtils;
 import dev.yumi.commons.TriState;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.network.chat.Text;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.io.ResourceIoSupplier;
 import net.minecraft.resources.io.ResourceType;
+import net.minecraft.server.packs.PackLocationInfo;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.metadata.MetadataSectionSerializer;
+import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.util.GsonHelper;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -35,6 +38,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
@@ -233,6 +237,11 @@ public abstract class InMemoryPackResources implements MutablePackResources {
 
 		public Named(String name) {
 			this.name = name;
+		}
+
+		@Override
+		public @NotNull PackLocationInfo location() {
+			return new PackLocationInfo(this.name, Text.empty(), PackSource.BUILT_IN, Optional.empty());
 		}
 
 		@Override

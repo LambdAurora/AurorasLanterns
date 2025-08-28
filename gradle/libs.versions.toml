@@ -1,11 +1,11 @@
 [versions]
-minecraft = "1.20.1"
+minecraft = "1.21.1"
 fabric-loader = "0.16.14"
-fabric-api = "0.86.1+1.20.1"
-mappings-yalmm = "8"
+fabric-api = "0.116.5+1.21.1"
+mappings-yalmm = "7"
 
 # Dependencies
-yumi-commons = "1.0.0-beta.1"
+yumi-mc-foundation = "1.0.0-alpha.8+1.21.1"
 
 # Gradle
 gradle-licenser = "2.1.+"
@@ -18,9 +18,7 @@ fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-l
 fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
 
 # Dependencies
-yumi-commons-core = { module = "dev.yumi.commons:yumi-commons-core", version.ref = "yumi-commons" }
-yumi-commons-collections = { module = "dev.yumi.commons:yumi-commons-collections", version.ref = "yumi-commons" }
-yumi-commons-event = { module = "dev.yumi.commons:yumi-commons-event", version.ref = "yumi-commons" }
+yumi-mc-foundation = { module = "dev.yumi.mc.core:yumi-mc-foundation", version.ref = "yumi-mc-foundation" }
 
 [plugins]
 licenser = { id = "dev.yumi.gradle.licenser", version.ref = "gradle-licenser" }
