@@ -116,10 +116,6 @@ public final class AurorasLanternsRegistry {
 		return Registry.register(BuiltInRegistries.BLOCK, id, block);
 	}
 
-	static <T extends Item> T registerItem(Identifier id, T item) {
-		return Registry.register(BuiltInRegistries.ITEM, id, item);
-	}
-
 	private static void handleRegisteredBlock(Identifier id, Block block) {
 		LanternRegistry.tryRegisterWallLantern(BuiltInRegistries.BLOCK, block, id);
 	}
