@@ -1,4 +1,6 @@
 accessWidener v2 named
 accessible method net/minecraft/world/level/block/state/BlockBehaviour onPlace (Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Z)V
 accessible method net/minecraft/world/level/block/state/BlockBehaviour onRemove (Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Z)V
+accessible method net/minecraft/world/level/block/state/BlockBehaviour isRandomlyTicking (Lnet/minecraft/world/level/block/state/BlockState;)Z
+accessible method net/minecraft/world/level/block/state/BlockBehaviour randomTick (Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/core/BlockPos;Lnet/minecraft/util/RandomSource;)V
 accessible method net/minecraft/world/level/block/AbstractCandleBlock addParticlesAndSound (Lnet/minecraft/world/level/Level;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/util/RandomSource;)V

@@ -27,8 +27,8 @@ public class RedstoneWallLanternBlock extends WallLanternBlock<RedstoneLanternBl
 
 	private final RedstoneLanternBehavior behavior = new RedstoneLanternBehavior(state -> state.get(FACING));
 
-	public RedstoneWallLanternBlock(RedstoneLanternBlock lantern) {
-		super(lantern);
+	public RedstoneWallLanternBlock(RedstoneLanternBlock lantern, Properties properties) {
+		super(lantern, properties);
 	}
 
 	@Override

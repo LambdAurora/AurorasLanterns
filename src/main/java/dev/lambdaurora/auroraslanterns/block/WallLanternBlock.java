@@ -22,12 +22,12 @@ import dev.lambdaurora.auroraslanterns.block.behavior.AnimateTickBehavior;
 import dev.lambdaurora.auroraslanterns.block.entity.SwayingBlockEntity;
 import dev.lambdaurora.auroraslanterns.mixin.BlockAccessor;
 import dev.lambdaurora.auroraslanterns.util.CustomStateBuilder;
-import dev.lambdaurora.auroraslanterns.util.Utils;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -67,14 +67,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
 /**
  * Represents a wall lantern.
  *
  * @param <L> the type of the underlying lantern
  * @author LambdAurora
- * @version 1.1.0
+ * @version 1.1.1
  * @since 1.0.0
  */
 @SuppressWarnings("deprecation")
@@ -82,7 +82,7 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 	public static final MapCodec<? extends WallLanternBlock<?>> CODEC = makeCodec(LanternBlock.class, WallLanternBlock::new);
 
 	static <L extends LanternBlock, W extends WallLanternBlock<? extends L>> MapCodec<W> makeCodec(
-			@NotNull Class<L> lanternClass, @NotNull Function<L, W> instantiator
+			@NotNull Class<L> lanternClass, @NotNull BiFunction<L, Properties, W> instantiator
 	) {
 		return RecordCodecBuilder.mapCodec(
 				instance -> instance.group(
@@ -93,7 +93,8 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 														: DataResult.error(() -> "Lantern must be of type LanternBlock"),
 												DataResult::success
 										)
-										.forGetter(lantern -> lantern.lanternBlock)
+										.forGetter(lantern -> lantern.lanternBlock),
+								propertiesCodec()
 						)
 						.apply(instance, instantiator)
 		);
@@ -120,12 +121,12 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 	protected final L lanternBlock;
 	private final AnimateTickBehavior<L> animateTickBehavior;
 
-	public WallLanternBlock(L lantern) {
-		super(settings(lantern));
+	public WallLanternBlock(L lantern, Properties properties) {
+		super(setupContext(lantern, properties));
 
 		this.lanternBlock = lantern;
 
-		this.setDefaultState(Utils.remapBlockState(lantern.defaultState(), this.getStateDefinition().any())
+		this.setDefaultState(this.withPropertiesOf(lantern.defaultState())
 				.with(FACING, Direction.NORTH)
 				.with(EXTENSION, ExtensionType.NONE)
 		);
@@ -143,12 +144,21 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 		return CODEC;
 	}
 
+	/**
+	 * {@return the underlying lantern block of this wall lantern block}
+	 */
 	public @NotNull L getLanternBlock() {
 		return this.lanternBlock;
 	}
 
+	/**
+	 * Gets the state of the underlying lantern block given the state of this wall lantern block.
+	 *
+	 * @param state the state of this wall lantern block
+	 * @return the state of the underlying lantern block
+	 */
 	public BlockState getLanternState(BlockState state) {
-		return Utils.remapBlockState(state, this.getLanternBlock().defaultState());
+		return this.getLanternBlock().withPropertiesOf(state);
 	}
 
 	@Override
@@ -271,8 +281,18 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 			world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
 		}
 
-		return direction.getOpposite() == state.get(FACING) && !state.canSurvive(world, pos)
-				? Blocks.AIR.defaultState() : state;
+		if (direction.getOpposite() == state.get(FACING)) {
+			if (!state.canSurvive(world, pos)) {
+				return Blocks.AIR.defaultState();
+			}
+
+			var extensionType = ExtensionType.getExtensionValue(newState, posFrom, world);
+			if (extensionType != state.get(EXTENSION)) {
+				return state.with(EXTENSION, extensionType);
+			}
+		}
+
+		return state;
 	}
 
 	/* Interaction */
@@ -436,133 +456,108 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 		return Redstone.SIGNAL_NONE;
 	}
 
-	/* Visual */
+	/* Ticking */
 
 	@Override
 	public void animateTick(BlockState state, Level world, BlockPos pos, RandomSource random) {
 		this.animateTickBehavior.animateTick(this.getLanternBlock(), this.getLanternState(state), world, pos, random);
 	}
 
-	private static Properties settings(LanternBlock lanternBlock) {
+	@Override
+	public boolean isRandomlyTicking(BlockState state) {
+		return this.lanternBlock.isRandomlyTicking(state);
+	}
+
+	@Override
+	public void randomTick(BlockState state, ServerLevel serverLevel, BlockPos pos, RandomSource randomSource) {
+		this.lanternBlock.randomTick(state, serverLevel, pos, randomSource);
+		super.randomTick(state, serverLevel, pos, randomSource);
+	}
+
+	private static Properties setupContext(LanternBlock lanternBlock, Properties properties) {
 		ASSOCIATED_LANTERN_INIT.set(lanternBlock);
+		return properties;
+	}
+
+	public static Properties properties(Block lanternBlock) {
 		return FabricBlockSettings.copyOf(lanternBlock).pistonBehavior(PushReaction.DESTROY).dropsLike(lanternBlock);
 	}
 
+	private static VoxelShape getLanternHangShape(Direction direction, ExtensionType extensionType) {
+		if (extensionType.getOffset() == 0) {
+			return LANTERN_HANG_SHAPE;
+		}
+
+		float offset = extensionType.getOffset() / 16.f;
+
+		return switch (direction) {
+			case NORTH -> LANTERN_HANG_SHAPE.move(0, 0, offset);
+			case SOUTH -> LANTERN_HANG_SHAPE.move(0, 0, -offset);
+			case WEST -> LANTERN_HANG_SHAPE.move(offset, 0, 0);
+			case EAST -> LANTERN_HANG_SHAPE.move(-offset, 0, 0);
+			default -> LANTERN_HANG_SHAPE;
+		};
+	}
+
+	private static VoxelShape getWallAttachmentShape(Direction direction, ExtensionType extensionType) {
+		final double attachmentMaxY = 16.0;
+		final double attachmentMinY = 10.0 + (extensionType != ExtensionType.NONE ? -3 : 0);
+		final double minSide = 6.0;
+		final double maxSide = 10.0;
+		final double offset = extensionType == ExtensionType.NONE ? 0 : extensionType.getOffset() + 2;
+
+		return switch (direction) {
+			case NORTH -> box(minSide, attachmentMinY, 15 + offset, maxSide, attachmentMaxY, 16 + offset);
+			case SOUTH -> box(minSide, attachmentMinY, -offset, maxSide, attachmentMaxY, 1 - offset);
+			case WEST -> box(15 + offset, attachmentMinY, minSide, 16 + offset, attachmentMaxY, maxSide);
+			case EAST -> box(-offset, attachmentMinY, minSide, 1 - offset, attachmentMaxY, maxSide);
+			default -> Shapes.empty();
+		};
+	}
+
+	private static VoxelShape getPoleShape(Direction direction, ExtensionType extensionType) {
+		final double minY = 13.0;
+		final double maxY = 15.0;
+		final double minSide = 7.0;
+		final double maxSide = 9.0;
+		final double offset = extensionType == ExtensionType.NONE ? 0 : extensionType.getOffset() - 2;
+		final double length = offset + (extensionType == ExtensionType.NONE ? 8.0 : 12.0);
+
+		return switch (direction) {
+			case NORTH -> box(minSide, minY, 7 + offset, maxSide, maxY, 7 + length);
+			case SOUTH -> box(minSide, minY, 9 - length, maxSide, maxY, 9 - offset);
+			case WEST -> box(7 + offset, minY, minSide, 7 + length, maxY, maxSide);
+			case EAST -> box(9 - length, minY, minSide, 9 - offset, maxY, maxSide);
+			default -> Shapes.empty();
+		};
+	}
+
 	static {
-		double attachmentMaxY = 16.0;
-		double attachmentMinY = 10.0;
+		var builder = ImmutableMap.<Direction, Map<ExtensionType, VoxelShape>>builder();
+		for (var direction : Direction.values()) {
+			if (direction.getAxis().isHorizontal()) {
+				var directionBuilder = ImmutableMap.<ExtensionType, VoxelShape>builder();
 
-		Map<ExtensionType, VoxelShape> northShape;
-		{
-			var builder = ImmutableMap.<ExtensionType, VoxelShape>builder();
-			var wallAttachment = box(
-					6.0, attachmentMinY - 3.0, 15.0,
-					10.0, attachmentMaxY, 16.0
-			);
-			builder.put(ExtensionType.NONE, Shapes.or(
-					LANTERN_HANG_SHAPE,
-					box(7.0, 13.0, 7.0, 9.0, 15.0, 15.0),
-					box(6.0, attachmentMinY, 15.0, 10.0, attachmentMaxY, 16.0)
-			));
-			builder.put(ExtensionType.WALL, Shapes.or(
-					LANTERN_HANG_SHAPE.move(0, 0, 0.125),
-					box(7.0, 13.0, 7.0, 9.0, 15.0, 19.0),
-					wallAttachment.move(0, 0, 0.25)
-			));
-			builder.put(ExtensionType.FENCE, Shapes.or(
-					LANTERN_HANG_SHAPE.move(0, 0, 0.25),
-					box(7.0, 13.0, 9.0, 9.0, 15.0, 21.0),
-					wallAttachment.move(0, 0, 0.375)
-			));
+				for (var extensionType : ExtensionType.VALUES) {
+					directionBuilder.put(extensionType, Shapes.or(
+							getLanternHangShape(direction, extensionType),
+							getPoleShape(direction, extensionType),
+							getWallAttachmentShape(direction, extensionType)
+					));
+				}
 
-			northShape = builder.build();
+				builder.put(direction, directionBuilder.build());
+			}
 		}
 
-		Map<ExtensionType, VoxelShape> southShape;
-		{
-			var builder = ImmutableMap.<ExtensionType, VoxelShape>builder();
-			var wallAttachment = box(
-					6.0, attachmentMinY - 3.0, 0.0,
-					10.0, attachmentMaxY, 1.0
-			);
-			builder.put(ExtensionType.NONE, Shapes.or(
-					LANTERN_HANG_SHAPE,
-					box(7.0, 13.0, 1.0, 9.0, 15.0, 9.0),
-					box(6.0, attachmentMinY, 0.0, 10.0, attachmentMaxY, 1.0)
-			));
-			builder.put(ExtensionType.WALL, Shapes.or(
-					LANTERN_HANG_SHAPE.move(0, 0, -.125),
-					box(7.0, 13.0, -3.0, 9.0, 15.0, 9.0),
-					wallAttachment.move(0, 0, -.25)
-			));
-			builder.put(ExtensionType.FENCE, Shapes.or(
-					LANTERN_HANG_SHAPE.move(0, 0, -.25),
-					box(7.0, 13.0, -5.0, 9.0, 15.0, 7.0),
-					wallAttachment.move(0, 0, -.375)
-			));
+		ATTACHMENT_SHAPES = Maps.newEnumMap(builder.build());
+	}
 
-			southShape = builder.build();
-		}
+	public interface Factory<L extends LanternBlock, W extends WallLanternBlock<? extends L>> {
+		W create(L lantern, Properties properties);
+	}
 
-		Map<ExtensionType, VoxelShape> westShape;
-		{
-			var builder = ImmutableMap.<ExtensionType, VoxelShape>builder();
-			var wallAttachment = box(
-					15.0, attachmentMinY - 3.0, 6.0,
-					16.0, attachmentMaxY, 10.0
-			);
-			builder.put(ExtensionType.NONE, Shapes.or(
-					LANTERN_HANG_SHAPE,
-					box(7.0, 13.0, 7.0, 15.0, 15.0, 9.0),
-					box(15.0, attachmentMinY, 6.0, 16.0, attachmentMaxY, 10.0)
-			));
-			builder.put(ExtensionType.WALL, Shapes.or(
-					LANTERN_HANG_SHAPE.move(0.125, 0, 0),
-					box(7.0, 13.0, 7.0, 19.0, 15.0, 9.0),
-					wallAttachment.move(0.25, 0, 0)
-			));
-			builder.put(ExtensionType.FENCE, Shapes.or(
-					LANTERN_HANG_SHAPE.move(0.25, 0, 0),
-					box(9.0, 13.0, 7.0, 21.0, 15.0, 9.0),
-					wallAttachment.move(0.375, 0, 0)
-			));
-
-			westShape = builder.build();
-		}
-
-		Map<ExtensionType, VoxelShape> eastShape;
-		{
-			var builder = ImmutableMap.<ExtensionType, VoxelShape>builder();
-			var wallAttachment = box(
-					0.0, attachmentMinY - 3.0, 6.0,
-					1.0, attachmentMaxY, 10.0
-			);
-			builder.put(ExtensionType.NONE, Shapes.or(
-					LANTERN_HANG_SHAPE,
-					box(1.0, 13.0, 7.0, 9.0, 15.0, 9.0),
-					box(0.0, attachmentMinY, 6.0, 1.0, attachmentMaxY, 10.0)
-			));
-			builder.put(ExtensionType.WALL, Shapes.or(
-					LANTERN_HANG_SHAPE.move(-.125, 0, 0),
-					box(-3.0, 13.0, 7.0, 9.0, 15.0, 9.0),
-					wallAttachment.move(-.25, 0, 0)
-			));
-			builder.put(ExtensionType.FENCE, Shapes.or(
-					LANTERN_HANG_SHAPE.move(-.25, 0, 0),
-					box(-5.0, 13.0, 7.0, 7.0, 15.0, 9.0),
-					wallAttachment.move(-.375, 0, 0)
-			));
-
-			eastShape = builder.build();
-		}
-
-		ATTACHMENT_SHAPES = Maps.newEnumMap(
-				ImmutableMap.of(
-						Direction.NORTH, northShape,
-						Direction.SOUTH, southShape,
-						Direction.WEST, westShape,
-						Direction.EAST, eastShape
-				)
-		);
+	public interface Provider<L extends LanternBlock, W extends WallLanternBlock<? extends L>> {
+		Factory<L, W> getWallLanternFactory();
 	}
 }

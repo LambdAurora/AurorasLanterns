@@ -29,10 +29,12 @@ import org.jetbrains.annotations.NotNull;
  * Represents a redstone lantern block.
  *
  * @author LambdAurora
- * @version 1.1.0
+ * @version 1.1.1
  * @since 1.0.0
  */
-public class RedstoneLanternBlock extends LanternBlock {
+public class RedstoneLanternBlock
+		extends LanternBlock
+		implements WallLanternBlock.Provider<RedstoneLanternBlock, RedstoneWallLanternBlock> {
 	public static final MapCodec<RedstoneLanternBlock> CODEC = simpleCodec(RedstoneLanternBlock::new);
 
 	private final RedstoneLanternBehavior behavior
@@ -115,5 +117,10 @@ public class RedstoneLanternBlock extends LanternBlock {
 			double z = (double) pos.getZ() + 0.5 + (random.nextDouble() - 0.5) * 0.75;
 			world.addParticle(DustParticleOptions.REDSTONE, x, y, z, 0.0, 0.0, 0.0);
 		}
+	}
+
+	@Override
+	public WallLanternBlock.Factory<RedstoneLanternBlock, RedstoneWallLanternBlock> getWallLanternFactory() {
+		return RedstoneWallLanternBlock::new;
 	}
 }

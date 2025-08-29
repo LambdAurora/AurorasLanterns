@@ -8,13 +8,19 @@
 		],
 		"facing=north,extension=wall": [
 			{
-				"model": "auroraslanterns:block/wall_lantern_attachment_extended1",
+				"model": "auroraslanterns:block/wall_lantern_attachment_wall",
+				"y": 90
+			}
+		],
+		"facing=north,extension=low_wall": [
+			{
+				"model": "auroraslanterns:block/wall_lantern_attachment_low_wall",
 				"y": 90
 			}
 		],
 		"facing=north,extension=fence": [
 			{
-				"model": "auroraslanterns:block/wall_lantern_attachment_extended2",
+				"model": "auroraslanterns:block/wall_lantern_attachment_fence",
 				"y": 90
 			}
 		],
@@ -26,13 +32,19 @@
 		],
 		"facing=south,extension=wall": [
 			{
-				"model": "auroraslanterns:block/wall_lantern_attachment_extended1",
+				"model": "auroraslanterns:block/wall_lantern_attachment_wall",
+				"y": 270
+			}
+		],
+		"facing=south,extension=low_wall": [
+			{
+				"model": "auroraslanterns:block/wall_lantern_attachment_low_wall",
 				"y": 270
 			}
 		],
 		"facing=south,extension=fence": [
 			{
-				"model": "auroraslanterns:block/wall_lantern_attachment_extended2",
+				"model": "auroraslanterns:block/wall_lantern_attachment_fence",
 				"y": 270
 			}
 		],
@@ -43,12 +55,17 @@
 		],
 		"facing=west,extension=wall": [
 			{
-				"model": "auroraslanterns:block/wall_lantern_attachment_extended1"
+				"model": "auroraslanterns:block/wall_lantern_attachment_wall"
+			}
+		],
+		"facing=west,extension=low_wall": [
+			{
+				"model": "auroraslanterns:block/wall_lantern_attachment_low_wall"
 			}
 		],
 		"facing=west,extension=fence": [
 			{
-				"model": "auroraslanterns:block/wall_lantern_attachment_extended2"
+				"model": "auroraslanterns:block/wall_lantern_attachment_fence"
 			}
 		],
 		"facing=east,extension=none": [
@@ -59,13 +76,19 @@
 		],
 		"facing=east,extension=wall": [
 			{
-				"model": "auroraslanterns:block/wall_lantern_attachment_extended1",
+				"model": "auroraslanterns:block/wall_lantern_attachment_wall",
+				"y": 180
+			}
+		],
+		"facing=east,extension=low_wall": [
+			{
+				"model": "auroraslanterns:block/wall_lantern_attachment_low_wall",
 				"y": 180
 			}
 		],
 		"facing=east,extension=fence": [
 			{
-				"model": "auroraslanterns:block/wall_lantern_attachment_extended2",
+				"model": "auroraslanterns:block/wall_lantern_attachment_fence",
 				"y": 180
 			}
 		]
