@@ -40,7 +40,7 @@ import java.util.stream.Stream;
  * Represents the lantern registry.
  *
  * @author LambdAurora
- * @version 1.2.1
+ * @version 1.2.2
  * @since 1.0.0
  */
 public final class LanternRegistry {
@@ -159,7 +159,7 @@ public final class LanternRegistry {
 				}
 			}
 
-			var nextWaxable = HoneycombItem.WAXABLES.get().get(block);
+			var nextWaxable = HoneycombItem.WAXABLES.get().get(block.getLanternBlock());
 			if (nextWaxable instanceof LanternBlock waxedLantern) {
 				var waxedWallLantern = WALL_LANTERN_BLOCK_MAP.get(waxedLantern);
 				OxidizableBlocksRegistry.registerWaxableBlockPair(block, waxedWallLantern);

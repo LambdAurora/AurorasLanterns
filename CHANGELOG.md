@@ -24,6 +24,10 @@
 - Improved support of oxidizing and waxable lanterns.
 - Improved wall lanterns on walls that do not have the post part.
 
+### 1.0.3
+
+- Fixed broken support of waxable lanterns.
+
 ## 1.1.0
 
 - Ported to Minecraft 1.21.1.
@@ -36,6 +40,10 @@
 - Fixed missing recipes for the Amethyst and Redstone Lanterns.
 - Fixed missing `#auroraslanterns:wall_lanterns` block tag.
 
+### 1.1.2
+
+- Fixed broken support of waxable lanterns.
+
 ## 1.2.0
 
 - Ported to Minecraft 1.21.5.
@@ -46,3 +54,7 @@
 - Improved wall lanterns on walls that do not have the post part.
 - Fixed missing recipes for the Amethyst and Redstone Lanterns.
 - Fixed missing `#auroraslanterns:wall_lanterns` block tag.
+
+### 1.2.2
+
+- Fixed broken support of waxable lanterns.
