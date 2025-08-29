@@ -23,3 +23,7 @@
 
 - Improved support of oxidizing and waxable lanterns.
 - Improved wall lanterns on walls that do not have the post part.
+
+### 1.0.3
+
+- Fixed broken support of waxable lanterns.
