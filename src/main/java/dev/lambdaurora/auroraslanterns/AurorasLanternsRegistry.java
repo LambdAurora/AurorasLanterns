@@ -15,8 +15,9 @@ import dev.lambdaurora.auroraslanterns.advancement.WallLanternBonkTrigger;
 import dev.lambdaurora.auroraslanterns.block.AmethystLanternBlock;
 import dev.lambdaurora.auroraslanterns.block.RedstoneLanternBlock;
 import dev.lambdaurora.auroraslanterns.block.WallLanternBlock;
+import dev.lambdaurora.auroraslanterns.block.behavior.RedstoneLanternBehavior;
 import dev.lambdaurora.auroraslanterns.block.entity.WallLanternBlockEntity;
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
@@ -24,17 +25,21 @@ import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LanternBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public final class AurorasLanternsRegistry {
 	private AurorasLanternsRegistry() {
@@ -62,32 +67,45 @@ public final class AurorasLanternsRegistry {
 	//endregion
 
 	//region Lanterns
-	public static final AmethystLanternBlock AMETHYST_LANTERN_BLOCK = registerWithItem("amethyst_lantern",
-			new AmethystLanternBlock(), new FabricItemSettings()
+	public static final Identifier AMETHYST_LANTERN_ID = AurorasLanterns.id("amethyst_lantern");
+	public static final AmethystLanternBlock AMETHYST_LANTERN_BLOCK = registerBlock(AMETHYST_LANTERN_ID,
+			AmethystLanternBlock::new,
+			FabricBlockSettings.copyOf(Blocks.LANTERN)
+					.luminance(state -> 14)
 	);
-	public static final RedstoneLanternBlock REDSTONE_LANTERN_BLOCK = registerWithItem("redstone_lantern",
-			new RedstoneLanternBlock(), new FabricItemSettings()
+	public static final Item AMETHYST_LANTERN_ITEM = Items.registerBlock(AMETHYST_LANTERN_BLOCK);
+
+	public static final Identifier REDSTONE_LANTERN_ID = AurorasLanterns.id("redstone_lantern");
+	public static final RedstoneLanternBlock REDSTONE_LANTERN_BLOCK = registerBlock(REDSTONE_LANTERN_ID,
+			RedstoneLanternBlock::new,
+			FabricBlockSettings.copyOf(Blocks.LANTERN)
+					.luminance(state -> state.get(RedstoneLanternBehavior.LIT) ? 7 : 0)
 	);
+	public static final Item REDSTONE_LANTERN_ITEM = Items.registerBlock(REDSTONE_LANTERN_BLOCK);
 	//endregion
 
 	//region Wall Lanterns
 	public static final WallLanternBlock<LanternBlock> WALL_LANTERN_BLOCK = registerBlock(
-			"wall_lantern", new WallLanternBlock<>((LanternBlock) Blocks.LANTERN)
+			AurorasLanterns.id("wall_lantern"),
+			properties -> new WallLanternBlock<>((LanternBlock) Blocks.LANTERN, properties),
+			WallLanternBlock.properties(Blocks.LANTERN)
 	);
 	public static final WallLanternBlock<LanternBlock> SOUL_WALL_LANTERN_BLOCK = registerBlock(
-			"wall_lantern/soul", new WallLanternBlock<>((LanternBlock) Blocks.SOUL_LANTERN)
+			AurorasLanterns.id("wall_lantern/soul"),
+			properties -> new WallLanternBlock<>((LanternBlock) Blocks.SOUL_LANTERN, properties),
+			WallLanternBlock.properties(Blocks.SOUL_LANTERN)
 	);
-	public static final WallLanternBlock<RedstoneLanternBlock> REDSTONE_WALL_LANTERN_BLOCK
-			= LanternRegistry.registerWallLantern(REDSTONE_LANTERN_BLOCK);
 	public static final BlockEntityType<WallLanternBlockEntity> WALL_LANTERN_BLOCK_ENTITY_TYPE = Registry.register(
 			BuiltInRegistries.BLOCK_ENTITY_TYPE,
 			AurorasLanterns.id("wall_lantern"),
 			FabricBlockEntityTypeBuilder.create(
-					WallLanternBlockEntity::new, WALL_LANTERN_BLOCK, SOUL_WALL_LANTERN_BLOCK, REDSTONE_WALL_LANTERN_BLOCK
+					WallLanternBlockEntity::new, WALL_LANTERN_BLOCK, SOUL_WALL_LANTERN_BLOCK
 			).build()
 	);
 	public static final WallLanternBlock<AmethystLanternBlock> AMETHYST_WALL_LANTERN_BLOCK
 			= LanternRegistry.registerWallLantern(AMETHYST_LANTERN_BLOCK);
+	public static final WallLanternBlock<RedstoneLanternBlock> REDSTONE_WALL_LANTERN_BLOCK
+			= LanternRegistry.registerWallLantern(REDSTONE_LANTERN_BLOCK);
 	//endregion
 
 	//region POI
@@ -98,24 +116,13 @@ public final class AurorasLanternsRegistry {
 	);
 	//endregion
 
-	static <T extends Block> T registerBlock(String name, T block) {
-		return Registry.register(BuiltInRegistries.BLOCK, AurorasLanterns.id(name), block);
-	}
 
-	static <T extends Item> T registerItem(String name, T item) {
-		return Registry.register(BuiltInRegistries.ITEM, AurorasLanterns.id(name), item);
-	}
-
-	static <T extends Block> T registerWithItem(String name, T block, Item.Properties properties) {
-		return registerWithItem(name, block, properties, BlockItem::new);
-	}
-
-	static <T extends Block> T registerWithItem(
-			String name, T block, Item.Properties properties,
-			BiFunction<T, Item.Properties, BlockItem> factory
+	static <T extends Block> T registerBlock(
+			Identifier id, Function<BlockBehaviour.Properties, T> factory, BlockBehaviour.Properties properties
 	) {
-		registerItem(name, factory.apply(registerBlock(name, block), properties));
-		return block;
+		var key = ResourceKey.of(Registries.BLOCK, id);
+		var block = factory.apply(properties);
+		return Registry.register(BuiltInRegistries.BLOCK, id, block);
 	}
 
 	private static void handleRegisteredBlock(Identifier id, Block block) {

@@ -11,12 +11,10 @@ package dev.lambdaurora.auroraslanterns.block;
 
 import dev.lambdaurora.auroraslanterns.AurorasLanterns;
 import dev.lambdaurora.auroraslanterns.AurorasLanternsRegistry;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LanternBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -24,7 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * Represents an amethyst lantern block.
  *
  * @author LambdAurora
- * @version 1.0.0
+ * @version 1.0.2
  * @since 1.0.0
  */
 public class AmethystLanternBlock extends LanternBlock {
@@ -32,8 +30,8 @@ public class AmethystLanternBlock extends LanternBlock {
 	public static final Identifier HANGING_MODEL = AurorasLanterns.id("block/hanging_amethyst_lantern");
 	public static final int EFFECT_RADIUS = 32;
 
-	public AmethystLanternBlock() {
-		super(FabricBlockSettings.copyOf(Blocks.LANTERN).luminance(14));
+	public AmethystLanternBlock(Properties properties) {
+		super(properties);
 	}
 
 	/* Visual */

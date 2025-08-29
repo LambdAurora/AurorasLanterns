@@ -9,9 +9,8 @@
 
 package dev.lambdaurora.auroraslanterns.block;
 
-import dev.lambdaurora.auroraslanterns.util.Utils;
 import dev.lambdaurora.auroraslanterns.block.behavior.RedstoneLanternBehavior;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import dev.lambdaurora.auroraslanterns.util.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -20,7 +19,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LanternBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -29,16 +27,18 @@ import net.minecraft.world.level.block.state.StateDefinition;
  * Represents a redstone lantern block.
  *
  * @author LambdAurora
- * @version 1.0.0
+ * @version 1.0.2
  * @since 1.0.0
  */
 @SuppressWarnings("deprecation")
-public class RedstoneLanternBlock extends LanternBlock {
+public class RedstoneLanternBlock
+		extends LanternBlock
+		implements WallLanternBlock.Provider<RedstoneLanternBlock, RedstoneWallLanternBlock> {
 	private final RedstoneLanternBehavior behavior
 			= new RedstoneLanternBehavior(state -> state.get(HANGING) ? Direction.DOWN : Direction.UP);
 
-	public RedstoneLanternBlock() {
-		super(FabricBlockSettings.copyOf(Blocks.LANTERN).luminance(state -> state.get(RedstoneLanternBehavior.LIT) ? 7 : 0));
+	public RedstoneLanternBlock(Properties properties) {
+		super(properties);
 
 		this.setDefaultState(this.defaultState().with(RedstoneLanternBehavior.LIT, true));
 	}
@@ -108,5 +108,10 @@ public class RedstoneLanternBlock extends LanternBlock {
 			double z = (double) pos.getZ() + 0.5 + (random.nextDouble() - 0.5) * 0.75;
 			world.addParticle(DustParticleOptions.REDSTONE, x, y, z, 0.0, 0.0, 0.0);
 		}
+	}
+
+	@Override
+	public WallLanternBlock.Factory<RedstoneLanternBlock, RedstoneWallLanternBlock> getWallLanternFactory() {
+		return RedstoneWallLanternBlock::new;
 	}
 }

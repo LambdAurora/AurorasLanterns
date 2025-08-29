@@ -32,8 +32,8 @@ public abstract class MappedRegistryMixin<T> implements Registry<T>, RegistryEve
 	public abstract int getRawId(@Nullable T value);
 
 	@Unique
-	private final Event<Identifier,  RegistryEventStorage.Callback<T>> auroraslanterns$addEvent
-			= AurorasLanterns.EVENT_MANAGER.create( RegistryEventStorage.Callback.class);
+	private final Event<Identifier, RegistryEventStorage.Callback<T>> auroraslanterns$addEvent
+			= AurorasLanterns.EVENT_MANAGER.create(RegistryEventStorage.Callback.class);
 
 	public MappedRegistryMixin() {}
 

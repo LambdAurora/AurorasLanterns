@@ -23,8 +23,8 @@ import net.minecraft.world.level.block.state.BlockState;
 public class RedstoneWallLanternBlock extends WallLanternBlock<RedstoneLanternBlock> {
 	private final RedstoneLanternBehavior behavior = new RedstoneLanternBehavior(state -> state.get(FACING));
 
-	public RedstoneWallLanternBlock(RedstoneLanternBlock lantern) {
-		super(lantern);
+	public RedstoneWallLanternBlock(RedstoneLanternBlock lantern, Properties properties) {
+		super(lantern, properties);
 	}
 
 	/* Updates */

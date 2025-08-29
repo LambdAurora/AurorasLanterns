@@ -18,3 +18,8 @@
 
 - Added better integration of Adorn's Candlelit Lanterns.
 - Fixed some cases where block state IDs would not be able to sync back up.
+
+### 1.0.2
+
+- Improved support of oxidizing and waxable lanterns.
+- Improved wall lanterns on walls that do not have the post part.

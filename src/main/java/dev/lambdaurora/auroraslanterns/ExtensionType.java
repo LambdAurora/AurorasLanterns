@@ -20,19 +20,24 @@ import net.minecraft.world.level.block.WallBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.Shapes;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 /**
  * Represents an extension type for blocks placed on horizontal sides which can also be placed on fences or walls.
  *
  * @author LambdAurora
- * @version 1.0.0
+ * @version 1.0.2
  * @since 1.0.0
  */
 public enum ExtensionType implements StringRepresentable {
 	NONE("none", 0),
 	WALL("wall", 2),
+	LOW_WALL("low_wall", 3),
 	FENCE("fence", 4);
 
+	public static final List<ExtensionType> VALUES = List.of(values());
 	private final String name;
 	private final int offset;
 
@@ -46,7 +51,7 @@ public enum ExtensionType implements StringRepresentable {
 	}
 
 	@Override
-	public String getSerializedName() {
+	public @NotNull String getSerializedName() {
 		return this.name;
 	}
 
@@ -71,8 +76,13 @@ public enum ExtensionType implements StringRepresentable {
 			var box = shape.bounds();
 			if (block instanceof FenceBlock || state.is(BlockTags.FENCES) || Utils.isShapeEqual(FENCE_SHAPE, box))
 				return FENCE;
-			if (block instanceof WallBlock || state.is(BlockTags.WALLS) || Utils.isShapeEqual(WALL_SHAPE, box))
-				return WALL;
+			if (block instanceof WallBlock || state.is(BlockTags.WALLS) || Utils.isShapeEqual(WALL_SHAPE, box)) {
+				if (state.hasProperty(WallBlock.UP) && !state.get(WallBlock.UP)) {
+					return LOW_WALL;
+				} else {
+					return WALL;
+				}
+			}
 		}
 
 		return NONE;

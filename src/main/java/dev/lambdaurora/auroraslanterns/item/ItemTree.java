@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static dev.lambdaurora.auroraslanterns.AurorasLanternsRegistry.AMETHYST_LANTERN_BLOCK;
-import static dev.lambdaurora.auroraslanterns.AurorasLanternsRegistry.REDSTONE_LANTERN_BLOCK;
+import static dev.lambdaurora.auroraslanterns.AurorasLanternsRegistry.AMETHYST_LANTERN_ITEM;
+import static dev.lambdaurora.auroraslanterns.AurorasLanternsRegistry.REDSTONE_LANTERN_ITEM;
 
 public class ItemTree extends ItemTreeGroupNode {
 	private static final Identifier PHASE = AurorasLanterns.id("phase");
@@ -95,11 +95,11 @@ public class ItemTree extends ItemTreeGroupNode {
 						&& blockItem.getBlock() instanceof LanternBlock
 		);
 
-		lanterns.add(AMETHYST_LANTERN_BLOCK);
-		lanterns.add(REDSTONE_LANTERN_BLOCK);
+		lanterns.add(AMETHYST_LANTERN_ITEM);
+		lanterns.add(REDSTONE_LANTERN_ITEM);
 	}
 
 	private static void modifyRedstoneBlocks(ItemTree tree) {
-		tree.addAfter(Items.REDSTONE_TORCH, REDSTONE_LANTERN_BLOCK);
+		tree.addAfter(Items.REDSTONE_TORCH, REDSTONE_LANTERN_ITEM);
 	}
 }
