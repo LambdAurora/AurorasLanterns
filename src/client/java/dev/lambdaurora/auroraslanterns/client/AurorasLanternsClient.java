@@ -22,10 +22,10 @@ import dev.yumi.mc.core.api.ModContainer;
 import dev.yumi.mc.core.api.entrypoint.client.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
-import net.minecraft.client.renderer.RenderType;
+import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.resources.io.ResourceType;
 import org.slf4j.Logger;
 
@@ -41,13 +41,13 @@ public final class AurorasLanternsClient implements ClientModInitializer {
 				AurorasLanternsRegistry.AMETHYST_GLINT_PARTICLE_TYPE, AmethystGlintParticle.Provider::new
 		);
 
-		BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(),
+		BlockRenderLayerMap.putBlocks(ChunkSectionLayer.CUTOUT,
 				AurorasLanternsRegistry.AMETHYST_LANTERN_BLOCK,
 				AurorasLanternsRegistry.REDSTONE_LANTERN_BLOCK
 		);
 
 		LanternRegistry.forEachAndFuture((id, wallLanternBlock) -> {
-			BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(), wallLanternBlock);
+			BlockRenderLayerMap.putBlocks(ChunkSectionLayer.CUTOUT, wallLanternBlock);
 		});
 
 		BlockEntityRenderers.register(

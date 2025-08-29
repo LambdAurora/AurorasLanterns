@@ -58,3 +58,7 @@
 ### 1.2.2
 
 - Fixed broken support of waxable lanterns.
+
+## 1.3.0
+
+- Ported to Minecraft 1.21.8.

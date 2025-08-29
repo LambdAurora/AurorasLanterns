@@ -64,7 +64,7 @@ public class WallLanternBlockEntityRenderer implements BlockEntityRenderer<WallL
 		}
 
 		var lanternState = lantern.getLanternState();
-		var consumer = vertexConsumers.getBuffer(ItemBlockRenderTypes.getChunkRenderType(lanternState));
+		var consumer = vertexConsumers.getBuffer(ItemBlockRenderTypes.getMovingBlockRenderType(lanternState));
 		matrices.push();
 
 		matrices.translate(8.f / 16.f, 12.f / 16.f, 8.f / 16.f);
