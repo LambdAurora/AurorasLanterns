@@ -23,3 +23,8 @@
 
 - Ported to Minecraft 1.21.1.
 - Improved stability of Aurora's Decorations backwards compatibility.
+
+### 1.1.1
+
+- Fixed missing recipes for the Amethyst and Redstone Lanterns.
+- Fixed missing `#auroraslanterns:wall_lanterns` block tag.

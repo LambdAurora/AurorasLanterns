@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "L": {
+      "item": "minecraft:lantern"
+    },
+    "S": {
+      "item": "minecraft:amethyst_shard"
+    }
+  },
+  "pattern": [
+    "SLS"
+  ],
+  "result": {
+    "count": 1,
+    "id": "auroraslanterns:amethyst_lantern"
+  }
+}
