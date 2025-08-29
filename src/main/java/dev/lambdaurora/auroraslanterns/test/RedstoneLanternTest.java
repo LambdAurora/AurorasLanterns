@@ -20,7 +20,8 @@ import net.minecraft.world.level.block.RepeaterBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.RedstoneSide;
-import org.jetbrains.annotations.NotNull;
+
+import static dev.lambdaurora.auroraslanterns.test.TestHelper.assertBlockState;
 
 public class RedstoneLanternTest {
 	private static final String PREFIX = AurorasLanterns.NAMESPACE + ":redstone_lantern/";
@@ -109,19 +110,5 @@ public class RedstoneLanternTest {
 				.with(BlockStateProperties.LOCKED, false)
 				.with(RepeaterBlock.FACING, facing)
 				.with(BlockStateProperties.DELAY, 1);
-	}
-
-	/**
-	 * Expects the given block state at the given block position.
-	 *
-	 * @param state the expected block state
-	 * @param pos   the position to check for
-	 */
-	public static void assertBlockState(GameTestHelper context, @NotNull BlockState state, @NotNull BlockPos pos) {
-		context.assertBlockState(
-				pos,
-				s -> s.equals(state),
-				() -> "Expected block state " + state + " at position " + pos.toShortString() + '.'
-		);
 	}
 }

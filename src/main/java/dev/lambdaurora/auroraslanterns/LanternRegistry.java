@@ -16,7 +16,6 @@ import dev.yumi.commons.event.Event;
 import dev.yumi.mc.core.api.YumiEvents;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.registry.OxidizableBlocksRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -49,8 +48,6 @@ public final class LanternRegistry {
 
 	public static final Event<Identifier, OnLanternRegistration> REGISTRATION_EVENT
 			= YumiEvents.EVENTS.create(OnLanternRegistration.class);
-
-	private static boolean isFullyInitialized = false;
 
 	private LanternRegistry() {
 		throw new UnsupportedOperationException("LanternRegistry only contains static definitions.");
@@ -145,28 +142,22 @@ public final class LanternRegistry {
 		return null;
 	}
 
-	static {
-		ServerLifecycleEvents.SERVER_STARTING.register(server -> {
-			if (!isFullyInitialized) {
-				forEach((id, block) -> {
-					if (block instanceof OxidizableWallLanternBlock<?> oxidizable) {
-						var lantern = oxidizable.getLanternBlock();
-						var next = WeatheringCopper.NEXT_BY_BLOCK.get().get(lantern);
+	public static void rebuildCaches() {
+		forEach((id, block) -> {
+			if (block instanceof OxidizableWallLanternBlock<?> oxidizable) {
+				var lantern = oxidizable.getLanternBlock();
+				var next = WeatheringCopper.NEXT_BY_BLOCK.get().get(lantern);
 
-						if (next instanceof LanternBlock nextLantern) {
-							var nextWallLantern = WALL_LANTERN_BLOCK_MAP.get(nextLantern);
-							OxidizableBlocksRegistry.registerOxidizableBlockPair(block, nextWallLantern);
-						}
-					}
+				if (next instanceof LanternBlock nextLantern) {
+					var nextWallLantern = WALL_LANTERN_BLOCK_MAP.get(nextLantern);
+					OxidizableBlocksRegistry.registerOxidizableBlockPair(block, nextWallLantern);
+				}
+			}
 
-					var nextWaxable = HoneycombItem.WAXABLES.get().get(block);
-					if (nextWaxable instanceof LanternBlock waxedLantern) {
-						var waxedWallLantern = WALL_LANTERN_BLOCK_MAP.get(waxedLantern);
-						OxidizableBlocksRegistry.registerWaxableBlockPair(block, waxedWallLantern);
-					}
-				});
-
-				isFullyInitialized = true;
+			var nextWaxable = HoneycombItem.WAXABLES.get().get(block);
+			if (nextWaxable instanceof LanternBlock waxedLantern) {
+				var waxedWallLantern = WALL_LANTERN_BLOCK_MAP.get(waxedLantern);
+				OxidizableBlocksRegistry.registerWaxableBlockPair(block, waxedWallLantern);
 			}
 		});
 	}
