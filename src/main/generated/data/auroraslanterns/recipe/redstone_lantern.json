@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "I": "minecraft:iron_nugget",
+    "T": "minecraft:redstone_torch"
+  },
+  "pattern": [
+    "III",
+    "ITI",
+    "III"
+  ],
+  "result": {
+    "count": 1,
+    "id": "auroraslanterns:redstone_lantern"
+  }
+}

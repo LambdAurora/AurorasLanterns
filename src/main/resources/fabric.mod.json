@@ -26,7 +26,8 @@
 			"dev.lambdaurora.auroraslanterns.resource.AurorasLanternsStaticDatagen"
 		],
 		"fabric-gametest": [
-			"dev.lambdaurora.auroraslanterns.test.RedstoneLanternTest"
+			"dev.lambdaurora.auroraslanterns.test.RedstoneLanternTest",
+			"dev.lambdaurora.auroraslanterns.test.WallLanternTest"
 		]
 	},
 	"accessWidener": "auroraslanterns.accesswidener",

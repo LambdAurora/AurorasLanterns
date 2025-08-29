@@ -10,33 +10,51 @@
 package dev.lambdaurora.auroraslanterns;
 
 import dev.lambdaurora.auroraslanterns.accessor.BlockEntityTypeAccessor;
+import dev.lambdaurora.auroraslanterns.block.OxidizableWallLanternBlock;
 import dev.lambdaurora.auroraslanterns.block.WallLanternBlock;
 import dev.yumi.commons.event.Event;
 import dev.yumi.mc.core.api.YumiEvents;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.registry.OxidizableBlocksRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.HoneycombItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LanternBlock;
+import net.minecraft.world.level.block.WeatheringCopper;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 
+/**
+ * Represents the lantern registry.
+ *
+ * @author LambdAurora
+ * @version 1.2.1
+ * @since 1.0.0
+ */
 public final class LanternRegistry {
-	private static final Map<Identifier, WallLanternBlock<?>> WALL_LANTERNS = new Object2ObjectOpenHashMap<>();
-	private static final Map<LanternBlock, WallLanternBlock<?>> WALL_LANTERN_BLOCK_MAP = new Reference2ObjectOpenHashMap<>();
+	private static final Map<Identifier, WallLanternBlock<?>> WALL_LANTERNS
+			= new Object2ObjectOpenHashMap<>();
+	private static final Map<LanternBlock, WallLanternBlock<?>> WALL_LANTERN_BLOCK_MAP
+			= new Reference2ObjectOpenHashMap<>();
 
 	public static final Event<Identifier, OnLanternRegistration> REGISTRATION_EVENT
 			= YumiEvents.EVENTS.create(OnLanternRegistration.class);
+
+	private LanternRegistry() {
+		throw new UnsupportedOperationException("LanternRegistry only contains static definitions.");
+	}
 
 	public static Stream<Identifier> streamIds() {
 		return WALL_LANTERNS.keySet().stream();
@@ -58,15 +76,17 @@ public final class LanternRegistry {
 	 * @param lanternId the lantern block id
 	 * @return the wall lantern block
 	 */
-	@SuppressWarnings("unchecked")
-	public static <L extends LanternBlock> WallLanternBlock<L> registerWallLantern(Registry<Block> registry, L block, Identifier lanternId) {
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	public static <L extends LanternBlock> WallLanternBlock<L> registerWallLantern(
+			Registry<Block> registry, L block, Identifier lanternId
+	) {
 		var wallLanternId = getWallLanternId(lanternId);
 
 		WallLanternBlock<L> wallLanternBlock;
 		if (WALL_LANTERNS.containsKey(wallLanternId))
 			return (WallLanternBlock<L>) WALL_LANTERNS.get(wallLanternId);
 		else if (block == Blocks.LANTERN || block == Blocks.SOUL_LANTERN) {
-			wallLanternBlock = (WallLanternBlock<L>) BuiltInRegistries.BLOCK.getValue(wallLanternId);
+			wallLanternBlock = (WallLanternBlock<L>) registry.getValue(wallLanternId);
 		} else {
 			var key = ResourceKey.of(Registries.BLOCK, wallLanternId);
 			var properties = WallLanternBlock.properties(block)
@@ -76,11 +96,13 @@ public final class LanternRegistry {
 				wallLanternBlock = ((WallLanternBlock.Provider<L, WallLanternBlock<L>>) provider)
 						.getWallLanternFactory()
 						.create(block, properties);
+			} else if (block instanceof WeatheringCopper) {
+				wallLanternBlock = new OxidizableWallLanternBlock(block, properties);
 			} else {
 				wallLanternBlock = new WallLanternBlock<>(block, properties);
 			}
 
-			Registry.register(BuiltInRegistries.BLOCK, key, wallLanternBlock);
+			Registry.register(registry, key, wallLanternBlock);
 			((BlockEntityTypeAccessor) AurorasLanternsRegistry.WALL_LANTERN_BLOCK_ENTITY_TYPE)
 					.auroraslanterns$addSupportedBlock(wallLanternBlock);
 		}
@@ -123,6 +145,30 @@ public final class LanternRegistry {
 			return WALL_LANTERN_BLOCK_MAP.get(lanternBlock);
 		}
 		return null;
+	}
+
+	public static void rebuildCaches() {
+		forEach((id, block) -> {
+			if (block instanceof OxidizableWallLanternBlock<?> oxidizable) {
+				var lantern = oxidizable.getLanternBlock();
+				var next = WeatheringCopper.NEXT_BY_BLOCK.get().get(lantern);
+
+				if (next instanceof LanternBlock nextLantern) {
+					var nextWallLantern = WALL_LANTERN_BLOCK_MAP.get(nextLantern);
+					OxidizableBlocksRegistry.registerOxidizableBlockPair(block, nextWallLantern);
+				}
+			}
+
+			var nextWaxable = HoneycombItem.WAXABLES.get().get(block);
+			if (nextWaxable instanceof LanternBlock waxedLantern) {
+				var waxedWallLantern = WALL_LANTERN_BLOCK_MAP.get(waxedLantern);
+				OxidizableBlocksRegistry.registerWaxableBlockPair(block, waxedWallLantern);
+			}
+		});
+	}
+
+	static {
+		ServerLifecycleEvents.SERVER_STARTING.register(server -> rebuildCaches());
 	}
 
 	@FunctionalInterface

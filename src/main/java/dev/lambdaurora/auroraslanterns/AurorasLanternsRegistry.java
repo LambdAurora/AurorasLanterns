@@ -72,7 +72,7 @@ public final class AurorasLanternsRegistry {
 	public static final Identifier AMETHYST_LANTERN_ID = AurorasLanterns.id("amethyst_lantern");
 	public static final AmethystLanternBlock AMETHYST_LANTERN_BLOCK = registerBlock(AMETHYST_LANTERN_ID,
 			AmethystLanternBlock::new,
-			BlockBehaviour.Properties.ofFullCopy(Blocks.LANTERN)
+			Block.Properties.ofFullCopy(Blocks.LANTERN)
 					.lightLevel(state -> 14)
 	);
 	public static final Item AMETHYST_LANTERN_ITEM = Items.registerBlock(AMETHYST_LANTERN_BLOCK);
@@ -90,12 +90,12 @@ public final class AurorasLanternsRegistry {
 	public static final WallLanternBlock<LanternBlock> WALL_LANTERN_BLOCK = registerBlock(
 			AurorasLanterns.id("wall_lantern"),
 			properties -> new WallLanternBlock<>((LanternBlock) Blocks.LANTERN, properties),
-			WallLanternBlock.properties((LanternBlock) Blocks.LANTERN)
+			WallLanternBlock.properties(Blocks.LANTERN)
 	);
 	public static final WallLanternBlock<LanternBlock> SOUL_WALL_LANTERN_BLOCK = registerBlock(
 			AurorasLanterns.id("wall_lantern/soul"),
 			properties -> new WallLanternBlock<>((LanternBlock) Blocks.SOUL_LANTERN, properties),
-			WallLanternBlock.properties((LanternBlock) Blocks.SOUL_LANTERN)
+			WallLanternBlock.properties(Blocks.SOUL_LANTERN)
 	);
 	public static final Identifier WALL_LANTERN_BLOCK_ENTITY_TYPE_ID = AurorasLanterns.id("wall_lantern");
 	public static final BlockEntityType<WallLanternBlockEntity> WALL_LANTERN_BLOCK_ENTITY_TYPE = Registry.register(

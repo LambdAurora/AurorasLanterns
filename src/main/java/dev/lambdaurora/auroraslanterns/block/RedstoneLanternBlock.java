@@ -34,7 +34,8 @@ import org.jetbrains.annotations.Nullable;
  * @version 1.2.0
  * @since 1.0.0
  */
-public class RedstoneLanternBlock extends LanternBlock
+public class RedstoneLanternBlock
+		extends LanternBlock
 		implements WallLanternBlock.Provider<RedstoneLanternBlock, RedstoneWallLanternBlock> {
 	public static final MapCodec<RedstoneLanternBlock> CODEC = simpleCodec(RedstoneLanternBlock::new);
 
