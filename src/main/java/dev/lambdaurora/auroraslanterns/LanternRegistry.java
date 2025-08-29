@@ -10,8 +10,6 @@
 package dev.lambdaurora.auroraslanterns;
 
 import dev.lambdaurora.auroraslanterns.accessor.BlockEntityTypeAccessor;
-import dev.lambdaurora.auroraslanterns.block.RedstoneLanternBlock;
-import dev.lambdaurora.auroraslanterns.block.RedstoneWallLanternBlock;
 import dev.lambdaurora.auroraslanterns.block.WallLanternBlock;
 import dev.yumi.commons.event.Event;
 import dev.yumi.mc.core.api.YumiEvents;
@@ -19,7 +17,9 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -66,13 +66,21 @@ public final class LanternRegistry {
 		if (WALL_LANTERNS.containsKey(wallLanternId))
 			return (WallLanternBlock<L>) WALL_LANTERNS.get(wallLanternId);
 		else if (block == Blocks.LANTERN || block == Blocks.SOUL_LANTERN) {
-			wallLanternBlock = (WallLanternBlock<L>) BuiltInRegistries.BLOCK.get(wallLanternId);
-		} else if (block instanceof RedstoneLanternBlock redstoneLanternBlock) {
-			wallLanternBlock = (WallLanternBlock<L>) Registry.register(
-					registry, wallLanternId, new RedstoneWallLanternBlock(redstoneLanternBlock)
-			);
+			wallLanternBlock = (WallLanternBlock<L>) BuiltInRegistries.BLOCK.getValue(wallLanternId);
 		} else {
-			wallLanternBlock = Registry.register(registry, wallLanternId, new WallLanternBlock<>(block));
+			var key = ResourceKey.of(Registries.BLOCK, wallLanternId);
+			var properties = WallLanternBlock.properties(block)
+					.setId(key);
+
+			if (block instanceof WallLanternBlock.Provider<?, ?> provider) {
+				wallLanternBlock = ((WallLanternBlock.Provider<L, WallLanternBlock<L>>) provider)
+						.getWallLanternFactory()
+						.create(block, properties);
+			} else {
+				wallLanternBlock = new WallLanternBlock<>(block, properties);
+			}
+
+			Registry.register(BuiltInRegistries.BLOCK, key, wallLanternBlock);
 			((BlockEntityTypeAccessor) AurorasLanternsRegistry.WALL_LANTERN_BLOCK_ENTITY_TYPE)
 					.auroraslanterns$addSupportedBlock(wallLanternBlock);
 		}

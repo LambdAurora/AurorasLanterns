@@ -11,7 +11,6 @@ package dev.lambdaurora.auroraslanterns.resource;
 
 import com.google.common.base.Suppliers;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.mojang.logging.LogUtils;
 import dev.yumi.commons.TriState;
 import net.fabricmc.loader.api.FabricLoader;
@@ -19,11 +18,11 @@ import net.minecraft.network.chat.Text;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.io.ResourceIoSupplier;
 import net.minecraft.resources.io.ResourceType;
+import net.minecraft.server.packs.AbstractPackResources;
 import net.minecraft.server.packs.PackLocationInfo;
 import net.minecraft.server.packs.PackResources;
-import net.minecraft.server.packs.metadata.MetadataSectionSerializer;
+import net.minecraft.server.packs.metadata.MetadataSectionType;
 import net.minecraft.server.packs.repository.PackSource;
-import net.minecraft.util.GsonHelper;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,7 +32,7 @@ import org.slf4j.Logger;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -50,7 +49,7 @@ import java.util.stream.Collectors;
  * The resources of this pack are stored in memory instead of it being on-disk.
  *
  * @author LambdAurora
- * @version 1.0.0
+ * @version 1.2.0
  * @since 1.0.0
  */
 public abstract class InMemoryPackResources implements MutablePackResources {
@@ -110,7 +109,7 @@ public abstract class InMemoryPackResources implements MutablePackResources {
 	}
 
 	@Override
-	public <T> @Nullable T getMetadataSection(MetadataSectionSerializer<T> metaReader) throws IOException {
+	public <T> @Nullable T getMetadataSection(MetadataSectionType<T> metadataSectionType) throws IOException {
 		if (!this.root.containsKey(PackResources.PACK_META)) {
 			var json = new JsonObject();
 			var packJson = new JsonObject();
@@ -118,13 +117,15 @@ public abstract class InMemoryPackResources implements MutablePackResources {
 			packJson.addProperty("pack_format", 5); // This is like, not read by any significant system when invisible to users.
 			json.add("pack", packJson);
 
-			if (!json.has(metaReader.getMetadataSectionName())) {
+			if (!json.has(metadataSectionType.name())) {
 				return null;
 			} else {
 				try {
-					return metaReader.fromJson(GsonHelper.getAsJsonObject(json, metaReader.getMetadataSectionName()));
+					return AbstractPackResources.getMetadataFromStream(
+							metadataSectionType, new ByteArrayInputStream(json.toString().getBytes(StandardCharsets.UTF_8))
+					);
 				} catch (Exception e) {
-					LOGGER.error("Couldn't load {} metadata from pack \"{}\":", metaReader.getMetadataSectionName(), this.packId(), e);
+					LOGGER.error("Couldn't load {} metadata from pack \"{}\":", metadataSectionType.name(), this.packId(), e);
 					return null;
 				}
 			}
@@ -133,8 +134,8 @@ public abstract class InMemoryPackResources implements MutablePackResources {
 		var resource = this.getRootResource(PackResources.PACK_META);
 		if (resource == null) return null;
 
-		try (var stream = resource.get(); var reader = new InputStreamReader(stream)) {
-			return metaReader.fromJson(JsonParser.parseReader(reader).getAsJsonObject());
+		try (var stream = resource.get();) {
+			return AbstractPackResources.getMetadataFromStream(metadataSectionType, stream);
 		}
 	}
 

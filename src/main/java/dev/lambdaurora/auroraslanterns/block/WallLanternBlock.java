@@ -23,16 +23,17 @@ import dev.lambdaurora.auroraslanterns.block.entity.SwayingBlockEntity;
 import dev.lambdaurora.auroraslanterns.mixin.BlockAccessor;
 import dev.lambdaurora.auroraslanterns.util.CustomStateBuilder;
 import dev.lambdaurora.auroraslanterns.util.Utils;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Item;
@@ -40,8 +41,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -50,7 +51,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
@@ -67,14 +67,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
-import java.util.function.Function;
 
 /**
  * Represents a wall lantern.
  *
  * @param <L> the type of the underlying lantern
  * @author LambdAurora
- * @version 1.1.0
+ * @version 1.2.0
  * @since 1.0.0
  */
 @SuppressWarnings("deprecation")
@@ -82,7 +81,7 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 	public static final MapCodec<? extends WallLanternBlock<?>> CODEC = makeCodec(LanternBlock.class, WallLanternBlock::new);
 
 	static <L extends LanternBlock, W extends WallLanternBlock<? extends L>> MapCodec<W> makeCodec(
-			@NotNull Class<L> lanternClass, @NotNull Function<L, W> instantiator
+			@NotNull Class<L> lanternClass, @NotNull Factory<L, W> instantiator
 	) {
 		return RecordCodecBuilder.mapCodec(
 				instance -> instance.group(
@@ -93,13 +92,14 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 														: DataResult.error(() -> "Lantern must be of type LanternBlock"),
 												DataResult::success
 										)
-										.forGetter(lantern -> lantern.lanternBlock)
+										.forGetter(lantern -> lantern.lanternBlock),
+								propertiesCodec()
 						)
-						.apply(instance, instantiator)
+						.apply(instance, instantiator::create)
 		);
 	}
 
-	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+	public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
 	public static final EnumProperty<ExtensionType> EXTENSION = EnumProperty.create("extension", ExtensionType.class);
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 	public static final VoxelShape LANTERN_HANG_SHAPE = box(
@@ -120,8 +120,8 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 	protected final L lanternBlock;
 	private final AnimateTickBehavior<L> animateTickBehavior;
 
-	public WallLanternBlock(L lantern) {
-		super(settings(lantern));
+	public WallLanternBlock(L lantern, Properties properties) {
+		super(setupContext(lantern, properties));
 
 		this.lanternBlock = lantern;
 
@@ -162,16 +162,6 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 
 		builder.add(FACING);
 		builder.add(EXTENSION);
-	}
-
-	@Override
-	public @NotNull String getDescriptionId() {
-		return this.lanternBlock.getDescriptionId();
-	}
-
-	@Override
-	public boolean propagatesSkylightDown(BlockState state, BlockGetter world, BlockPos pos) {
-		return state.getFluidState().isEmpty();
 	}
 
 	/* Shapes */
@@ -257,18 +247,18 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 	}
 
 	@Override
-	public void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean moved) {
-		this.lanternBlock.onRemove(state, world, pos, newState, moved);
-		super.onRemove(state, world, pos, newState, moved);
+	public void affectNeighborsAfterRemoval(BlockState state, ServerLevel world, BlockPos pos, boolean moved) {
+		this.lanternBlock.affectNeighborsAfterRemoval(state, world, pos, moved);
+		super.affectNeighborsAfterRemoval(state, world, pos, moved);
 	}
 
 	@Override
 	protected @NotNull BlockState updateShape(
-			BlockState state, Direction direction, BlockState newState, LevelAccessor world,
-			BlockPos pos, BlockPos posFrom
+			BlockState state, LevelReader world, ScheduledTickAccess tickScheduler, BlockPos pos,
+			Direction direction, BlockPos posFrom, BlockState newState, RandomSource randomSource
 	) {
 		if (state.get(WATERLOGGED)) {
-			world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
+			tickScheduler.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
 		}
 
 		return direction.getOpposite() == state.get(FACING) && !state.canSurvive(world, pos)
@@ -278,8 +268,8 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 	/* Interaction */
 
 	@Override
-	public @NotNull ItemStack getCloneItemStack(LevelReader world, BlockPos pos, BlockState state) {
-		return this.getLanternBlock().getCloneItemStack(world, pos, this.getLanternState(state));
+	public @NotNull ItemStack getCloneItemStack(LevelReader world, BlockPos pos, BlockState state, boolean includeData) {
+		return this.getLanternState(state).getCloneItemStack(world, pos, includeData);
 	}
 
 	@Override
@@ -293,7 +283,7 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 			BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit
 	) {
 		return this.swing(world, state, hit, player, true)
-				? InteractionResult.sidedSuccess(world.isClientSide())
+				? InteractionResult.SUCCESS
 				: InteractionResult.PASS;
 	}
 
@@ -342,7 +332,10 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 	}
 
 	@Override
-	protected void entityInside(BlockState state, Level world, BlockPos pos, Entity entity) {
+	protected void entityInside(
+			BlockState state, Level world, BlockPos pos, Entity entity,
+			InsideBlockEffectApplier insideBlockEffectApplier
+	) {
 		if (world.isClientSide())
 			return;
 		if (entity instanceof Projectile)
@@ -443,9 +436,16 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 		this.animateTickBehavior.animateTick(this.getLanternBlock(), this.getLanternState(state), world, pos, random);
 	}
 
-	private static Properties settings(LanternBlock lanternBlock) {
+	private static Properties setupContext(LanternBlock lanternBlock, Properties properties) {
 		ASSOCIATED_LANTERN_INIT.set(lanternBlock);
-		return FabricBlockSettings.copyOf(lanternBlock).pistonBehavior(PushReaction.DESTROY).dropsLike(lanternBlock);
+		return properties;
+	}
+
+	public static Properties properties(LanternBlock lanternBlock) {
+		return Properties.ofFullCopy(lanternBlock)
+				.pushReaction(PushReaction.DESTROY)
+				.overrideDescription(lanternBlock.getDescriptionId())
+				.overrideLootTable(lanternBlock.getLootTable());
 	}
 
 	static {
@@ -564,5 +564,13 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 						Direction.EAST, eastShape
 				)
 		);
+	}
+
+	public interface Factory<L extends LanternBlock, W extends WallLanternBlock<? extends L>> {
+		W create(L lantern, Properties properties);
+	}
+
+	public interface Provider<L extends LanternBlock, W extends WallLanternBlock<? extends L>> {
+		Factory<L, W> getWallLanternFactory();
 	}
 }

@@ -23,16 +23,19 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LanternBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.redstone.Orientation;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents a redstone lantern block.
  *
  * @author LambdAurora
- * @version 1.1.0
+ * @version 1.2.0
  * @since 1.0.0
  */
-public class RedstoneLanternBlock extends LanternBlock {
+public class RedstoneLanternBlock extends LanternBlock
+		implements WallLanternBlock.Provider<RedstoneLanternBlock, RedstoneWallLanternBlock> {
 	public static final MapCodec<RedstoneLanternBlock> CODEC = simpleCodec(RedstoneLanternBlock::new);
 
 	private final RedstoneLanternBehavior behavior
@@ -66,7 +69,7 @@ public class RedstoneLanternBlock extends LanternBlock {
 	}
 
 	@Override
-	public void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean moved) {
+	public void affectNeighborsAfterRemoval(BlockState state, ServerLevel world, BlockPos pos, boolean moved) {
 		if (!moved) {
 			for (var direction : Utils.DIRECTIONS) {
 				world.updateNeighborsAt(pos.relative(direction), this);
@@ -75,8 +78,10 @@ public class RedstoneLanternBlock extends LanternBlock {
 	}
 
 	@Override
-	protected void neighborChanged(BlockState state, Level world, BlockPos pos, Block block, BlockPos fromPos, boolean notify) {
-		super.neighborChanged(state, world, pos, block, fromPos, notify);
+	protected void neighborChanged(
+			BlockState state, Level world, BlockPos pos, Block block, @Nullable Orientation orientation, boolean notify
+	) {
+		super.neighborChanged(state, world, pos, block, orientation, notify);
 		this.behavior.neighborChanged(state, world, pos);
 	}
 
@@ -115,5 +120,10 @@ public class RedstoneLanternBlock extends LanternBlock {
 			double z = (double) pos.getZ() + 0.5 + (random.nextDouble() - 0.5) * 0.75;
 			world.addParticle(DustParticleOptions.REDSTONE, x, y, z, 0.0, 0.0, 0.0);
 		}
+	}
+
+	@Override
+	public WallLanternBlock.Factory<RedstoneLanternBlock, RedstoneWallLanternBlock> getWallLanternFactory() {
+		return RedstoneWallLanternBlock::new;
 	}
 }
