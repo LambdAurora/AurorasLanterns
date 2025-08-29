@@ -9,6 +9,7 @@
 		"BlockEntityMixin",
 		"BlockEntityTypeMixin",
 		"BlockItemMixin",
+		"BlocksMixin",
 		"IdentifierMixin",
 		"MappedRegistryMixin",
 		"NaturalSpawnerMixin",
