@@ -52,6 +52,11 @@
 
 - Fixed runtime generation of the `#auroraslanterns:wall_lanterns` tag, which is required for proper mining of the wall lanterns.
 
+### 1.1.4
+
+- Fixed wall lanterns not being in the pickaxe mineable tag due to a bad path.
+- Updated [Yumi Minecraft Libraries: Foundation].
+
 ## 1.2.0
 
 - Ported to Minecraft 1.21.5.
@@ -70,3 +75,10 @@
 ### 1.2.3
 
 - Fixed runtime generation of the `#auroraslanterns:wall_lanterns` tag, which is required for proper mining of the wall lanterns.
+
+### 1.2.4
+
+- Fixed wall lanterns not being in the pickaxe mineable tag due to a bad path.
+- Updated [Yumi Minecraft Libraries: Foundation].
+
+[Yumi Minecraft Libraries: Foundation]: https://github.com/YumiProject/yumi-minecraft-foundation-library "Yumi Minecraft Foundation Library page"
