@@ -27,3 +27,7 @@
 ### 1.0.3
 
 - Fixed broken support of waxable lanterns.
+
+### 1.0.4
+
+- Fixed runtime generation of the `#auroraslanterns:wall_lanterns` tag, which is required for proper mining of the wall lanterns.
