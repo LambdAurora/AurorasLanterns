@@ -28,6 +28,10 @@
 
 - Fixed broken support of waxable lanterns.
 
+### 1.0.4
+
+- Fixed runtime generation of the `#auroraslanterns:wall_lanterns` tag, which is required for proper mining of the wall lanterns.
+
 ## 1.1.0
 
 - Ported to Minecraft 1.21.1.
@@ -44,6 +48,10 @@
 
 - Fixed broken support of waxable lanterns.
 
+### 1.1.3
+
+- Fixed runtime generation of the `#auroraslanterns:wall_lanterns` tag, which is required for proper mining of the wall lanterns.
+
 ## 1.2.0
 
 - Ported to Minecraft 1.21.5.
@@ -59,6 +67,14 @@
 
 - Fixed broken support of waxable lanterns.
 
+### 1.2.3
+
+- Fixed runtime generation of the `#auroraslanterns:wall_lanterns` tag, which is required for proper mining of the wall lanterns.
+
 ## 1.3.0
 
 - Ported to Minecraft 1.21.8.
+
+### 1.3.1
+
+- Fixed runtime generation of the `#auroraslanterns:wall_lanterns` tag, which is required for proper mining of the wall lanterns.
