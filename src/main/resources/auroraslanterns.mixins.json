@@ -8,11 +8,10 @@
 		"BlockAccessor",
 		"BlockEntityTypeMixin",
 		"BlockItemMixin",
-		"MultiPackResourceManagerAccessor",
 		"NaturalSpawnerMixin",
 		"ReloadableResourceManagerMixin",
-		"ReloadableServerResourcesMixin",
 		"StateDefinitionBuilderAccessor",
+		"TagLoaderMixin",
 		"ZombieVillagerEntityMixin",
 		"compat.AmendmentsConfigMixin"
 	],
