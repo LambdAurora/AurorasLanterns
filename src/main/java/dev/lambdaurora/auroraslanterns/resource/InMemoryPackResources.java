@@ -49,7 +49,7 @@ import java.util.stream.Collectors;
  * The resources of this pack are stored in memory instead of it being on-disk.
  *
  * @author LambdAurora
- * @version 1.2.0
+ * @version 1.4.0
  * @since 1.0.0
  */
 public abstract class InMemoryPackResources implements MutablePackResources {
@@ -122,7 +122,8 @@ public abstract class InMemoryPackResources implements MutablePackResources {
 			} else {
 				try {
 					return AbstractPackResources.getMetadataFromStream(
-							metadataSectionType, new ByteArrayInputStream(json.toString().getBytes(StandardCharsets.UTF_8))
+							metadataSectionType, new ByteArrayInputStream(json.toString().getBytes(StandardCharsets.UTF_8)),
+							this.location()
 					);
 				} catch (Exception e) {
 					LOGGER.error("Couldn't load {} metadata from pack \"{}\":", metadataSectionType.name(), this.packId(), e);
@@ -135,7 +136,7 @@ public abstract class InMemoryPackResources implements MutablePackResources {
 		if (resource == null) return null;
 
 		try (var stream = resource.get();) {
-			return AbstractPackResources.getMetadataFromStream(metadataSectionType, stream);
+			return AbstractPackResources.getMetadataFromStream(metadataSectionType, stream, this.location());
 		}
 	}
 

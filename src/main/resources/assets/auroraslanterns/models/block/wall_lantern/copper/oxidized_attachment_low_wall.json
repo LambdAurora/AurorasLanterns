@@ -1,0 +1,8 @@
+{
+	"credit": "Made by LambdAurora",
+	"parent": "auroraslanterns:block/wall_lantern/attachment_low_wall",
+	"textures": {
+		"particle": "minecraft:block/copper_chain",
+		"attachment": "auroraslanterns:block/wall_lantern_oxidized_copper_attachment"
+	}
+}

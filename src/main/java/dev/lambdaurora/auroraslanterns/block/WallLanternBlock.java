@@ -72,7 +72,7 @@ import java.util.Map;
  *
  * @param <L> the type of the underlying lantern
  * @author LambdAurora
- * @version 1.2.1
+ * @version 1.4.0
  * @since 1.0.0
  */
 @SuppressWarnings("deprecation")
@@ -432,7 +432,7 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 	}
 
 	@Override
-	protected int getAnalogOutputSignal(BlockState state, Level world, BlockPos pos) {
+	protected int getAnalogOutputSignal(BlockState state, Level world, BlockPos pos, Direction direction) {
 		var lantern = AurorasLanternsRegistry.WALL_LANTERN_BLOCK_ENTITY_TYPE.getBlockEntity(world, pos);
 		if (lantern != null) {
 			if (lantern.isColliding()) {

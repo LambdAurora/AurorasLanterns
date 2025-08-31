@@ -16,23 +16,17 @@ import dev.lambdaurora.auroraslanterns.block.entity.WallLanternBlockEntity;
 import dev.lambdaurora.auroraslanterns.client.utils.LBGHooks;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.core.Direction;
-import net.minecraft.util.RandomSource;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.level.levelgen.LegacyRandomSource;
-import net.minecraft.world.level.levelgen.RandomSupport;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
 @Environment(EnvType.CLIENT)
 public class WallLanternBlockEntityRenderer implements BlockEntityRenderer<WallLanternBlockEntity> {
-	private final Minecraft client = Minecraft.getInstance();
-	private final RandomSource random = new LegacyRandomSource(RandomSupport.generateUniqueSeed());
-
 	public WallLanternBlockEntityRenderer(BlockEntityRendererProvider.Context ctx) {}
 
 	@Override
@@ -41,9 +35,11 @@ public class WallLanternBlockEntityRenderer implements BlockEntityRenderer<WallL
 	}
 
 	@Override
-	public void render(
-			WallLanternBlockEntity lantern, float tickDelta, MatrixStack matrices, MultiBufferSource vertexConsumers,
-			int light, int overlay, Vec3 cameraPos
+	public void submit(
+			WallLanternBlockEntity lantern, float tickDelta, MatrixStack matrices,
+			int light, int overlay, Vec3 cameraPos,
+			@Nullable ModelFeatureRenderer.CrumblingOverlay crumblingOverlay,
+			SubmitNodeCollector collector
 	) {
 		var pos = lantern.getBlockPos();
 
@@ -64,7 +60,6 @@ public class WallLanternBlockEntityRenderer implements BlockEntityRenderer<WallL
 		}
 
 		var lanternState = lantern.getLanternState();
-		var consumer = vertexConsumers.getBuffer(ItemBlockRenderTypes.getMovingBlockRenderType(lanternState));
 		matrices.push();
 
 		matrices.translate(8.f / 16.f, 12.f / 16.f, 8.f / 16.f);
@@ -97,12 +92,7 @@ public class WallLanternBlockEntityRenderer implements BlockEntityRenderer<WallL
 		matrices.translate(-8.f / 16.f, -1.f / 16.f - size, -8.f / 16.f);
 
 		LBGHooks.pushDisableBetterLayer();
-		var model = this.client.getBlockRenderer().getBlockModel(lanternState);
-		var parts = model.collectParts(this.random);
-		this.client.getBlockRenderer().renderBatched(
-				lanternState, pos, lantern.getLevel(), matrices, consumer,
-				false, parts
-		);
+		collector.submitBlock(matrices, lanternState, light, overlay, 0);
 		LBGHooks.popDisableBetterLayer();
 		matrices.pop();
 	}

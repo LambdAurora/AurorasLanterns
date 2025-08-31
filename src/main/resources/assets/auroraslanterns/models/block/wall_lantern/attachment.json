@@ -2,7 +2,7 @@
 	"credit": "Made by LambdAurora",
 	"parent": "block/block",
 	"textures": {
-		"particle": "minecraft:block/chain",
+		"particle": "minecraft:block/iron_chain",
 		"attachment": "auroraslanterns:block/wall_lantern_attachment",
 		"bar": "minecraft:block/dark_oak_planks"
 	},
