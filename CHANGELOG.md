@@ -31,3 +31,8 @@
 ### 1.0.4
 
 - Fixed runtime generation of the `#auroraslanterns:wall_lanterns` tag, which is required for proper mining of the wall lanterns.
+
+### 1.0.5
+
+- Fixed again the runtime generation of the `#auroraslanterns:wall_lanterns` tag, which is required for proper mining.
+  - The last attempt at fixing this used a faulty injection point, the new injection point is much more reliable.

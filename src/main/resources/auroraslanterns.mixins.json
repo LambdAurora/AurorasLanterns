@@ -12,11 +12,10 @@
 		"BlocksMixin",
 		"IdentifierMixin",
 		"MappedRegistryMixin",
-		"MultiPackResourceManagerAccessor",
 		"NaturalSpawnerMixin",
 		"ReloadableResourceManagerMixin",
-		"ReloadableServerResourcesMixin",
 		"StateDefinitionBuilderAccessor",
+		"TagLoaderMixin",
 		"ZombieVillagerEntityMixin",
 		"compat.AmendmentsConfigMixin"
 	],
