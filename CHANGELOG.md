@@ -37,6 +37,10 @@
 - Fixed again the runtime generation of the `#auroraslanterns:wall_lanterns` tag, which is required for proper mining.
   - The last attempt at fixing this used a faulty injection point, the new injection point is much more reliable.
 
+### 1.0.6
+
+- Updated Ukrainian translations ([#1](https://github.com/LambdAurora/AurorasLanterns/pull/1)).
+
 ## 1.1.0
 
 - Ported to Minecraft 1.21.1.
