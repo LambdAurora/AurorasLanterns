@@ -99,7 +99,7 @@ license {
 }
 
 val README = ModUtils.parseReadme(
-	project, "https://raw.githubusercontent.com/LambdAurora/AurorasLanterns/1.20/\$2"
+	project, "https://raw.githubusercontent.com/LambdAurora/AurorasLanterns/1.21.8/\$2"
 )
 val CHANGELOG_CONTENT = ModUtils.fetchChangelog(project, VERSION)
 
