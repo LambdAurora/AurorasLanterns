@@ -19,9 +19,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.redstone.Orientation;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class RedstoneWallLanternBlock extends WallLanternBlock<RedstoneLanternBlock> {
 	public static final MapCodec<? extends RedstoneWallLanternBlock> CODEC
@@ -41,10 +39,8 @@ public class RedstoneWallLanternBlock extends WallLanternBlock<RedstoneLanternBl
 	/* Updates */
 
 	@Override
-	protected void neighborChanged(
-			BlockState state, Level world, BlockPos pos, Block block, @Nullable Orientation orientation, boolean notify
-	) {
-		super.neighborChanged(state, world, pos, block, orientation, notify);
+	protected void neighborChanged(BlockState state, Level world, BlockPos pos, Block block, BlockPos fromPos, boolean notify) {
+		super.neighborChanged(state, world, pos, block, fromPos, notify);
 		this.behavior.neighborChanged(state, world, pos);
 	}
 

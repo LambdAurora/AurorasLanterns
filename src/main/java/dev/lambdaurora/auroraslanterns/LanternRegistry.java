@@ -16,13 +16,10 @@ import dev.yumi.commons.event.Event;
 import dev.yumi.mc.core.api.YumiEvents;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.registry.OxidizableBlocksRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.HoneycombItem;
 import net.minecraft.world.item.Item;
@@ -40,7 +37,7 @@ import java.util.stream.Stream;
  * Represents the lantern registry.
  *
  * @author LambdAurora
- * @version 1.2.2
+ * @version 1.1.2
  * @since 1.0.0
  */
 public final class LanternRegistry {
@@ -86,11 +83,9 @@ public final class LanternRegistry {
 		if (WALL_LANTERNS.containsKey(wallLanternId))
 			return (WallLanternBlock<L>) WALL_LANTERNS.get(wallLanternId);
 		else if (block == Blocks.LANTERN || block == Blocks.SOUL_LANTERN) {
-			wallLanternBlock = (WallLanternBlock<L>) registry.getValue(wallLanternId);
+			wallLanternBlock = (WallLanternBlock<L>) registry.get(wallLanternId);
 		} else {
-			var key = ResourceKey.of(Registries.BLOCK, wallLanternId);
-			var properties = WallLanternBlock.properties(block)
-					.setId(key);
+			var properties = WallLanternBlock.properties(block);
 
 			if (block instanceof WallLanternBlock.Provider<?, ?> provider) {
 				wallLanternBlock = ((WallLanternBlock.Provider<L, WallLanternBlock<L>>) provider)
@@ -102,7 +97,7 @@ public final class LanternRegistry {
 				wallLanternBlock = new WallLanternBlock<>(block, properties);
 			}
 
-			Registry.register(registry, key, wallLanternBlock);
+			Registry.register(registry, wallLanternId, wallLanternBlock);
 			((BlockEntityTypeAccessor) AurorasLanternsRegistry.WALL_LANTERN_BLOCK_ENTITY_TYPE)
 					.auroraslanterns$addSupportedBlock(wallLanternBlock);
 		}
@@ -165,10 +160,6 @@ public final class LanternRegistry {
 				OxidizableBlocksRegistry.registerWaxableBlockPair(block, waxedWallLantern);
 			}
 		});
-	}
-
-	static {
-		ServerLifecycleEvents.SERVER_STARTING.register(server -> rebuildCaches());
 	}
 
 	@FunctionalInterface

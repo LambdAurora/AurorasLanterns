@@ -2,8 +2,12 @@
   "type": "minecraft:crafting_shaped",
   "category": "redstone",
   "key": {
-    "I": "minecraft:iron_nugget",
-    "T": "minecraft:redstone_torch"
+    "I": {
+      "item": "minecraft:iron_nugget"
+    },
+    "T": {
+      "item": "minecraft:redstone_torch"
+    }
   },
   "pattern": [
     "III",

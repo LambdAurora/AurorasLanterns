@@ -26,7 +26,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import net.minecraft.world.level.levelgen.RandomSupport;
-import net.minecraft.world.phys.Vec3;
 
 @Environment(EnvType.CLIENT)
 public class WallLanternBlockEntityRenderer implements BlockEntityRenderer<WallLanternBlockEntity> {
@@ -43,7 +42,7 @@ public class WallLanternBlockEntityRenderer implements BlockEntityRenderer<WallL
 	@Override
 	public void render(
 			WallLanternBlockEntity lantern, float tickDelta, MatrixStack matrices, MultiBufferSource vertexConsumers,
-			int light, int overlay, Vec3 cameraPos
+			int light, int overlay
 	) {
 		var pos = lantern.getBlockPos();
 
@@ -97,11 +96,9 @@ public class WallLanternBlockEntityRenderer implements BlockEntityRenderer<WallL
 		matrices.translate(-8.f / 16.f, -1.f / 16.f - size, -8.f / 16.f);
 
 		LBGHooks.pushDisableBetterLayer();
-		var model = this.client.getBlockRenderer().getBlockModel(lanternState);
-		var parts = model.collectParts(this.random);
 		this.client.getBlockRenderer().renderBatched(
 				lanternState, pos, lantern.getLevel(), matrices, consumer,
-				false, parts
+				false, this.random
 		);
 		LBGHooks.popDisableBetterLayer();
 		matrices.pop();

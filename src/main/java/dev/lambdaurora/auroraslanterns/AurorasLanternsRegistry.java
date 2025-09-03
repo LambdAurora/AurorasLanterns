@@ -18,7 +18,6 @@ import dev.lambdaurora.auroraslanterns.block.behavior.RedstoneLanternBehavior;
 import dev.lambdaurora.auroraslanterns.block.entity.WallLanternBlockEntity;
 import dev.lambdaurora.auroraslanterns.compat.AurorasDecoDataUpper;
 import net.fabricmc.fabric.api.event.registry.RegistryEntryAddedCallback;
-import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.minecraft.core.Registry;
@@ -101,7 +100,7 @@ public final class AurorasLanternsRegistry {
 	public static final BlockEntityType<WallLanternBlockEntity> WALL_LANTERN_BLOCK_ENTITY_TYPE = Registry.register(
 			BuiltInRegistries.BLOCK_ENTITY_TYPE,
 			WALL_LANTERN_BLOCK_ENTITY_TYPE_ID,
-			FabricBlockEntityTypeBuilder.create(
+			BlockEntityType.Builder.of(
 					WallLanternBlockEntity::new, WALL_LANTERN_BLOCK, SOUL_WALL_LANTERN_BLOCK
 			).build()
 	);
@@ -123,7 +122,7 @@ public final class AurorasLanternsRegistry {
 			Identifier id, Function<BlockBehaviour.Properties, T> factory, BlockBehaviour.Properties properties
 	) {
 		var key = ResourceKey.of(Registries.BLOCK, id);
-		var block = factory.apply(properties.setId(key));
+		var block = factory.apply(properties);
 		return Registry.register(BuiltInRegistries.BLOCK, id, block);
 	}
 
@@ -145,7 +144,7 @@ public final class AurorasLanternsRegistry {
 	}
 
 	static void init() {
-		BuiltInRegistries.BLOCK.streamElements()
+		BuiltInRegistries.BLOCK.holders()
 				.filter(holder -> !holder.key().value().namespace().equals(AurorasLanterns.NAMESPACE))
 				.toList() // Ensure we operate on an immutable copy of the known blocks.
 				.forEach(holder -> handleRegisteredBlock(holder.key().value(), holder.value()));
