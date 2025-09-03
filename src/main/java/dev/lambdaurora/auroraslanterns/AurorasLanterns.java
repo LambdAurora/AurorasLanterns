@@ -12,8 +12,8 @@ package dev.lambdaurora.auroraslanterns;
 import dev.lambdaurora.auroraslanterns.item.ItemTree;
 import dev.lambdaurora.auroraslanterns.resource.AurorasLanternsRuntimeDatagen;
 import dev.lambdaurora.auroraslanterns.resource.InMemoryPackResources;
-import dev.yumi.mc.core.api.ModContainer;
-import dev.yumi.mc.core.api.entrypoint.ModInitializer;
+import dev.yumi.commons.event.EventManager;
+import net.fabricmc.api.ModInitializer;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.io.ResourceType;
 import org.jetbrains.annotations.NotNull;
@@ -24,21 +24,22 @@ import java.util.stream.Collectors;
  * Represents the Aurora's Lanterns mod.
  *
  * @author LambdAurora
- * @version 1.1.0
+ * @version 1.0.0
  * @since 1.0.0
  */
 public final class AurorasLanterns implements ModInitializer {
 	public static final String NAMESPACE = "auroraslanterns";
+	public static final EventManager<Identifier> EVENT_MANAGER = new EventManager<>(id("default"), Identifier::new);
 
 	@Override
-	public void onInitialize(ModContainer mod) {
+	public void onInitialize() {
 		AurorasLanternsRegistry.init();
 
 		AurorasLanternsRuntimeDatagen.DATA_DATAGEN.register(registrar -> {
 			var pack = new InMemoryPackResources.Named(AurorasLanterns.id("generated").toString());
 			registrar.accept(pack);
 
-			pack.putText(ResourceType.SERVER_DATA, AurorasLanterns.id("tags/block/wall_lanterns.json"), """
+			pack.putText(ResourceType.SERVER_DATA, AurorasLanterns.id("tags/blocks/wall_lanterns.json"), """
 					{
 						"replace": false,
 						"values": [
@@ -53,6 +54,6 @@ public final class AurorasLanterns implements ModInitializer {
 	}
 
 	public static @NotNull Identifier id(@NotNull String path) {
-		return Identifier.of(NAMESPACE, path);
+		return new Identifier(NAMESPACE, path);
 	}
 }

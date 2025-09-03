@@ -10,16 +10,18 @@
 package dev.lambdaurora.auroraslanterns;
 
 import dev.lambdaurora.auroraslanterns.accessor.BlockItemAccessor;
+import dev.lambdaurora.auroraslanterns.accessor.RegistryEventStorage;
 import dev.lambdaurora.auroraslanterns.advancement.WallLanternBonkTrigger;
 import dev.lambdaurora.auroraslanterns.block.AmethystLanternBlock;
 import dev.lambdaurora.auroraslanterns.block.RedstoneLanternBlock;
 import dev.lambdaurora.auroraslanterns.block.WallLanternBlock;
 import dev.lambdaurora.auroraslanterns.block.behavior.RedstoneLanternBehavior;
 import dev.lambdaurora.auroraslanterns.block.entity.WallLanternBlockEntity;
-import dev.lambdaurora.auroraslanterns.compat.AurorasDecoDataUpper;
-import net.fabricmc.fabric.api.event.registry.RegistryEntryAddedCallback;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -60,27 +62,24 @@ public final class AurorasLanternsRegistry {
 	//endregion
 
 	//region Advancement Triggers
-	public static final WallLanternBonkTrigger WALL_LANTERN_BONK_TRIGGER = Registry.register(
-			BuiltInRegistries.TRIGGER_TYPES,
-			AurorasLanterns.id("wall_lantern_bonk"),
-			new WallLanternBonkTrigger()
-	);
+	public static final WallLanternBonkTrigger WALL_LANTERN_BONK_TRIGGER
+			= CriteriaTriggers.register(new WallLanternBonkTrigger());
 	//endregion
 
 	//region Lanterns
 	public static final Identifier AMETHYST_LANTERN_ID = AurorasLanterns.id("amethyst_lantern");
 	public static final AmethystLanternBlock AMETHYST_LANTERN_BLOCK = registerBlock(AMETHYST_LANTERN_ID,
 			AmethystLanternBlock::new,
-			Block.Properties.ofFullCopy(Blocks.LANTERN)
-					.lightLevel(state -> 14)
+			FabricBlockSettings.copyOf(Blocks.LANTERN)
+					.luminance(state -> 14)
 	);
 	public static final Item AMETHYST_LANTERN_ITEM = Items.registerBlock(AMETHYST_LANTERN_BLOCK);
 
 	public static final Identifier REDSTONE_LANTERN_ID = AurorasLanterns.id("redstone_lantern");
 	public static final RedstoneLanternBlock REDSTONE_LANTERN_BLOCK = registerBlock(REDSTONE_LANTERN_ID,
 			RedstoneLanternBlock::new,
-			Block.Properties.ofFullCopy(Blocks.LANTERN)
-					.lightLevel(state -> state.get(RedstoneLanternBehavior.LIT) ? 7 : 0)
+			FabricBlockSettings.copyOf(Blocks.LANTERN)
+					.luminance(state -> state.get(RedstoneLanternBehavior.LIT) ? 7 : 0)
 	);
 	public static final Item REDSTONE_LANTERN_ITEM = Items.registerBlock(REDSTONE_LANTERN_BLOCK);
 	//endregion
@@ -96,11 +95,10 @@ public final class AurorasLanternsRegistry {
 			properties -> new WallLanternBlock<>((LanternBlock) Blocks.SOUL_LANTERN, properties),
 			WallLanternBlock.properties(Blocks.SOUL_LANTERN)
 	);
-	public static final Identifier WALL_LANTERN_BLOCK_ENTITY_TYPE_ID = AurorasLanterns.id("wall_lantern");
 	public static final BlockEntityType<WallLanternBlockEntity> WALL_LANTERN_BLOCK_ENTITY_TYPE = Registry.register(
 			BuiltInRegistries.BLOCK_ENTITY_TYPE,
-			WALL_LANTERN_BLOCK_ENTITY_TYPE_ID,
-			BlockEntityType.Builder.of(
+			AurorasLanterns.id("wall_lantern"),
+			FabricBlockEntityTypeBuilder.create(
 					WallLanternBlockEntity::new, WALL_LANTERN_BLOCK, SOUL_WALL_LANTERN_BLOCK
 			).build()
 	);
@@ -117,6 +115,7 @@ public final class AurorasLanternsRegistry {
 			AMETHYST_LANTERN_BLOCK, AMETHYST_WALL_LANTERN_BLOCK
 	);
 	//endregion
+
 
 	static <T extends Block> T registerBlock(
 			Identifier id, Function<BlockBehaviour.Properties, T> factory, BlockBehaviour.Properties properties
@@ -148,13 +147,13 @@ public final class AurorasLanternsRegistry {
 				.filter(holder -> !holder.key().value().namespace().equals(AurorasLanterns.NAMESPACE))
 				.toList() // Ensure we operate on an immutable copy of the known blocks.
 				.forEach(holder -> handleRegisteredBlock(holder.key().value(), holder.value()));
-		RegistryEntryAddedCallback.event(BuiltInRegistries.BLOCK)
-				.register((rawId, id, block) -> handleRegisteredBlock(id, block));
+		RegistryEventStorage.of(BuiltInRegistries.BLOCK)
+				.auroraslanterns$getAddEvent()
+				.register(AurorasLanternsRegistry::handleRegisteredBlock);
 
 		BuiltInRegistries.ITEM.forEach(AurorasLanternsRegistry::handleRegisteredItem);
-		RegistryEntryAddedCallback.event(BuiltInRegistries.ITEM)
-				.register((rawId, id, item) -> handleRegisteredItem(item));
-
-		AurorasDecoDataUpper.init();
+		RegistryEventStorage.of(BuiltInRegistries.ITEM)
+				.auroraslanterns$getAddEvent()
+				.register((id, item) -> handleRegisteredItem(item));
 	}
 }

@@ -13,7 +13,6 @@ import dev.lambdaurora.auroraslanterns.accessor.BlockEntityTypeAccessor;
 import dev.lambdaurora.auroraslanterns.block.OxidizableWallLanternBlock;
 import dev.lambdaurora.auroraslanterns.block.WallLanternBlock;
 import dev.yumi.commons.event.Event;
-import dev.yumi.mc.core.api.YumiEvents;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.fabricmc.fabric.api.registry.OxidizableBlocksRegistry;
@@ -37,7 +36,7 @@ import java.util.stream.Stream;
  * Represents the lantern registry.
  *
  * @author LambdAurora
- * @version 1.1.2
+ * @version 1.0.3
  * @since 1.0.0
  */
 public final class LanternRegistry {
@@ -47,7 +46,7 @@ public final class LanternRegistry {
 			= new Reference2ObjectOpenHashMap<>();
 
 	public static final Event<Identifier, OnLanternRegistration> REGISTRATION_EVENT
-			= YumiEvents.EVENTS.create(OnLanternRegistration.class);
+			= AurorasLanterns.EVENT_MANAGER.create(OnLanternRegistration.class);
 
 	private LanternRegistry() {
 		throw new UnsupportedOperationException("LanternRegistry only contains static definitions.");
@@ -62,7 +61,7 @@ public final class LanternRegistry {
 	}
 
 	public static void forEachAndFuture(OnLanternRegistration listener) {
-		WALL_LANTERNS.forEach(listener::onRegisterWallLantern);
+		WALL_LANTERNS.values().forEach(listener::onRegisterWallLantern);
 		REGISTRATION_EVENT.register(listener);
 	}
 
@@ -105,7 +104,7 @@ public final class LanternRegistry {
 		WALL_LANTERNS.put(wallLanternId, wallLanternBlock);
 		WALL_LANTERN_BLOCK_MAP.put(block, wallLanternBlock);
 
-		REGISTRATION_EVENT.invoker().onRegisterWallLantern(wallLanternId, wallLanternBlock);
+		REGISTRATION_EVENT.invoker().onRegisterWallLantern(wallLanternBlock);
 
 		return wallLanternBlock;
 	}
@@ -164,6 +163,6 @@ public final class LanternRegistry {
 
 	@FunctionalInterface
 	public interface OnLanternRegistration {
-		void onRegisterWallLantern(Identifier id, WallLanternBlock<?> wallLanternBlock);
+		void onRegisterWallLantern(WallLanternBlock<?> wallLanternBlock);
 	}
 }

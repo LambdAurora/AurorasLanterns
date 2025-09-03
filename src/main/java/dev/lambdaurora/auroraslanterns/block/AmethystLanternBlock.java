@@ -9,35 +9,29 @@
 
 package dev.lambdaurora.auroraslanterns.block;
 
-import com.mojang.serialization.MapCodec;
+import dev.lambdaurora.auroraslanterns.AurorasLanterns;
 import dev.lambdaurora.auroraslanterns.AurorasLanternsRegistry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LanternBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an amethyst lantern block.
  *
  * @author LambdAurora
- * @version 1.1.0
+ * @version 1.0.2
  * @since 1.0.0
  */
 public class AmethystLanternBlock extends LanternBlock {
-	public static final MapCodec<AmethystLanternBlock> CODEC = simpleCodec(AmethystLanternBlock::new);
-
+	public static final Identifier BLOCK_TEXTURE = AurorasLanterns.id("block/amethyst_lantern");
+	public static final Identifier HANGING_MODEL = AurorasLanterns.id("block/hanging_amethyst_lantern");
 	public static final int EFFECT_RADIUS = 32;
 
 	public AmethystLanternBlock(Properties properties) {
 		super(properties);
-	}
-
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	@Override
-	public @NotNull MapCodec<LanternBlock> codec() {
-		return (MapCodec) CODEC;
 	}
 
 	/* Visual */

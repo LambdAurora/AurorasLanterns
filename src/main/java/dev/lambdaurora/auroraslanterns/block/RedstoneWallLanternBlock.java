@@ -9,7 +9,6 @@
 
 package dev.lambdaurora.auroraslanterns.block;
 
-import com.mojang.serialization.MapCodec;
 import dev.lambdaurora.auroraslanterns.block.behavior.RedstoneLanternBehavior;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -19,27 +18,19 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("deprecation")
 public class RedstoneWallLanternBlock extends WallLanternBlock<RedstoneLanternBlock> {
-	public static final MapCodec<? extends RedstoneWallLanternBlock> CODEC
-			= makeCodec(RedstoneLanternBlock.class, RedstoneWallLanternBlock::new);
-
 	private final RedstoneLanternBehavior behavior = new RedstoneLanternBehavior(state -> state.get(FACING));
 
 	public RedstoneWallLanternBlock(RedstoneLanternBlock lantern, Properties properties) {
 		super(lantern, properties);
 	}
 
-	@Override
-	protected @NotNull MapCodec<? extends RedstoneWallLanternBlock> codec() {
-		return CODEC;
-	}
-
 	/* Updates */
 
 	@Override
-	protected void neighborChanged(BlockState state, Level world, BlockPos pos, Block block, BlockPos fromPos, boolean notify) {
+	public void neighborChanged(BlockState state, Level world, BlockPos pos, Block block, BlockPos fromPos, boolean notify) {
 		super.neighborChanged(state, world, pos, block, fromPos, notify);
 		this.behavior.neighborChanged(state, world, pos);
 	}
@@ -47,7 +38,7 @@ public class RedstoneWallLanternBlock extends WallLanternBlock<RedstoneLanternBl
 	/* Ticking */
 
 	@Override
-	protected void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
+	public void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
 		super.tick(state, world, pos, random);
 		this.behavior.scheduledTick(state, world, pos);
 	}
@@ -55,12 +46,12 @@ public class RedstoneWallLanternBlock extends WallLanternBlock<RedstoneLanternBl
 	/* Redstone */
 
 	@Override
-	protected int getSignal(BlockState state, BlockGetter world, BlockPos pos, Direction direction) {
+	public int getSignal(BlockState state, BlockGetter world, BlockPos pos, Direction direction) {
 		return this.behavior.getWeakRedstonePower(state, world, pos, direction);
 	}
 
 	@Override
-	protected int getDirectSignal(BlockState state, BlockGetter world, BlockPos pos, Direction direction) {
+	public int getDirectSignal(BlockState state, BlockGetter world, BlockPos pos, Direction direction) {
 		return this.behavior.getStrongRedstonePower(state, world, pos, direction);
 	}
 }

@@ -18,7 +18,7 @@ plugins {
 base.archivesName.set(project.property("mod_namespace") as String)
 
 val mcVersion = libs.versions.minecraft.get()
-val compatibleMcVersions: Set<String> = setOf("1.21")
+val compatibleMcVersions: Set<String> = setOf("1.20")
 val VERSION = project.property("mod_version") as String
 version = "$VERSION+$mcVersion"
 
@@ -60,8 +60,10 @@ dependencies {
 	modImplementation(libs.fabric.loader)
 	modImplementation(libs.fabric.api)
 
-	modImplementation(libs.yumi.mc.foundation)
-	include(libs.yumi.mc.foundation)
+	implementation(libs.yumi.commons.event)
+	include(libs.yumi.commons.core)
+	include(libs.yumi.commons.collections)
+	include(libs.yumi.commons.event)
 }
 
 java {

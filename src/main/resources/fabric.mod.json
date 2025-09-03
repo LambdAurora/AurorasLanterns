@@ -16,10 +16,10 @@
 	"icon": "assets/auroraslanterns/icon.png",
 	"environment": "*",
 	"entrypoints": {
-		"yumi:init": [
+		"main": [
 			"dev.lambdaurora.auroraslanterns.AurorasLanterns"
 		],
-		"yumi:client_init": [
+		"client": [
 			"dev.lambdaurora.auroraslanterns.client.AurorasLanternsClient"
 		],
 		"fabric-datagen": [
@@ -36,10 +36,12 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.16.9",
-		"minecraft": "~1.21 <1.21.2-",
-		"java": ">=21",
-		"fabric-api": ">=0.115.6",
-		"yumi_mc_core": ">=1.0.0-alpha.8"
+		"minecraft": "~1.20 <1.20.2-",
+		"java": ">=17",
+		"fabric-api": ">=0.86.1"
+	},
+	"breaks": {
+		"aurorasdeco": "<=1.0.0-beta.22"
 	},
 	"custom": {
 		"modmenu": {

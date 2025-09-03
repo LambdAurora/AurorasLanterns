@@ -92,8 +92,8 @@ public final class RedstoneLanternBehavior {
 		boolean shouldUnpower = this.shouldUnpower(world, pos, state);
 		List<BurnoutEntry> list = this.burnoutMap.get(world);
 
-		while (list != null && !list.isEmpty() && world.getGameTime() - list.getFirst().time > RedstoneTorchBlock.RECENT_TOGGLE_TIMER) {
-			list.removeFirst();
+		while (list != null && !list.isEmpty() && world.getGameTime() - list.get(0).time > RedstoneTorchBlock.RECENT_TOGGLE_TIMER) {
+			list.remove(0);
 		}
 
 		if (isLit(state)) {

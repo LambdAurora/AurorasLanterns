@@ -10,9 +10,9 @@
 package dev.lambdaurora.auroraslanterns.resource;
 
 import com.mojang.logging.LogUtils;
+import dev.lambdaurora.auroraslanterns.AurorasLanterns;
 import dev.yumi.commons.collections.YumiCollections;
 import dev.yumi.commons.event.Event;
-import dev.yumi.mc.core.api.YumiEvents;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.io.ResourceType;
 import net.minecraft.server.packs.PackResources;
@@ -25,9 +25,9 @@ import java.util.function.Consumer;
 public final class AurorasLanternsRuntimeDatagen {
 	private static final Logger LOGGER = LogUtils.getLogger();
 	public static final Event<Identifier, DataGenerator> CLIENT_DATAGEN
-			= YumiEvents.EVENTS.create(DataGenerator.class);
+			= AurorasLanterns.EVENT_MANAGER.create(DataGenerator.class);
 	public static final Event<Identifier, DataGenerator> DATA_DATAGEN
-			= YumiEvents.EVENTS.create(DataGenerator.class);
+			= AurorasLanterns.EVENT_MANAGER.create(DataGenerator.class);
 
 	private AurorasLanternsRuntimeDatagen() {
 		throw new UnsupportedOperationException("AurorasLanternsRuntimeDatagen only contains static definitions.");

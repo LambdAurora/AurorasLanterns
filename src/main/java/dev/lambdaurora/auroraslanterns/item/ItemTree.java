@@ -46,11 +46,11 @@ public class ItemTree extends ItemTreeGroupNode {
 			for (int j = 0; j < nodes.size(); j++) {
 				ItemTreeItemNode node = nodes.get(j);
 
-				if (ItemStack.isSameItemSameComponents(node.stack(), current)) {
+				if (ItemStack.isSameItemSameTags(node.stack(), current)) {
 					node.setVisibility(CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
 					foundIndex = -1;
 					break;
-				} else if (previous != null && ItemStack.isSameItemSameComponents(node.stack(), previous)) {
+				} else if (previous != null && ItemStack.isSameItemSameTags(node.stack(), previous)) {
 					foundIndex = j + 1;
 				}
 			}
@@ -75,6 +75,7 @@ public class ItemTree extends ItemTreeGroupNode {
 		event.register(PHASE, modifyItems(modifier));
 	}
 
+	@SuppressWarnings("UnstableApiUsage")
 	private static ItemGroupEvents.ModifyEntries modifyItems(Consumer<ItemTree> modifier) {
 		return entries -> {
 			var tree = fromStacks(entries.getDisplayStacks(), entries.getSearchTabStacks());
@@ -89,7 +90,7 @@ public class ItemTree extends ItemTreeGroupNode {
 	}
 
 	private static void modifyFunctionalBlocks(ItemTree tree) {
-		var lanterns = tree.collectItemsAsGroup(Identifier.ofDefault("lantern"),
+		var lanterns = tree.collectItemsAsGroup(new Identifier(Identifier.DEFAULT_NAMESPACE, "lantern"),
 				stack -> stack.getItem() instanceof BlockItem blockItem
 						&& blockItem.getBlock() instanceof LanternBlock
 		);

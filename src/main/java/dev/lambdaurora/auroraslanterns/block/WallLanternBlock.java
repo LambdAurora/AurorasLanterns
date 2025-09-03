@@ -11,9 +11,6 @@ package dev.lambdaurora.auroraslanterns.block;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import com.mojang.serialization.DataResult;
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.lambdaurora.auroraslanterns.AurorasLanterns;
 import dev.lambdaurora.auroraslanterns.AurorasLanternsRegistry;
 import dev.lambdaurora.auroraslanterns.ExtensionType;
@@ -25,12 +22,12 @@ import dev.lambdaurora.auroraslanterns.util.CustomStateBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -67,39 +64,17 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
-import java.util.function.BiFunction;
 
 /**
  * Represents a wall lantern.
  *
  * @param <L> the type of the underlying lantern
  * @author LambdAurora
- * @version 1.1.1
+ * @version 1.0.2
  * @since 1.0.0
  */
 @SuppressWarnings("deprecation")
 public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity implements SimpleWaterloggedBlock {
-	public static final MapCodec<? extends WallLanternBlock<?>> CODEC = makeCodec(LanternBlock.class, WallLanternBlock::new);
-
-	static <L extends LanternBlock, W extends WallLanternBlock<? extends L>> MapCodec<W> makeCodec(
-			@NotNull Class<L> lanternClass, @NotNull BiFunction<L, Properties, W> instantiator
-	) {
-		return RecordCodecBuilder.mapCodec(
-				instance -> instance.group(
-								BuiltInRegistries.BLOCK.byNameCodec().fieldOf("lantern")
-										.flatXmap(
-												block -> lanternClass.isInstance(block)
-														? DataResult.success(lanternClass.cast(block))
-														: DataResult.error(() -> "Lantern must be of type LanternBlock"),
-												DataResult::success
-										)
-										.forGetter(lantern -> lantern.lanternBlock),
-								propertiesCodec()
-						)
-						.apply(instance, instantiator)
-		);
-	}
-
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	public static final EnumProperty<ExtensionType> EXTENSION = EnumProperty.create("extension", ExtensionType.class);
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -139,15 +114,10 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 		this.animateTickBehavior = AnimateTickBehavior.lanternBehavior(lanternBlock);
 	}
 
-	@Override
-	protected @NotNull MapCodec<? extends WallLanternBlock<?>> codec() {
-		return CODEC;
-	}
-
 	/**
 	 * {@return the underlying lantern block of this wall lantern block}
 	 */
-	public @NotNull L getLanternBlock() {
+	public L getLanternBlock() {
 		return this.lanternBlock;
 	}
 
@@ -273,7 +243,7 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 	}
 
 	@Override
-	protected @NotNull BlockState updateShape(
+	public @NotNull BlockState updateShape(
 			BlockState state, Direction direction, BlockState newState, LevelAccessor world,
 			BlockPos pos, BlockPos posFrom
 	) {
@@ -298,19 +268,19 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 	/* Interaction */
 
 	@Override
-	public @NotNull ItemStack getCloneItemStack(LevelReader world, BlockPos pos, BlockState state) {
+	public @NotNull ItemStack getCloneItemStack(BlockGetter world, BlockPos pos, BlockState state) {
 		return this.getLanternBlock().getCloneItemStack(world, pos, this.getLanternState(state));
 	}
 
 	@Override
-	protected void onProjectileHit(Level world, BlockState state, BlockHitResult hit, Projectile projectile) {
+	public void onProjectileHit(Level world, BlockState state, BlockHitResult hit, Projectile projectile) {
 		var entity = projectile.getOwner();
 		this.swing(world, state, hit, entity instanceof Player player ? player : null, true);
 	}
 
 	@Override
-	protected @NotNull InteractionResult useWithoutItem(
-			BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit
+	public @NotNull InteractionResult use(
+			BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
 	) {
 		return this.swing(world, state, hit, player, true)
 				? InteractionResult.sidedSuccess(world.isClientSide())
@@ -362,7 +332,7 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 	}
 
 	@Override
-	protected void entityInside(BlockState state, Level world, BlockPos pos, Entity entity) {
+	public void entityInside(BlockState state, Level world, BlockPos pos, Entity entity) {
 		if (world.isClientSide())
 			return;
 		if (entity instanceof Projectile)
@@ -395,7 +365,7 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 	/* Block Entity Stuff */
 
 	@Override
-	protected @NotNull RenderShape getRenderShape(BlockState state) {
+	public @NotNull RenderShape getRenderShape(BlockState state) {
 		return RenderShape.MODEL;
 	}
 
@@ -417,31 +387,31 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 	/* Fluid */
 
 	@Override
-	protected @NotNull FluidState getFluidState(BlockState state) {
+	public @NotNull FluidState getFluidState(BlockState state) {
 		return state.get(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
 	}
 
 	/* Entity Stuff */
 
 	@Override
-	protected boolean isPathfindable(BlockState state, PathComputationType pathComputationType) {
+	public boolean isPathfindable(BlockState state, BlockGetter world, BlockPos pos, PathComputationType type) {
 		return false;
 	}
 
 	/* Redstone */
 
 	@Override
-	protected boolean isSignalSource(BlockState state) {
-		return this.getLanternState(state).isSignalSource();
+	public boolean isSignalSource(BlockState state) {
+		return this.lanternBlock.isSignalSource(state);
 	}
 
 	@Override
-	protected boolean hasAnalogOutputSignal(BlockState state) {
+	public boolean hasAnalogOutputSignal(BlockState state) {
 		return true;
 	}
 
 	@Override
-	protected int getAnalogOutputSignal(BlockState state, Level world, BlockPos pos) {
+	public int getAnalogOutputSignal(BlockState state, Level world, BlockPos pos) {
 		var lantern = AurorasLanternsRegistry.WALL_LANTERN_BLOCK_ENTITY_TYPE.getBlockEntity(world, pos);
 		if (lantern != null) {
 			if (lantern.isColliding()) {
