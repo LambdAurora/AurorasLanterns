@@ -12,27 +12,35 @@ package dev.lambdaurora.auroraslanterns.client.particle;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.*;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.SingleQuadParticle;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents the amethyst glint particle.
  *
  * @author LambdAurora
- * @version 1.0.0
+ * @version 1.4.0
  * @since 1.0.0
  */
 @Environment(EnvType.CLIENT)
-public class AmethystGlintParticle extends TextureSheetParticle {
-	protected AmethystGlintParticle(ClientLevel clientWorld, double x, double y, double z,
-			double velocityX, double velocityY, double velocityZ) {
-		super(clientWorld, x, y, z, velocityX, velocityY, velocityZ);
+public class AmethystGlintParticle extends SingleQuadParticle {
+	protected AmethystGlintParticle(
+			ClientLevel clientWorld,
+			double x, double y, double z,
+			double velocityX, double velocityY, double velocityZ,
+			TextureAtlasSprite sprite
+	) {
+		super(clientWorld, x, y, z, sprite);
 		this.hasPhysics = false;
 
-		this.dX = 0.f;
-		this.dY *= 0.15f;
-		this.dZ = 0.f;
+		this.dX = velocityX;
+		this.dY = velocityY * 0.15f;
+		this.dZ = velocityZ;
 
 		this.setSize(0.01F, 0.01F);
 		this.quadSize *= this.random.nextFloat() * 0.4F + 0.7F;
@@ -45,23 +53,21 @@ public class AmethystGlintParticle extends TextureSheetParticle {
 	}
 
 	@Override
-	public @NotNull ParticleRenderType getRenderType() {
-		return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
+	protected @NotNull Layer getLayer() {
+		return Layer.OPAQUE;
 	}
 
 	public record Provider(@NotNull SpriteSet spriteProvider) implements ParticleProvider<SimpleParticleType> {
 		@Override
-		public Particle createParticle(
+		public SingleQuadParticle createParticle(
 				SimpleParticleType parameters, ClientLevel clientWorld, double x, double y, double z,
-				double velocityX, double velocityY, double velocityZ
+				double velocityX, double velocityY, double velocityZ, RandomSource random
 		) {
-			var random = clientWorld.random;
-			var particle = new AmethystGlintParticle(
+			return new AmethystGlintParticle(
 					clientWorld, x, y, z,
-					0.f, random.nextDouble() * -0.1, 0.f
+					0.f, random.nextDouble() * -0.1, 0.f,
+					this.spriteProvider.get(random)
 			);
-			particle.pickSprite(this.spriteProvider());
-			return particle;
 		}
 	}
 }
