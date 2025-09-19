@@ -97,11 +97,8 @@ public class WallLanternBlockEntityRenderer implements BlockEntityRenderer<WallL
 		matrices.translate(-8.f / 16.f, -1.f / 16.f - size, -8.f / 16.f);
 
 		LBGHooks.pushDisableBetterLayer();
-		var model = this.client.getBlockRenderer().getBlockModel(lanternState);
-		var parts = model.collectParts(this.random);
-		this.client.getBlockRenderer().renderBatched(
-				lanternState, pos, lantern.getLevel(), matrices, consumer,
-				false, parts
+		this.client.getBlockRenderer().renderBlockAsEntity(
+				lanternState, matrices, vertexConsumers, light, overlay, lantern.getLevel(), pos
 		);
 		LBGHooks.popDisableBetterLayer();
 		matrices.pop();

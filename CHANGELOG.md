@@ -108,6 +108,11 @@
 
 - Updated Ukrainian translations ([#1](https://github.com/LambdAurora/AurorasLanterns/pull/1)).
 
+### 1.2.7
+
+- Fixed wall lanterns failing to render in some cases ([#2](https://github.com/LambdAurora/AurorasLanterns/issues/2)).
+- Updated [Yumi Minecraft Libraries: Foundation].
+
 ## 1.3.0
 
 - Ported to Minecraft 1.21.8.

@@ -3,5 +3,6 @@
 	"block.auroraslanterns.redstone_lantern": "Lanterne de redstone",
 	"subtitles.auroraslanterns.block.lantern.swing": "Balancement de lanterne",
 	"advancements.auroraslanterns.adventure.wall_lantern_bonk.title": "Attention- Bonk!",
-	"advancements.auroraslanterns.adventure.wall_lantern_bonk.description": "Cogne sur une lanterne murale"
+	"advancements.auroraslanterns.adventure.wall_lantern_bonk.description": "Cogne sur une lanterne murale",
+	"modmenu.bluesky": "Bluesky"
 }
