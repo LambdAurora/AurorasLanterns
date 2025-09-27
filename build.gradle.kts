@@ -82,15 +82,17 @@ tasks.processResources {
 	inputs.property("version", project.version)
 
 	filesMatching("fabric.mod.json") {
-		expand("version" to inputs.properties["version"])
+		expand("version" to (inputs.properties["version"] as String))
 	}
 
 	exclude(".cache/**")
 }
 
 tasks.jar {
+	inputs.property("archivesName", base.archivesName)
+
 	from("LICENSE") {
-		rename { "${it}_${base.archivesName.get()}" }
+		rename { "${it}_${inputs.properties["archivesName"]}" }
 	}
 }
 
