@@ -17,6 +17,7 @@ import dev.lambdaurora.auroraslanterns.block.WallLanternBlock;
 import dev.lambdaurora.auroraslanterns.block.behavior.RedstoneLanternBehavior;
 import dev.lambdaurora.auroraslanterns.block.entity.WallLanternBlockEntity;
 import dev.lambdaurora.auroraslanterns.compat.AurorasDecoDataUpper;
+import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.registry.RegistryEntryAddedCallback;
 import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
@@ -144,12 +145,15 @@ public final class AurorasLanternsRegistry {
 	}
 
 	static void init() {
+		final var phaseId = AurorasLanterns.id("lantern_lookup");
+
 		BuiltInRegistries.BLOCK.holders()
 				.filter(holder -> !holder.key().value().namespace().equals(AurorasLanterns.NAMESPACE))
 				.toList() // Ensure we operate on an immutable copy of the known blocks.
 				.forEach(holder -> handleRegisteredBlock(holder.key().value(), holder.value()));
-		RegistryEntryAddedCallback.event(BuiltInRegistries.BLOCK)
-				.register((rawId, id, block) -> handleRegisteredBlock(id, block));
+		var blockEvent = RegistryEntryAddedCallback.event(BuiltInRegistries.BLOCK);
+		blockEvent.register(phaseId, (rawId, id, block) -> handleRegisteredBlock(id, block));
+		blockEvent.addPhaseOrdering(Event.DEFAULT_PHASE, phaseId);
 
 		BuiltInRegistries.ITEM.forEach(AurorasLanternsRegistry::handleRegisteredItem);
 		RegistryEntryAddedCallback.event(BuiltInRegistries.ITEM)
