@@ -2,7 +2,7 @@
 
 <!-- modrinth_exclude.start -->
 ![Java 21](https://img.shields.io/badge/language-Java%2021-9115ff.svg?style=flat-square) <!-- modrinth_exclude.end -->
-[![GitHub license](https://img.shields.io/badge/license-Lambda%20License-c7136d?style=flat-square)](https://raw.githubusercontent.com/LambdAurora/LambdaBetterGrass/1.20/LICENSE)
+[![GitHub license](https://img.shields.io/badge/license-Lambda%20License-c7136d?style=flat-square)](https://raw.githubusercontent.com/LambdAurora/AurorasLanterns/1.21.8/LICENSE)
 ![Environment: Both](https://img.shields.io/badge/environment-both-4caf50?style=flat-square)
 [![Mod loader: Fabric]][fabric] <!-- modrinth_exclude.start -->
 ![Version](https://img.shields.io/github/v/tag/LambdAurora/AurorasLanterns?label=version&style=flat-square)
@@ -23,9 +23,11 @@ and a whole new way to place lanterns: walls!
 
 ### Amethyst Lantern
 
+![Amethyst Lantern](assets/amethyst_lantern.apng)
+
 Amethyst Lanterns are... so... shiny! They sparkle, sparkle!
 They sparkle so much they scare off hostile mobs!
-When placed Amethyst Lanterns will prevent the spawning of hostile mobs in a large radius.
+When placed Amethyst Lanterns will prevent the spawning of hostile mobs in a large radius regardless of light levels.
 They also help cure Zombie Villagers a bit faster if close enough.
 
 ### Redstone Lantern
@@ -40,6 +42,8 @@ They will also work when hung on walls, as a Wall Lantern:
 ![Wall Redstone Lantern connectivity](assets/redstone_lantern/wall_connectivity.png)
 
 ### Wall Lanterns
+
+![Wall Lantern](assets/wall_lantern.apng)
 
 Diversify how you use lanterns by placing them on the sides of blocks!
 Be it a full block, a wall, or a fence, they will hang there, swaying over in the wind.
@@ -59,7 +63,7 @@ Just do `./gradlew build` and everything should build just fine!
 
 Aurora's Lanterns is compatible with some versions of Aurora's Decorations.
 The mod is also backwards compatible with worlds that used older versions of Aurora's Decorations,
-which means any placed lanterns that were from Aurora's Decorations that are now present in this mod will
+which means any placed lanterns that were from Aurora's Decorations which are now present in this mod will
 not be lost!
 
 <!-- modrinth_exclude.long_start -->

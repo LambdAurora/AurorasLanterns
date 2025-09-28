@@ -1,5 +1,8 @@
 {
 	"block.auroraslanterns.amethyst_lantern": "Аметистовий ліхтар",
 	"block.auroraslanterns.redstone_lantern": "Редстоуновий ліхтар",
-	"subtitles.auroraslanterns.block.lantern.swing": "Ліхтар гойдається"
+	"subtitles.auroraslanterns.block.lantern.swing": "Ліхтар гойдається",
+	"advancements.auroraslanterns.adventure.wall_lantern_bonk.title": "Обережно -Бонк!",
+	"advancements.auroraslanterns.adventure.wall_lantern_bonk.description": "Бонкніть у настінний ліхтар",
+	"modmenu.descriptionTranslation.auroraslanterns": "Мод про ліхтарі, зосереджений на дрібних деталях"
 }

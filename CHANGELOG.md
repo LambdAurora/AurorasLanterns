@@ -37,6 +37,10 @@
 - Fixed again the runtime generation of the `#auroraslanterns:wall_lanterns` tag, which is required for proper mining.
   - The last attempt at fixing this used a faulty injection point, the new injection point is much more reliable.
 
+### 1.0.6
+
+- Updated Ukrainian translations ([#1](https://github.com/LambdAurora/AurorasLanterns/pull/1)).
+
 ## 1.1.0
 
 - Ported to Minecraft 1.21.1.
@@ -67,6 +71,15 @@
 - Fixed again the runtime generation of the `#auroraslanterns:wall_lanterns` tag, which is required for proper mining.
   - The last attempt at fixing this used a faulty injection point, the new injection point is much more reliable.
 
+### 1.1.6
+
+- Updated Ukrainian translations ([#1](https://github.com/LambdAurora/AurorasLanterns/pull/1)).
+
+### 1.1.7
+
+- Fixed critical synchronization issues with wall lanterns.
+- Updated [Yumi Minecraft Libraries: Foundation].
+
 ## 1.2.0
 
 - Ported to Minecraft 1.21.5.
@@ -96,6 +109,15 @@
 - Fixed again the runtime generation of the `#auroraslanterns:wall_lanterns` tag, which is required for proper mining.
   - The last attempt at fixing this used a faulty injection point, the new injection point is much more reliable.
 
+### 1.2.6
+
+- Updated Ukrainian translations ([#1](https://github.com/LambdAurora/AurorasLanterns/pull/1)).
+
+### 1.2.8
+
+- Fixed critical synchronization issues with wall lanterns.
+- Updated [Yumi Minecraft Libraries: Foundation].
+
 ## 1.3.0
 
 - Ported to Minecraft 1.21.8.
@@ -113,5 +135,14 @@
 
 - Fixed again the runtime generation of the `#auroraslanterns:wall_lanterns` tag, which is required for proper mining.
   - The last attempt at fixing this used a faulty injection point, the new injection point is much more reliable.
+
+### 1.3.4
+
+- Updated Ukrainian translations ([#1](https://github.com/LambdAurora/AurorasLanterns/pull/1)).
+
+### 1.3.5
+
+- Fixed critical synchronization issues with wall lanterns.
+- Updated [Yumi Minecraft Libraries: Foundation].
 
 [Yumi Minecraft Libraries: Foundation]: https://github.com/YumiProject/yumi-minecraft-foundation-library "Yumi Minecraft Foundation Library page"

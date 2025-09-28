@@ -82,15 +82,17 @@ tasks.processResources {
 	inputs.property("version", project.version)
 
 	filesMatching("fabric.mod.json") {
-		expand("version" to inputs.properties["version"])
+		expand("version" to (inputs.properties["version"] as String))
 	}
 
 	exclude(".cache/**")
 }
 
 tasks.jar {
+	inputs.property("archivesName", base.archivesName)
+
 	from("LICENSE") {
-		rename { "${it}_${base.archivesName.get()}" }
+		rename { "${it}_${inputs.properties["archivesName"]}" }
 	}
 }
 
@@ -99,7 +101,7 @@ license {
 }
 
 val README = ModUtils.parseReadme(
-	project, "https://raw.githubusercontent.com/LambdAurora/AurorasLanterns/1.20/\$2"
+	project, "https://raw.githubusercontent.com/LambdAurora/AurorasLanterns/1.21.8/\$2"
 )
 val CHANGELOG_CONTENT = ModUtils.fetchChangelog(project, VERSION)
 
