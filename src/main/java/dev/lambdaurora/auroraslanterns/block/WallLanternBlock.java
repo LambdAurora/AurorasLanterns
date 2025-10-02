@@ -352,7 +352,7 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 	@Override
 	protected void entityInside(
 			BlockState state, Level world, BlockPos pos, Entity entity,
-			InsideBlockEffectApplier insideBlockEffectApplier
+			InsideBlockEffectApplier insideBlockEffectApplier, boolean b
 	) {
 		if (world.isClientSide())
 			return;
