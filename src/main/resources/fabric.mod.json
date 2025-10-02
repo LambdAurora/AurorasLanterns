@@ -36,9 +36,9 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.17.2",
-		"minecraft": "~1.21.9-",
+		"minecraft": "~1.21.9- <1.21.10-",
 		"java": ">=21",
-		"fabric-api": ">=0.133.6",
+		"fabric-api": ">=0.133.14",
 		"yumi_mc_core": ">=1.0.0-alpha.16"
 	},
 	"custom": {
@@ -48,7 +48,8 @@
 				"modmenu.discord": "https://discord.lambdaurora.dev/",
 				"modmenu.github_releases": "https://github.com/LambdAurora/AurorasLanterns/releases",
 				"modmenu.modrinth": "https://modrinth.com/mod/auroraslanterns",
-				"modmenu.bluesky": "https://bsky.app/profile/lambdaurora.dev"
+				"modmenu.bluesky": "https://bsky.app/profile/lambdaurora.dev",
+				"modmenu.donate": "https://donate.lambdaurora.dev/"
 			}
 		}
 	}
