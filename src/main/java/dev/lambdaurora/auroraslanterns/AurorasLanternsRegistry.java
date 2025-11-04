@@ -23,7 +23,6 @@ import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityT
 import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.minecraft.core.Registry;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -83,7 +82,7 @@ public final class AurorasLanternsRegistry {
 	public static final RedstoneLanternBlock REDSTONE_LANTERN_BLOCK = registerBlock(REDSTONE_LANTERN_ID,
 			RedstoneLanternBlock::new,
 			Block.Properties.ofFullCopy(Blocks.LANTERN)
-					.lightLevel(state -> state.get(RedstoneLanternBehavior.LIT) ? 7 : 0)
+					.lightLevel(state -> state.getValue(RedstoneLanternBehavior.LIT) ? 7 : 0)
 	);
 	public static final Item REDSTONE_LANTERN_ITEM = Items.registerBlock(REDSTONE_LANTERN_BLOCK);
 	//endregion
@@ -124,7 +123,7 @@ public final class AurorasLanternsRegistry {
 	static <T extends Block> T registerBlock(
 			Identifier id, Function<BlockBehaviour.Properties, T> factory, BlockBehaviour.Properties properties
 	) {
-		var key = ResourceKey.of(Registries.BLOCK, id);
+		var key = ResourceKey.create(Registries.BLOCK, id);
 		var block = factory.apply(properties.setId(key));
 		return Registry.register(BuiltInRegistries.BLOCK, id, block);
 	}
@@ -149,10 +148,10 @@ public final class AurorasLanternsRegistry {
 	static void init() {
 		final var phaseId = AurorasLanterns.id("lantern_lookup");
 
-		BuiltInRegistries.BLOCK.streamElements()
-				.filter(holder -> !holder.key().value().namespace().equals(AurorasLanterns.NAMESPACE))
+		BuiltInRegistries.BLOCK.listElements()
+				.filter(holder -> !holder.key().identifier().getNamespace().equals(AurorasLanterns.NAMESPACE))
 				.toList() // Ensure we operate on an immutable copy of the known blocks.
-				.forEach(holder -> handleRegisteredBlock(holder.key().value(), holder.value()));
+				.forEach(holder -> handleRegisteredBlock(holder.key().identifier(), holder.value()));
 		var blockEvent = RegistryEntryAddedCallback.event(BuiltInRegistries.BLOCK);
 		blockEvent.register(phaseId, (rawId, id, block) -> handleRegisteredBlock(id, block));
 		blockEvent.addPhaseOrdering(Event.DEFAULT_PHASE, phaseId);

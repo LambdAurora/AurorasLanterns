@@ -10,8 +10,8 @@
 package dev.lambdaurora.auroraslanterns.resource;
 
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.io.ResourceType;
 import net.minecraft.server.packs.PackResources;
+import net.minecraft.server.packs.PackType;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.charset.StandardCharsets;
@@ -30,7 +30,7 @@ public interface MutablePackResources extends PackResources {
 	 *
 	 * @param fileName the name of the file
 	 * @param resource the resource content
-	 * @see #putResource(ResourceType, Identifier, byte[])
+	 * @see #putResource(PackType, Identifier, byte[])
 	 * @see #putResource(String, Supplier)
 	 */
 	void putResource(@NotNull String fileName, byte @NotNull [] resource);
@@ -42,9 +42,9 @@ public interface MutablePackResources extends PackResources {
 	 * @param id       the path of the resource
 	 * @param resource the resource content
 	 * @see #putResource(String, byte[])
-	 * @see #putResource(ResourceType, Identifier, Supplier)
+	 * @see #putResource(PackType, Identifier, Supplier)
 	 */
-	void putResource(@NotNull ResourceType type, @NotNull Identifier id, byte @NotNull [] resource);
+	void putResource(@NotNull PackType type, @NotNull Identifier id, byte @NotNull [] resource);
 
 	/**
 	 * Puts a resource into the resource pack's root.
@@ -52,7 +52,7 @@ public interface MutablePackResources extends PackResources {
 	 * @param fileName the name of the file
 	 * @param resource the supplier of the resource content
 	 * @apiNote the supplier is {@link com.google.common.base.Suppliers#memoize(com.google.common.base.Supplier) memoized}
-	 * @see #putResource(ResourceType, Identifier, Supplier)
+	 * @see #putResource(PackType, Identifier, Supplier)
 	 * @see #putResource(String, byte[])
 	 */
 	void putResource(@NotNull String fileName, @NotNull Supplier<byte @NotNull []> resource);
@@ -65,9 +65,9 @@ public interface MutablePackResources extends PackResources {
 	 * @param resource the supplier of the resource content
 	 * @apiNote the supplier is {@link com.google.common.base.Suppliers#memoize(com.google.common.base.Supplier) memoized}
 	 * @see #putResource(String, Supplier)
-	 * @see #putResource(ResourceType, Identifier, byte[])
+	 * @see #putResource(PackType, Identifier, byte[])
 	 */
-	void putResource(@NotNull ResourceType type, @NotNull Identifier id, @NotNull Supplier<byte @NotNull []> resource);
+	void putResource(@NotNull PackType type, @NotNull Identifier id, @NotNull Supplier<byte @NotNull []> resource);
 
 	/**
 	 * Puts a text resource into the resource pack's root.
@@ -86,9 +86,9 @@ public interface MutablePackResources extends PackResources {
 	 * @param type the resource type
 	 * @param id   the path of the resource
 	 * @param text the resource content
-	 * @see #putResource(ResourceType, Identifier, byte[])
+	 * @see #putResource(PackType, Identifier, byte[])
 	 */
-	default void putText(@NotNull ResourceType type, @NotNull Identifier id, @NotNull String text) {
+	default void putText(@NotNull PackType type, @NotNull Identifier id, @NotNull String text) {
 		this.putResource(type, id, text.getBytes(StandardCharsets.UTF_8));
 	}
 
@@ -112,7 +112,7 @@ public interface MutablePackResources extends PackResources {
 	 * @param textSupplier the supplier of the resource content
 	 * @apiNote the supplier is {@link com.google.common.base.Suppliers#memoize(com.google.common.base.Supplier) memoized}
 	 */
-	default void putText(@NotNull ResourceType type, @NotNull Identifier id, @NotNull Supplier<@NotNull String> textSupplier) {
+	default void putText(@NotNull PackType type, @NotNull Identifier id, @NotNull Supplier<@NotNull String> textSupplier) {
 		this.putResource(type, id, () -> textSupplier.get().getBytes(StandardCharsets.UTF_8));
 	}
 
@@ -121,7 +121,7 @@ public interface MutablePackResources extends PackResources {
 	 *
 	 * @param type the resource type
 	 */
-	void clearResources(ResourceType type);
+	void clearResources(PackType type);
 
 	/**
 	 * Clears all the resources from memory.

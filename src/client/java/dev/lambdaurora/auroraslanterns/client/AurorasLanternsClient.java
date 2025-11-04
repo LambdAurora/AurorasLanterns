@@ -26,7 +26,7 @@ import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
-import net.minecraft.resources.io.ResourceType;
+import net.minecraft.server.packs.PackType;
 import org.slf4j.Logger;
 
 import java.io.IOException;
@@ -66,9 +66,9 @@ public final class AurorasLanternsClient implements ClientModInitializer {
 					var blockStateTemplate = stream.readAllBytes();
 
 					LanternRegistry.forEach((id, block) -> {
-						pack.putResource(ResourceType.CLIENT_RESOURCES, id.withPath(path -> "blockstates/" + path + ".json"), blockStateTemplate);
+						pack.putResource(PackType.CLIENT_RESOURCES, id.withPath(path -> "blockstates/" + path + ".json"), blockStateTemplate);
 						pack.putText(
-								ResourceType.CLIENT_RESOURCES, id.withPath(path -> "bettergrass/states/" + path + ".json"),
+								PackType.CLIENT_RESOURCES, id.withPath(path -> "bettergrass/states/" + path + ".json"),
 								"{\"type\":\"layer\",\"data\":\"" + WallLanternBlock.BETTERGRASS_DATA + "\"}"
 						);
 					});

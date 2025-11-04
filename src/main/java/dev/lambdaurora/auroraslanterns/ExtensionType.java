@@ -77,7 +77,7 @@ public enum ExtensionType implements StringRepresentable {
 			if (block instanceof FenceBlock || state.is(BlockTags.FENCES) || Utils.isShapeEqual(FENCE_SHAPE, box))
 				return FENCE;
 			if (block instanceof WallBlock || state.is(BlockTags.WALLS) || Utils.isShapeEqual(WALL_SHAPE, box)) {
-				if (state.hasProperty(WallBlock.UP) && !state.get(WallBlock.UP)) {
+				if (state.hasProperty(WallBlock.UP) && !state.getValue(WallBlock.UP)) {
 					return LOW_WALL;
 				} else {
 					return WALL;

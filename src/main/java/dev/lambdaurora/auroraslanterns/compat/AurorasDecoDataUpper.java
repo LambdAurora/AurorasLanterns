@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class AurorasDecoDataUpper {
 	private static @NotNull Identifier id(@NotNull String path) {
-		return Identifier.of("aurorasdeco", path);
+		return Identifier.fromNamespaceAndPath("aurorasdeco", path);
 	}
 
 	public static void init() {
@@ -41,7 +41,7 @@ public final class AurorasDecoDataUpper {
 		BuiltInRegistries.ITEM.addAlias(redstoneLanternId, AurorasLanternsRegistry.REDSTONE_LANTERN_ID);
 
 		LanternRegistry.forEachAndFuture((id, block) -> {
-			BuiltInRegistries.BLOCK.addAlias(id(id.path()), id);
+			BuiltInRegistries.BLOCK.addAlias(id(id.getPath()), id);
 		});
 	}
 }

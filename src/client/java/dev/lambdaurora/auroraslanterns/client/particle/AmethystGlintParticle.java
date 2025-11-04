@@ -38,9 +38,9 @@ public class AmethystGlintParticle extends SingleQuadParticle {
 		super(clientWorld, x, y, z, sprite);
 		this.hasPhysics = false;
 
-		this.dX = velocityX;
-		this.dY = velocityY * 0.15f;
-		this.dZ = velocityZ;
+		this.xd = velocityX;
+		this.yd = velocityY * 0.15f;
+		this.zd = velocityZ;
 
 		this.setSize(0.01F, 0.01F);
 		this.quadSize *= this.random.nextFloat() * 0.4F + 0.7F;

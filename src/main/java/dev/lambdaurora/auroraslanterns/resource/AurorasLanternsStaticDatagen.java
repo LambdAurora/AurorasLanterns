@@ -25,7 +25,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
-import net.minecraft.network.chat.Text;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
@@ -63,13 +63,13 @@ public final class AurorasLanternsStaticDatagen implements DataGeneratorEntrypoi
 		@Override
 		public void generateAdvancement(HolderLookup.Provider registryLookup, Consumer<AdvancementHolder> consumer) {
 			consumer.accept(Advancement.Builder.advancement()
-					.parent(new AdvancementHolder(Identifier.ofDefault("adventure/root"), null))
+					.parent(new AdvancementHolder(Identifier.withDefaultNamespace("adventure/root"), null))
 					.display(
 							Blocks.LANTERN,
-							Text.translatable(
+							Component.translatable(
 									"advancements.%s.adventure.wall_lantern_bonk.title".formatted(AurorasLanterns.NAMESPACE)
 							),
-							Text.translatable(
+							Component.translatable(
 									"advancements.%s.adventure.wall_lantern_bonk.description".formatted(AurorasLanterns.NAMESPACE)
 							),
 							null,

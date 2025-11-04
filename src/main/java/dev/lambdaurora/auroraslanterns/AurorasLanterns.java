@@ -15,7 +15,7 @@ import dev.lambdaurora.auroraslanterns.resource.InMemoryPackResources;
 import dev.yumi.mc.core.api.ModContainer;
 import dev.yumi.mc.core.api.entrypoint.ModInitializer;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.io.ResourceType;
+import net.minecraft.server.packs.PackType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.stream.Collectors;
@@ -38,7 +38,7 @@ public final class AurorasLanterns implements ModInitializer {
 			var pack = new InMemoryPackResources.Named(AurorasLanterns.id("generated").toString());
 			registrar.accept(pack);
 
-			pack.putText(ResourceType.SERVER_DATA, AurorasLanterns.id("tags/block/wall_lanterns.json"), """
+			pack.putText(PackType.SERVER_DATA, AurorasLanterns.id("tags/block/wall_lanterns.json"), """
 					{
 						"replace": false,
 						"values": [
@@ -53,6 +53,6 @@ public final class AurorasLanterns implements ModInitializer {
 	}
 
 	public static @NotNull Identifier id(@NotNull String path) {
-		return Identifier.of(NAMESPACE, path);
+		return Identifier.fromNamespaceAndPath(NAMESPACE, path);
 	}
 }

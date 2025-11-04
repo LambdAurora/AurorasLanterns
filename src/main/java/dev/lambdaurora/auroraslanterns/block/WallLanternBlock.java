@@ -76,7 +76,7 @@ import java.util.Map;
  * @since 1.0.0
  */
 @SuppressWarnings("deprecation")
-public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity implements SimpleWaterloggedBlock {
+public class WallLanternBlock<L extends LanternBlock> extends BaseEntityBlock implements SimpleWaterloggedBlock {
 	public static final MapCodec<? extends WallLanternBlock<?>> CODEC = makeCodec(LanternBlock.class, WallLanternBlock::new);
 
 	static <L extends LanternBlock, W extends WallLanternBlock<? extends L>> MapCodec<W> makeCodec(
@@ -124,9 +124,9 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 
 		this.lanternBlock = lantern;
 
-		this.setDefaultState(this.withPropertiesOf(lantern.defaultState())
-				.with(FACING, Direction.NORTH)
-				.with(EXTENSION, ExtensionType.NONE)
+		this.registerDefaultState(this.withPropertiesOf(lantern.defaultBlockState())
+				.setValue(FACING, Direction.NORTH)
+				.setValue(EXTENSION, ExtensionType.NONE)
 		);
 
 		var item = Item.byBlock(lantern); // Avoid caching which could break stuff at this stage.
@@ -160,7 +160,7 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 	}
 
 	@Override
-	protected void createStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		var lantern = ASSOCIATED_LANTERN_INIT.get();
 		ASSOCIATED_LANTERN_INIT.remove();
 
@@ -176,8 +176,8 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 
 	@Override
 	public @NotNull VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-		var facing = state.get(WallLanternBlock.FACING);
-		var extension = state.get(WallLanternBlock.EXTENSION);
+		var facing = state.getValue(WallLanternBlock.FACING);
+		var extension = state.getValue(WallLanternBlock.EXTENSION);
 		var lanternShape = this.getLanternState(state).getShape(world, pos);
 		var lanternShapeMaxY = lanternShape.max(Direction.Axis.Y);
 		var lanternShapeMinY = lanternShape.min(Direction.Axis.Y);
@@ -201,7 +201,7 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 
 	@Override
 	public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
-		var direction = state.get(FACING);
+		var direction = state.getValue(FACING);
 		var attachPos = pos.relative(direction.getOpposite());
 		var attachState = world.getBlockState(attachPos);
 		return !Shapes.joinIsNotEmpty(
@@ -212,21 +212,21 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 
 	@Override
 	public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
-		var state = this.defaultState();
+		var state = this.defaultBlockState();
 		var world = context.getLevel();
 		var pos = context.getClickedPos();
 		var fluidState = world.getFluidState(pos);
 		var directions = context.getNearestLookingDirections();
 
-		state = state.with(WATERLOGGED, fluidState.getType() == Fluids.WATER);
+		state = state.setValue(WATERLOGGED, fluidState.getType() == Fluids.WATER);
 
 		for (var direction : directions) {
 			if (direction.getAxis().isHorizontal()) {
 				var opposite = direction.getOpposite();
-				state = state.with(FACING, opposite);
+				state = state.setValue(FACING, opposite);
 				if (state.canSurvive(world, pos)) {
 					BlockPos attachPos = pos.relative(direction);
-					return state.with(
+					return state.setValue(
 							EXTENSION,
 							ExtensionType.getExtensionValue(world.getBlockState(attachPos), attachPos, world)
 					);
@@ -239,12 +239,12 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 
 	@Override
 	public @NotNull BlockState rotate(BlockState state, Rotation rotation) {
-		return state.with(FACING, rotation.rotate(state.get(FACING)));
+		return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
 	}
 
 	@Override
 	public @NotNull BlockState mirror(BlockState state, Mirror mirror) {
-		return state.rotate(mirror.getRotation(state.get(FACING)));
+		return state.rotate(mirror.getRotation(state.getValue(FACING)));
 	}
 
 	/* Updates */
@@ -265,18 +265,18 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 			BlockState state, LevelReader world, ScheduledTickAccess tickScheduler, BlockPos pos,
 			Direction direction, BlockPos posFrom, BlockState newState, RandomSource randomSource
 	) {
-		if (state.get(WATERLOGGED)) {
+		if (state.getValue(WATERLOGGED)) {
 			tickScheduler.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
 		}
 
-		if (direction.getOpposite() == state.get(FACING)) {
+		if (direction.getOpposite() == state.getValue(FACING)) {
 			if (!state.canSurvive(world, pos)) {
-				return Blocks.AIR.defaultState();
+				return Blocks.AIR.defaultBlockState();
 			}
 
 			var extensionType = ExtensionType.getExtensionValue(newState, posFrom, world);
-			if (extensionType != state.get(EXTENSION)) {
-				return state.with(EXTENSION, extensionType);
+			if (extensionType != state.getValue(EXTENSION)) {
+				return state.setValue(EXTENSION, extensionType);
 			}
 		}
 
@@ -324,7 +324,7 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 
 	private boolean isPointOnLantern(BlockState state, Direction side, double y) {
 		if (side.getAxis() != Direction.Axis.Y && y <= 0.8123999834060669D) {
-			var direction = state.get(FACING);
+			var direction = state.getValue(FACING);
 			return direction.getAxis() != side.getAxis();
 		} else {
 			return false;
@@ -363,7 +363,7 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 		if (blockEntity == null)
 			return;
 
-		var swingAxis = state.get(FACING).getClockWise().getAxis();
+		var swingAxis = state.getValue(FACING).getClockWise().getAxis();
 
 		var lanternBox = blockEntity.getCollisionBox();
 		var entityBox = entity.getBoundingBox();
@@ -391,7 +391,7 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 	}
 
 	@Override
-	public @Nullable BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+	public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 		return AurorasLanternsRegistry.WALL_LANTERN_BLOCK_ENTITY_TYPE.create(pos, state);
 	}
 
@@ -409,7 +409,7 @@ public class WallLanternBlock<L extends LanternBlock> extends BlockWithEntity im
 
 	@Override
 	protected @NotNull FluidState getFluidState(BlockState state) {
-		return state.get(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+		return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
 	}
 
 	/* Entity Stuff */

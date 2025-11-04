@@ -34,7 +34,7 @@ public class NaturalSpawnerMixin {
 	private static void auroraslanterns$onCanSpawn(
 			ServerLevel world, MobCategory category, StructureManager structureAccessor,
 			ChunkGenerator chunkGenerator, MobSpawnSettings.SpawnerData spawnerData,
-			BlockPos.Mutable pos, double squaredDistance, CallbackInfoReturnable<Boolean> cir
+			BlockPos.MutableBlockPos pos, double squaredDistance, CallbackInfoReturnable<Boolean> cir
 	) {
 		if (cir.getReturnValueZ()) {
 			if (!category.isFriendly() && world.getPoiManager().getInSquare(

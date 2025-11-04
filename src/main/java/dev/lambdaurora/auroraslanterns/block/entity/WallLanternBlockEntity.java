@@ -13,7 +13,7 @@ import dev.lambdaurora.auroraslanterns.AurorasLanternsRegistry;
 import dev.lambdaurora.auroraslanterns.block.WallLanternBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -48,19 +48,19 @@ public class WallLanternBlockEntity extends SwayingBlockEntity {
 	 * @return the lantern as block state
 	 */
 	public BlockState getLanternState() {
-		var cachedState = this.getCachedState();
+		var cachedState = this.getBlockState();
 		return ((WallLanternBlock<?>) cachedState.getBlock()).getLanternState(cachedState);
 	}
 
 	@Override
 	public AABB getCollisionBox() {
-		var swingAxis = this.getCachedState().get(WallLanternBlock.FACING).getClockWise().getAxis();
+		var swingAxis = this.getBlockState().getValue(WallLanternBlock.FACING).getClockWise().getAxis();
 		return swingAxis == Direction.Axis.X ? this.lanternCollisionBoxX : this.lanternCollisionBoxZ;
 	}
 
 	@Override
 	public int getMaxSwingTicks() {
-		return this.getCachedState().getFluidState().isEmpty() ? 60 : 100;
+		return this.getBlockState().getFluidState().isEmpty() ? 60 : 100;
 	}
 
 	private void updateCollisionBoxes() {
@@ -99,7 +99,7 @@ public class WallLanternBlockEntity extends SwayingBlockEntity {
 		if (this.isSwinging() || this.isColliding()) {
 			float ticks = this.getAdjustedSwingTicks();
 			float shiftedTicks = ticks - 100;
-			return (shiftedTicks * shiftedTicks) / 5000 * MathHelper.sin(ticks / MathHelper.PI) / (4 + ticks / 3);
+			return (shiftedTicks * shiftedTicks) / 5000 * Mth.sin(ticks / Mth.PI) / (4 + ticks / 3);
 		} else {
 			return this.getNaturalSwayingAngle();
 		}
@@ -120,6 +120,6 @@ public class WallLanternBlockEntity extends SwayingBlockEntity {
 		int period = 125;
 		float n = ((float) Math.floorMod(pos.getX() * 7L + pos.getY() * 9L + pos.getZ() * 13L + time, (long) period))
 				/ period;
-		return (float) ((.01f * MathHelper.cos((float) (Math.PI * 2 * n))) * Math.PI);
+		return (float) ((.01f * Mth.cos((float) (Math.PI * 2 * n))) * Math.PI);
 	}
 }

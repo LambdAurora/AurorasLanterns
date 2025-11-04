@@ -17,6 +17,6 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(Block.class)
 public interface BlockAccessor {
-	@Invoker("createStateDefinition")
+	@Invoker("createBlockStateDefinition")
 	void auroraslanterns$createStateDefinition(StateDefinition.Builder<Block, BlockState> builder);
 }

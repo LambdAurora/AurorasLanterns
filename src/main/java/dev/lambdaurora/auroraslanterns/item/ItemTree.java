@@ -12,8 +12,8 @@ package dev.lambdaurora.auroraslanterns.item;
 import dev.lambdaurora.auroraslanterns.AurorasLanterns;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.LanternBlock;
 
@@ -89,7 +89,7 @@ public class ItemTree extends ItemTreeGroupNode {
 	}
 
 	private static void modifyFunctionalBlocks(ItemTree tree) {
-		var lanterns = tree.collectItemsAsGroup(Identifier.ofDefault("lantern"),
+		var lanterns = tree.collectItemsAsGroup(Identifier.withDefaultNamespace("lantern"),
 				stack -> stack.getItem() instanceof BlockItem blockItem
 						&& blockItem.getBlock() instanceof LanternBlock
 		);

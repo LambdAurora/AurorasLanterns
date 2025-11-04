@@ -27,7 +27,7 @@ public class RedstoneWallLanternBlock extends WallLanternBlock<RedstoneLanternBl
 	public static final MapCodec<? extends RedstoneWallLanternBlock> CODEC
 			= makeCodec(RedstoneLanternBlock.class, RedstoneWallLanternBlock::new);
 
-	private final RedstoneLanternBehavior behavior = new RedstoneLanternBehavior(state -> state.get(FACING));
+	private final RedstoneLanternBehavior behavior = new RedstoneLanternBehavior(state -> state.getValue(FACING));
 
 	public RedstoneWallLanternBlock(RedstoneLanternBlock lantern, Properties properties) {
 		super(lantern, properties);
