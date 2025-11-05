@@ -28,8 +28,18 @@ val targetJavaVersion = Integer.parseInt(project.property("java_version").toStri
 repositories {
 	mavenCentral()
 	maven {
+		name = "ParchmentMC"
+		url = uri("https://maven.parchmentmc.org/")
+		content {
+			includeGroup("org.parchmentmc.data")
+		}
+	}
+	maven {
 		name = "Gegy"
 		url = uri("https://maven.gegy.dev/releases/")
+		content {
+			includeGroupAndSubgroups("dev.lambdaurora")
+		}
 	}
 }
 
@@ -55,11 +65,13 @@ dependencies {
 	@Suppress("UnstableApiUsage")
 	mappings(loom.layered {
 		officialMojangMappings()
-		mappings("dev.lambdaurora:yalmm:${mcVersion}+build.${libs.versions.mappings.yalmm.get()}")
+		parchment("org.parchmentmc.data:parchment-1.21.10:2025.10.12@zip")
+		mappings("dev.lambdaurora:yalmm-mojbackward:${mcVersion}+build.${libs.versions.mappings.yalmm.get()}")
 	})
 	modImplementation(libs.fabric.loader)
 	modImplementation(libs.fabric.api)
 
+	compileOnly(libs.jspecify)
 	modImplementation(libs.yumi.mc.foundation)
 	include(libs.yumi.mc.foundation)
 }

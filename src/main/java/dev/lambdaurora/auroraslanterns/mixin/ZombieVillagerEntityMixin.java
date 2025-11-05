@@ -33,7 +33,7 @@ public class ZombieVillagerEntityMixin extends Zombie {
 		if (this.random.nextFloat() < .35f) {
 			int lanterns = (int) ((ServerLevel) this.level()).getPoiManager().getInSquare(
 					poiType -> poiType.value() == AurorasLanternsRegistry.AMETHYST_LANTERN_POI,
-					this.getBlockPos(),
+					this.blockPosition(),
 					AmethystLanternBlock.EFFECT_RADIUS,
 					PoiManager.Occupancy.ANY
 			).filter(poi -> {

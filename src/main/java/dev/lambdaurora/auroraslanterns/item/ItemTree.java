@@ -89,10 +89,14 @@ public class ItemTree extends ItemTreeGroupNode {
 	}
 
 	private static void modifyFunctionalBlocks(ItemTree tree) {
-		var lanterns = tree.collectItemsAsGroup(Identifier.ofDefault("lantern"),
+		var lanterns = tree.collectItemsAsGroup(Identifier.withDefaultNamespace("lantern"),
 				stack -> stack.getItem() instanceof BlockItem blockItem
 						&& blockItem.getBlock() instanceof LanternBlock
 		);
+
+		if (lanterns == null) {
+			lanterns = tree;
+		}
 
 		lanterns.add(AMETHYST_LANTERN_ITEM);
 		lanterns.add(REDSTONE_LANTERN_ITEM);

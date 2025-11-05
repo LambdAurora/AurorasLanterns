@@ -13,26 +13,30 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.particles.SimpleParticleType;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.util.RandomSource;
 
 /**
  * Represents the amethyst glint particle.
  *
  * @author LambdAurora
- * @version 1.0.0
+ * @version 1.4.0
  * @since 1.0.0
  */
 @Environment(EnvType.CLIENT)
 public class AmethystGlintParticle extends TextureSheetParticle {
-	protected AmethystGlintParticle(ClientLevel clientWorld, double x, double y, double z,
-			double velocityX, double velocityY, double velocityZ) {
-		super(clientWorld, x, y, z, velocityX, velocityY, velocityZ);
+	protected AmethystGlintParticle(
+			ClientLevel clientWorld,
+			double x, double y, double z,
+			double velocityX, double velocityY, double velocityZ
+	) {
+		super(clientWorld, x, y, z);
 		this.hasPhysics = false;
 
-		this.dX = 0.f;
-		this.dY *= 0.15f;
-		this.dZ = 0.f;
+		this.xd = velocityX;
+		this.yd = velocityY * 0.15f;
+		this.zd = velocityZ;
 
 		this.setSize(0.01F, 0.01F);
 		this.quadSize *= this.random.nextFloat() * 0.4F + 0.7F;
@@ -45,11 +49,11 @@ public class AmethystGlintParticle extends TextureSheetParticle {
 	}
 
 	@Override
-	public @NotNull ParticleRenderType getRenderType() {
+	public ParticleRenderType getRenderType() {
 		return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
 	}
 
-	public record Provider(@NotNull SpriteSet spriteProvider) implements ParticleProvider<SimpleParticleType> {
+	public record Provider(SpriteSet spriteProvider) implements ParticleProvider<SimpleParticleType> {
 		@Override
 		public Particle createParticle(
 				SimpleParticleType parameters, ClientLevel clientWorld, double x, double y, double z,
@@ -58,7 +62,7 @@ public class AmethystGlintParticle extends TextureSheetParticle {
 			var random = clientWorld.random;
 			var particle = new AmethystGlintParticle(
 					clientWorld, x, y, z,
-					0.f, random.nextDouble() * -0.1, 0.f
+					0.f, random.nextDouble() * -0.1, 0.
 			);
 			particle.pickSprite(this.spriteProvider());
 			return particle;

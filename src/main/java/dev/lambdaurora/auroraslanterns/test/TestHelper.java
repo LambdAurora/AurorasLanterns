@@ -11,9 +11,8 @@ package dev.lambdaurora.auroraslanterns.test;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraft.network.chat.Text;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
 
 class TestHelper {
 	/**
@@ -22,13 +21,11 @@ class TestHelper {
 	 * @param state the expected block state
 	 * @param pos   the position to check for
 	 */
-	static void assertBlockState(
-			GameTestHelper context, @NotNull BlockState state, @NotNull BlockPos pos
-	) {
+	static void assertBlockState(GameTestHelper context, BlockState state, BlockPos pos) {
 		context.assertBlockState(
 				pos,
 				s -> s.equals(state),
-				s -> Text.literal(
+				s -> Component.literal(
 						"Expected block state %s at position %s, found %s.".formatted(state, pos.toShortString(), s)
 				)
 		);

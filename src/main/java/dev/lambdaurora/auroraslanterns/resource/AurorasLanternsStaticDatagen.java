@@ -25,11 +25,10 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
-import net.minecraft.network.chat.Text;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
@@ -63,13 +62,13 @@ public final class AurorasLanternsStaticDatagen implements DataGeneratorEntrypoi
 		@Override
 		public void generateAdvancement(HolderLookup.Provider registryLookup, Consumer<AdvancementHolder> consumer) {
 			consumer.accept(Advancement.Builder.advancement()
-					.parent(new AdvancementHolder(Identifier.ofDefault("adventure/root"), null))
+					.parent(new AdvancementHolder(Identifier.withDefaultNamespace("adventure/root"), null))
 					.display(
 							Blocks.LANTERN,
-							Text.translatable(
+							Component.translatable(
 									"advancements.%s.adventure.wall_lantern_bonk.title".formatted(AurorasLanterns.NAMESPACE)
 							),
-							Text.translatable(
+							Component.translatable(
 									"advancements.%s.adventure.wall_lantern_bonk.description".formatted(AurorasLanterns.NAMESPACE)
 							),
 							null,
@@ -117,12 +116,12 @@ public final class AurorasLanternsStaticDatagen implements DataGeneratorEntrypoi
 			}
 
 			@Override
-			protected @NotNull RecipeProvider createRecipeProvider(HolderLookup.Provider provider, RecipeOutput recipeOutput) {
+			protected RecipeProvider createRecipeProvider(HolderLookup.Provider provider, RecipeOutput recipeOutput) {
 				return new AurorasRecipeProvider(provider, recipeOutput);
 			}
 
 			@Override
-			public @NotNull String getName() {
+			public String getName() {
 				return "Aurora's Lanterns Recipes";
 			}
 		}

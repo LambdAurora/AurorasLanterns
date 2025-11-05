@@ -13,14 +13,13 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.lambdaurora.auroraslanterns.AurorasLanternsRegistry;
 import net.minecraft.advancements.Criterion;
-import net.minecraft.advancements.critereon.ContextAwarePredicate;
-import net.minecraft.advancements.critereon.EntityPredicate;
-import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
+import net.minecraft.advancements.criterion.ContextAwarePredicate;
+import net.minecraft.advancements.criterion.EntityPredicate;
+import net.minecraft.advancements.criterion.SimpleCriterionTrigger;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
@@ -33,7 +32,7 @@ import java.util.Optional;
  */
 public class WallLanternBonkTrigger extends SimpleCriterionTrigger<WallLanternBonkTrigger.TriggerInstance> {
 	@Override
-	public @NotNull Codec<TriggerInstance> codec() {
+	public Codec<TriggerInstance> codec() {
 		return TriggerInstance.CODEC;
 	}
 
@@ -42,8 +41,8 @@ public class WallLanternBonkTrigger extends SimpleCriterionTrigger<WallLanternBo
 	}
 
 	public record TriggerInstance(
-			@NotNull Optional<ContextAwarePredicate> player,
-			@NotNull Optional<Block> block
+			Optional<ContextAwarePredicate> player,
+			Optional<Block> block
 	) implements SimpleCriterionTrigger.SimpleInstance {
 		public static final Codec<TriggerInstance> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(TriggerInstance::player),
