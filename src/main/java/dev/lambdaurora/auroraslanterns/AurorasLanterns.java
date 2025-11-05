@@ -16,7 +16,6 @@ import dev.yumi.mc.core.api.ModContainer;
 import dev.yumi.mc.core.api.entrypoint.ModInitializer;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.stream.Collectors;
 
@@ -52,7 +51,7 @@ public final class AurorasLanterns implements ModInitializer {
 		ItemTree.init();
 	}
 
-	public static @NotNull Identifier id(@NotNull String path) {
+	public static Identifier id(String path) {
 		return Identifier.fromNamespaceAndPath(NAMESPACE, path);
 	}
 }

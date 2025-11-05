@@ -12,8 +12,8 @@ package dev.lambdaurora.auroraslanterns.item;
 import dev.lambdaurora.auroraslanterns.AurorasLanterns;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.LanternBlock;
 
@@ -93,6 +93,10 @@ public class ItemTree extends ItemTreeGroupNode {
 				stack -> stack.getItem() instanceof BlockItem blockItem
 						&& blockItem.getBlock() instanceof LanternBlock
 		);
+
+		if (lanterns == null) {
+			lanterns = tree;
+		}
 
 		lanterns.add(AMETHYST_LANTERN_ITEM);
 		lanterns.add(REDSTONE_LANTERN_ITEM);

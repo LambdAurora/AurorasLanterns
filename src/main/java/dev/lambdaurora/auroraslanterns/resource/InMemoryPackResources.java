@@ -24,9 +24,8 @@ import net.minecraft.server.packs.metadata.MetadataSectionType;
 import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.server.packs.resources.IoSupplier;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.io.ByteArrayInputStream;
@@ -72,7 +71,7 @@ public abstract class InMemoryPackResources implements MutablePackResources {
 		return this.openResource(this.getResourceMap(type), id);
 	}
 
-	protected <T> @Nullable IoSupplier<InputStream> openResource(Map<T, Supplier<byte[]>> map, @NotNull T key) {
+	protected <T> @Nullable IoSupplier<InputStream> openResource(Map<T, Supplier<byte[]>> map, T key) {
 		var supplier = map.get(key);
 
 		if (supplier == null) {
@@ -102,7 +101,7 @@ public abstract class InMemoryPackResources implements MutablePackResources {
 	}
 
 	@Override
-	public @Unmodifiable @NotNull Set<String> getNamespaces(PackType type) {
+	public @Unmodifiable Set<String> getNamespaces(PackType type) {
 		return this.getResourceMap(type).keySet().stream()
 				.map(Identifier::getNamespace)
 				.collect(Collectors.toUnmodifiableSet());
@@ -148,22 +147,22 @@ public abstract class InMemoryPackResources implements MutablePackResources {
 	}
 
 	@Override
-	public void putResource(@NotNull String fileName, byte @NotNull [] resource) {
+	public void putResource(String fileName, byte[] resource) {
 		this.root.put(fileName, () -> resource);
 	}
 
 	@Override
-	public void putResource(@NotNull PackType type, @NotNull Identifier id, byte @NotNull [] resource) {
+	public void putResource(PackType type, Identifier id, byte[] resource) {
 		this.getResourceMap(type).put(id, () -> resource);
 	}
 
 	@Override
-	public void putResource(@NotNull String fileName, @NotNull Supplier<byte[]> resource) {
+	public void putResource(String fileName, Supplier<byte[]> resource) {
 		this.root.put(fileName, Suppliers.memoize(resource::get));
 	}
 
 	@Override
-	public void putResource(@NotNull PackType type, @NotNull Identifier id, @NotNull Supplier<byte @NotNull []> resource) {
+	public void putResource(PackType type, Identifier id, Supplier<byte[]> resource) {
 		this.getResourceMap(type).put(id, Suppliers.memoize(resource::get));
 	}
 
@@ -184,7 +183,7 @@ public abstract class InMemoryPackResources implements MutablePackResources {
 	 *
 	 * @param path the path to dump the resources into
 	 */
-	public void dumpTo(@NotNull Path path) {
+	public void dumpTo(Path path) {
 		try {
 			Files.createDirectories(path);
 
@@ -205,7 +204,7 @@ public abstract class InMemoryPackResources implements MutablePackResources {
 	 * @param id   the identifier of the resource
 	 */
 	@Contract(value = "_, _ -> new", pure = true)
-	static @NotNull String getResourcePath(@NotNull PackType type, @NotNull Identifier id) {
+	static String getResourcePath(PackType type, Identifier id) {
 		return type.getDirectory() + '/' + id.getNamespace() + '/' + id.getPath();
 	}
 
@@ -242,12 +241,12 @@ public abstract class InMemoryPackResources implements MutablePackResources {
 		}
 
 		@Override
-		public @NotNull PackLocationInfo location() {
+		public PackLocationInfo location() {
 			return new PackLocationInfo(this.name, Component.empty(), PackSource.BUILT_IN, Optional.empty());
 		}
 
 		@Override
-		public @NotNull String packId() {
+		public String packId() {
 			return this.name;
 		}
 	}

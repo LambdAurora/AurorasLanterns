@@ -20,7 +20,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.redstone.Orientation;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class RedstoneWallLanternBlock extends WallLanternBlock<RedstoneLanternBlock> {
@@ -34,7 +33,7 @@ public class RedstoneWallLanternBlock extends WallLanternBlock<RedstoneLanternBl
 	}
 
 	@Override
-	protected @NotNull MapCodec<? extends RedstoneWallLanternBlock> codec() {
+	protected MapCodec<? extends RedstoneWallLanternBlock> codec() {
 		return CODEC;
 	}
 

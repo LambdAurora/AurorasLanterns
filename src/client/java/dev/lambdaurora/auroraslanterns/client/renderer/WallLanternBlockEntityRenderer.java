@@ -25,7 +25,6 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Environment(EnvType.CLIENT)
@@ -39,7 +38,7 @@ public class WallLanternBlockEntityRenderer
 	}
 
 	@Override
-	public @NotNull WallLanternBlockEntityRenderState createRenderState() {
+	public WallLanternBlockEntityRenderState createRenderState() {
 		return new WallLanternBlockEntityRenderState();
 	}
 

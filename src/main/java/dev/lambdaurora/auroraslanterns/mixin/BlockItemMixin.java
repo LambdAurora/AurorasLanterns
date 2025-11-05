@@ -16,6 +16,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import org.jspecify.annotations.NonNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -44,7 +45,7 @@ public abstract class BlockItemMixin extends Item implements BlockItemAccessor {
 
 
 	@Override
-	public void auroraslanterns$setWallBlock(Block block) {
+	public void auroraslanterns$setWallBlock(@NonNull Block block) {
 		this.auroraslanterns$wallBlock = block;
 	}
 

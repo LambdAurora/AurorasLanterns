@@ -13,7 +13,6 @@ import dev.lambdaurora.auroraslanterns.AurorasLanternsRegistry;
 import dev.lambdaurora.auroraslanterns.LanternRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Sets up the backwards compatibility of worlds that used Aurora's Decorations lanterns.
@@ -23,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
  * @since 1.1.0
  */
 public final class AurorasDecoDataUpper {
-	private static @NotNull Identifier id(@NotNull String path) {
+	private static Identifier id(String path) {
 		return Identifier.fromNamespaceAndPath("aurorasdeco", path);
 	}
 
