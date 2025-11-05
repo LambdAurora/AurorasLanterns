@@ -352,7 +352,7 @@ public class WallLanternBlock<L extends LanternBlock> extends BaseEntityBlock im
 	@Override
 	protected void entityInside(
 			BlockState state, Level world, BlockPos pos, Entity entity,
-			InsideBlockEffectApplier insideBlockEffectApplier, boolean b
+			InsideBlockEffectApplier insideBlockEffectApplier
 	) {
 		if (world.isClientSide())
 			return;
@@ -432,7 +432,7 @@ public class WallLanternBlock<L extends LanternBlock> extends BaseEntityBlock im
 	}
 
 	@Override
-	protected int getAnalogOutputSignal(BlockState state, Level world, BlockPos pos, Direction direction) {
+	protected int getAnalogOutputSignal(BlockState state, Level world, BlockPos pos) {
 		var lantern = AurorasLanternsRegistry.WALL_LANTERN_BLOCK_ENTITY_TYPE.getBlockEntity(world, pos);
 		if (lantern != null) {
 			if (lantern.isColliding()) {

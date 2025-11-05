@@ -122,8 +122,7 @@ public abstract class InMemoryPackResources implements MutablePackResources {
 			} else {
 				try {
 					return AbstractPackResources.getMetadataFromStream(
-							metadataSectionType, new ByteArrayInputStream(json.toString().getBytes(StandardCharsets.UTF_8)),
-							this.location()
+							metadataSectionType, new ByteArrayInputStream(json.toString().getBytes(StandardCharsets.UTF_8))
 					);
 				} catch (Exception e) {
 					LOGGER.error("Couldn't load {} metadata from pack \"{}\":", metadataSectionType.name(), this.packId(), e);
@@ -136,7 +135,7 @@ public abstract class InMemoryPackResources implements MutablePackResources {
 		if (resource == null) return null;
 
 		try (var stream = resource.get();) {
-			return AbstractPackResources.getMetadataFromStream(metadataSectionType, stream, this.location());
+			return AbstractPackResources.getMetadataFromStream(metadataSectionType, stream);
 		}
 	}
 
