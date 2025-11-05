@@ -23,7 +23,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LanternBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a redstone lantern block.
@@ -38,23 +37,23 @@ public class RedstoneLanternBlock
 	public static final MapCodec<RedstoneLanternBlock> CODEC = simpleCodec(RedstoneLanternBlock::new);
 
 	private final RedstoneLanternBehavior behavior
-			= new RedstoneLanternBehavior(state -> state.get(HANGING) ? Direction.DOWN : Direction.UP);
+			= new RedstoneLanternBehavior(state -> state.getValue(HANGING) ? Direction.DOWN : Direction.UP);
 
 	public RedstoneLanternBlock(Properties properties) {
 		super(properties);
 
-		this.setDefaultState(this.defaultState().with(RedstoneLanternBehavior.LIT, true));
+		this.registerDefaultState(this.defaultBlockState().setValue(RedstoneLanternBehavior.LIT, true));
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public @NotNull MapCodec<LanternBlock> codec() {
+	public MapCodec<LanternBlock> codec() {
 		return (MapCodec) CODEC;
 	}
 
 	@Override
-	protected void createStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		super.createStateDefinition(builder);
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		super.createBlockStateDefinition(builder);
 		builder.add(RedstoneLanternBehavior.LIT);
 	}
 

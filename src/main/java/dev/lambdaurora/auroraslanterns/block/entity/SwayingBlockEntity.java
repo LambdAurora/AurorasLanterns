@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Set;
 
@@ -26,7 +27,7 @@ public abstract class SwayingBlockEntity extends BlockEntity {
 	protected boolean naturalSway = false;
 	private int swingTicks;
 	private boolean swinging;
-	private Direction swingBaseDirection;
+	private @Nullable Direction swingBaseDirection;
 	private boolean colliding = false;
 	private final Set<Entity> collisions = new ObjectOpenHashSet<>();
 
@@ -53,7 +54,7 @@ public abstract class SwayingBlockEntity extends BlockEntity {
 	}
 
 	public float getAdjustedSwingTicks() {
-		boolean fluid = !this.getCachedState().getFluidState().isEmpty();
+		boolean fluid = !this.getBlockState().getFluidState().isEmpty();
 		float ticks = (float) this.getSwingTicks();
 
 		if (this.isColliding() && ticks > 4) {
@@ -79,7 +80,7 @@ public abstract class SwayingBlockEntity extends BlockEntity {
 		return this.swinging;
 	}
 
-	public Direction getSwingBaseDirection() {
+	public @Nullable Direction getSwingBaseDirection() {
 		return this.swingBaseDirection;
 	}
 
@@ -109,7 +110,7 @@ public abstract class SwayingBlockEntity extends BlockEntity {
 			this.swinging = true;
 		}
 
-		this.getLevel().blockEvent(blockPos, this.getCachedState().getBlock(), 1, direction.get3DDataValue());
+		this.getLevel().blockEvent(blockPos, this.getBlockState().getBlock(), 1, direction.get3DDataValue());
 	}
 
 	/**
@@ -124,8 +125,8 @@ public abstract class SwayingBlockEntity extends BlockEntity {
 
 		var pos = this.getBlockPos();
 		var world = this.getLevel();
-		world.blockEvent(pos, this.getCachedState().getBlock(), 2, 1);
-		world.updateNeighbourForOutputSignal(pos, this.getCachedState().getBlock());
+		world.blockEvent(pos, this.getBlockState().getBlock(), 2, 1);
+		world.updateNeighbourForOutputSignal(pos, this.getBlockState().getBlock());
 
 		this.activate(direction);
 	}
@@ -158,7 +159,7 @@ public abstract class SwayingBlockEntity extends BlockEntity {
 	/* Syncing */
 
 	@Override
-	public boolean onSyncedBlockEvent(int type, int data) {
+	public boolean triggerEvent(int type, int data) {
 		if (type == 1) {
 			this.swingBaseDirection = Direction.from3DDataValue(data);
 			if (!this.swinging || !this.isColliding()) {
@@ -170,7 +171,7 @@ public abstract class SwayingBlockEntity extends BlockEntity {
 			this.colliding = data != 0;
 			return true;
 		} else {
-			return super.onSyncedBlockEvent(type, data);
+			return super.triggerEvent(type, data);
 		}
 	}
 
@@ -190,7 +191,7 @@ public abstract class SwayingBlockEntity extends BlockEntity {
 	}
 
 	protected void tickClient(Level world) {
-		this.naturalSway = world.getBrightness(LightLayer.SKY, this.pos) >= 12;
+		this.naturalSway = world.getBrightness(LightLayer.SKY, this.worldPosition) >= 12;
 		this.tick();
 	}
 

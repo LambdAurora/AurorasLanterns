@@ -149,4 +149,9 @@
 - Fixed critical synchronization issues with wall lanterns.
 - Updated [Yumi Minecraft Libraries: Foundation].
 
+## 1.4.0
+
+- Ported to Minecraft 1.21.10.
+  - Copper Lanterns get their own wall variant, and the non-waxed will oxidize the same as regular copper lanterns.
+
 [Yumi Minecraft Libraries: Foundation]: https://github.com/YumiProject/yumi-minecraft-foundation-library "Yumi Minecraft Foundation Library page"

@@ -14,8 +14,8 @@ import dev.yumi.commons.collections.YumiCollections;
 import dev.yumi.commons.event.Event;
 import dev.yumi.mc.core.api.YumiEvents;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.io.ResourceType;
 import net.minecraft.server.packs.PackResources;
+import net.minecraft.server.packs.PackType;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
@@ -33,9 +33,9 @@ public final class AurorasLanternsRuntimeDatagen {
 		throw new UnsupportedOperationException("AurorasLanternsRuntimeDatagen only contains static definitions.");
 	}
 
-	public static List<PackResources> inject(ResourceType type, List<PackResources> resources) {
+	public static List<PackResources> inject(PackType type, List<PackResources> resources) {
 		var list = new ArrayList<PackResources>();
-		(type == ResourceType.CLIENT_RESOURCES ? CLIENT_DATAGEN : DATA_DATAGEN).invoker().inject(list::add);
+		(type == PackType.CLIENT_RESOURCES ? CLIENT_DATAGEN : DATA_DATAGEN).invoker().inject(list::add);
 		return YumiCollections.concat(list, resources);
 	}
 

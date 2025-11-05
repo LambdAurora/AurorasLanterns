@@ -13,7 +13,6 @@ import dev.lambdaurora.auroraslanterns.mixin.StateDefinitionBuilderAccessor;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.StateHolder;
 import net.minecraft.world.level.block.state.properties.Property;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -57,7 +56,7 @@ public class CustomStateBuilder<O, S extends StateHolder<O, S>> extends StateDef
 	}
 
 	@Override
-	public @NotNull StateDefinition<O, S> create(Function<O, S> ownerToStateFunction, StateDefinition.Factory<O, S> factory) {
+	public StateDefinition<O, S> create(Function<O, S> ownerToStateFunction, StateDefinition.Factory<O, S> factory) {
 		return this.parent.create(ownerToStateFunction, factory);
 	}
 }

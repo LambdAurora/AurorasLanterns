@@ -48,7 +48,8 @@
 				"modmenu.discord": "https://discord.lambdaurora.dev/",
 				"modmenu.github_releases": "https://github.com/LambdAurora/AurorasLanterns/releases",
 				"modmenu.modrinth": "https://modrinth.com/mod/auroraslanterns",
-				"modmenu.bluesky": "https://bsky.app/profile/lambdaurora.dev"
+				"modmenu.bluesky": "https://bsky.app/profile/lambdaurora.dev",
+				"modmenu.donate": "https://donate.lambdaurora.dev/"
 			}
 		}
 	}

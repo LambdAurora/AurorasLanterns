@@ -13,8 +13,8 @@ import dev.lambdaurora.auroraslanterns.AurorasLanternsRegistry;
 import dev.lambdaurora.auroraslanterns.block.WallLanternBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AbstractCandleBlock;
 import net.minecraft.world.level.block.Block;
@@ -54,19 +54,19 @@ public interface AnimateTickBehavior<T extends Block> {
 
 					if ((lantern.isSwinging() || lantern.isColliding()) && lantern.getSwingBaseDirection() != null) {
 						switch (lantern.getSwingBaseDirection()) {
-							case NORTH -> z = MathHelper.sin(angle);
-							case SOUTH -> z = MathHelper.sin(-angle);
-							case EAST -> x = MathHelper.sin(-angle);
-							case WEST -> x = MathHelper.sin(angle);
+							case NORTH -> z = Mth.sin(angle);
+							case SOUTH -> z = Mth.sin(-angle);
+							case EAST -> x = Mth.sin(-angle);
+							case WEST -> x = Mth.sin(angle);
 						}
 					} else {
-						if (lantern.getCachedState().get(WallLanternBlock.FACING).getAxis() == Direction.Axis.Z) x = MathHelper.sin(angle);
-						else z = MathHelper.sin(angle);
+						if (lantern.getBlockState().getValue(WallLanternBlock.FACING).getAxis() == Direction.Axis.Z) x = Mth.sin(angle);
+						else z = Mth.sin(angle);
 					}
 
 					x *= 4 / 16.f;
 					z *= 4 / 16.f;
-					float y = -(MathHelper.cos(angle) * 9 / 16);
+					float y = -(Mth.cos(angle) * 9 / 16);
 
 					AbstractCandleBlock.addParticlesAndSound(world, vec.add(x, y, z), random);
 				} else {

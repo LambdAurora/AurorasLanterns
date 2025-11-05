@@ -19,36 +19,35 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RepeaterBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.RedstoneSide;
 
 import static dev.lambdaurora.auroraslanterns.test.TestHelper.assertBlockState;
 
 public class RedstoneLanternTest {
 	private static final String PREFIX = AurorasLanterns.NAMESPACE + ":redstone_lantern/";
 	private static final BlockState LIT_REDSTONE_LAMP
-			= Blocks.REDSTONE_LAMP.defaultState().with(BlockStateProperties.LIT, true);
+			= Blocks.REDSTONE_LAMP.defaultBlockState().setValue(BlockStateProperties.LIT, true);
 	private static final BlockState UNLIT_REDSTONE_LAMP
-			= Blocks.REDSTONE_LAMP.defaultState().with(BlockStateProperties.LIT, false);
+			= Blocks.REDSTONE_LAMP.defaultBlockState().setValue(BlockStateProperties.LIT, false);
 
 	@GameTest(template = PREFIX + "basic_connectivity", batch = "redstone_lantern")
 	public void testBasicConnectivity(GameTestHelper context) {
 		context.runAtTickTime(1, () -> {
 			// Lamps
-			assertBlockState(context, LIT_REDSTONE_LAMP, BlockPos.ofFloored(1, 1, 2));
-			assertBlockState(context, UNLIT_REDSTONE_LAMP, BlockPos.ofFloored(1, 3, 2));
-			assertBlockState(context, UNLIT_REDSTONE_LAMP, BlockPos.ofFloored(5, 1, 2));
-			assertBlockState(context, UNLIT_REDSTONE_LAMP, BlockPos.ofFloored(5, 3, 2));
+			assertBlockState(context, LIT_REDSTONE_LAMP, BlockPos.containing(1, 1, 2));
+			assertBlockState(context, UNLIT_REDSTONE_LAMP, BlockPos.containing(1, 3, 2));
+			assertBlockState(context, UNLIT_REDSTONE_LAMP, BlockPos.containing(5, 1, 2));
+			assertBlockState(context, UNLIT_REDSTONE_LAMP, BlockPos.containing(5, 3, 2));
 
 			// Repeaters
-			assertBlockState(context, litRepeater(Direction.NORTH), BlockPos.ofFloored(1, 2, 3));
-			assertBlockState(context, litRepeater(Direction.EAST), BlockPos.ofFloored(0, 2, 2));
-			assertBlockState(context, litRepeater(Direction.SOUTH), BlockPos.ofFloored(1, 2, 1));
-			assertBlockState(context, litRepeater(Direction.WEST), BlockPos.ofFloored(2, 2, 2));
+			assertBlockState(context, litRepeater(context, Direction.NORTH), BlockPos.containing(1, 2, 3));
+			assertBlockState(context, litRepeater(context, Direction.EAST), BlockPos.containing(0, 2, 2));
+			assertBlockState(context, litRepeater(context, Direction.SOUTH), BlockPos.containing(1, 2, 1));
+			assertBlockState(context, litRepeater(context, Direction.WEST), BlockPos.containing(2, 2, 2));
 
-			assertBlockState(context, litRepeater(Direction.NORTH), BlockPos.ofFloored(5, 2, 3));
-			assertBlockState(context, litRepeater(Direction.EAST), BlockPos.ofFloored(4, 2, 2));
-			assertBlockState(context, litRepeater(Direction.SOUTH), BlockPos.ofFloored(5, 2, 1));
-			assertBlockState(context, litRepeater(Direction.WEST), BlockPos.ofFloored(6, 2, 2));
+			assertBlockState(context, litRepeater(context, Direction.NORTH), BlockPos.containing(5, 2, 3));
+			assertBlockState(context, litRepeater(context, Direction.EAST), BlockPos.containing(4, 2, 2));
+			assertBlockState(context, litRepeater(context, Direction.SOUTH), BlockPos.containing(5, 2, 1));
+			assertBlockState(context, litRepeater(context, Direction.WEST), BlockPos.containing(6, 2, 2));
 
 			context.succeed();
 		});
@@ -57,28 +56,13 @@ public class RedstoneLanternTest {
 	@GameTest(template = PREFIX + "wall_connectivity", batch = "redstone_lantern")
 	public void testWallConnectivity(GameTestHelper context) {
 		context.runAtTickTime(1, () -> {
-			BlockState xRedstone = Blocks.REDSTONE_WIRE.defaultState()
-					.with(BlockStateProperties.POWER, 15)
-					.with(BlockStateProperties.EAST_REDSTONE, RedstoneSide.SIDE)
-					.with(BlockStateProperties.WEST_REDSTONE, RedstoneSide.SIDE)
-					.with(BlockStateProperties.NORTH_REDSTONE, RedstoneSide.NONE)
-					.with(BlockStateProperties.SOUTH_REDSTONE, RedstoneSide.NONE);
+			assertRedstoneSignal(context, BlockPos.containing(2, 2, 1), Direction.WEST);
+			assertRedstoneSignal(context, BlockPos.containing(0, 2, 1), Direction.EAST);
+			assertRedstoneSignal(context, BlockPos.containing(1, 2, 0), Direction.SOUTH);
 
-			assertBlockState(context, LIT_REDSTONE_LAMP, BlockPos.ofFloored(1, 1, 1));
-			assertBlockState(context, LIT_REDSTONE_LAMP, BlockPos.ofFloored(1, 3, 1));
-			assertBlockState(context, UNLIT_REDSTONE_LAMP, BlockPos.ofFloored(1, 2, 2));
-
-			assertBlockState(context, xRedstone, BlockPos.ofFloored(0, 2, 1));
-			assertBlockState(context, xRedstone, BlockPos.ofFloored(2, 2, 1));
-			assertBlockState(context,
-					Blocks.REDSTONE_WIRE.defaultState()
-							.with(BlockStateProperties.POWER, 15)
-							.with(BlockStateProperties.NORTH_REDSTONE, RedstoneSide.SIDE)
-							.with(BlockStateProperties.SOUTH_REDSTONE, RedstoneSide.SIDE)
-							.with(BlockStateProperties.EAST_REDSTONE, RedstoneSide.NONE)
-							.with(BlockStateProperties.WEST_REDSTONE, RedstoneSide.NONE),
-					BlockPos.ofFloored(1, 2, 0)
-			);
+			assertBlockState(context, LIT_REDSTONE_LAMP, BlockPos.containing(1, 1, 1));
+			assertBlockState(context, LIT_REDSTONE_LAMP, BlockPos.containing(1, 3, 1));
+			assertBlockState(context, UNLIT_REDSTONE_LAMP, BlockPos.containing(1, 2, 2));
 
 			context.succeed();
 		});
@@ -86,29 +70,39 @@ public class RedstoneLanternTest {
 
 	@GameTest(template = PREFIX + "tower", batch = "redstone_lantern")
 	public void testTower(GameTestHelper context) {
-		BlockState lit = AurorasLanternsRegistry.REDSTONE_LANTERN_BLOCK.defaultState()
-				.with(BlockStateProperties.HANGING, true)
-				.with(BlockStateProperties.LIT, true);
-		BlockState unlit = AurorasLanternsRegistry.REDSTONE_LANTERN_BLOCK.defaultState()
-				.with(BlockStateProperties.HANGING, true)
-				.with(BlockStateProperties.LIT, false);
+		BlockState lit = AurorasLanternsRegistry.REDSTONE_LANTERN_BLOCK.defaultBlockState()
+				.setValue(BlockStateProperties.HANGING, true)
+				.setValue(BlockStateProperties.LIT, true);
+		BlockState unlit = AurorasLanternsRegistry.REDSTONE_LANTERN_BLOCK.defaultBlockState()
+				.setValue(BlockStateProperties.HANGING, true)
+				.setValue(BlockStateProperties.LIT, false);
 
-		assertBlockState(context, lit, BlockPos.ofFloored(1, 4, 1));
-		assertBlockState(context, unlit, BlockPos.ofFloored(1, 2, 1));
+		assertBlockState(context, lit, BlockPos.containing(1, 4, 1));
+		assertBlockState(context, unlit, BlockPos.containing(1, 2, 1));
 
-		context.pressButton(BlockPos.ofFloored(1, 6, 1));
+		context.pressButton(BlockPos.containing(1, 6, 1));
 
 		context.succeedOnTickWhen(4, () -> {
-			assertBlockState(context, unlit, BlockPos.ofFloored(1, 4, 1));
-			assertBlockState(context, lit, BlockPos.ofFloored(1, 2, 1));
+			assertBlockState(context, unlit, BlockPos.containing(1, 4, 1));
+			assertBlockState(context, lit, BlockPos.containing(1, 2, 1));
 		});
 	}
 
-	private static BlockState litRepeater(Direction facing) {
-		return Blocks.REPEATER.defaultState()
-				.with(BlockStateProperties.POWERED, true)
-				.with(BlockStateProperties.LOCKED, false)
-				.with(RepeaterBlock.FACING, facing)
-				.with(BlockStateProperties.DELAY, 1);
+	private static BlockState litRepeater(GameTestHelper context, Direction facing) {
+		return Blocks.REPEATER.defaultBlockState()
+				.setValue(BlockStateProperties.POWERED, true)
+				.setValue(BlockStateProperties.LOCKED, false)
+				.setValue(RepeaterBlock.FACING, context.getTestRotation().rotate(facing))
+				.setValue(BlockStateProperties.DELAY, 1);
+	}
+
+	private static void assertRedstoneSignal(GameTestHelper context, BlockPos pos, Direction direction) {
+		var rotated = context.getTestRotation().rotate(direction);
+		context.assertRedstoneSignal(
+				pos,
+				rotated,
+				value -> value == 15,
+				() -> "Missing redstone signal at %s towards %s!".formatted(pos, rotated)
+		);
 	}
 }
