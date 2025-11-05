@@ -95,6 +95,10 @@ public class ItemTree extends ItemTreeGroupNode {
 						&& blockItem.getBlock() instanceof LanternBlock
 		);
 
+		if (lanterns == null) {
+			lanterns = tree;
+		}
+
 		lanterns.add(AMETHYST_LANTERN_ITEM);
 		lanterns.add(REDSTONE_LANTERN_ITEM);
 	}

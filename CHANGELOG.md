@@ -75,6 +75,11 @@
 
 - Updated Ukrainian translations ([#1](https://github.com/LambdAurora/AurorasLanterns/pull/1)).
 
+### 1.1.7
+
+- Fixed critical synchronization issues with wall lanterns.
+- Updated [Yumi Minecraft Libraries: Foundation].
+
 ## 1.2.0
 
 - Ported to Minecraft 1.21.5.
@@ -108,6 +113,15 @@
 
 - Updated Ukrainian translations ([#1](https://github.com/LambdAurora/AurorasLanterns/pull/1)).
 
+### 1.2.7
+
+- Fixed wall lanterns failing to render in some cases ([#2](https://github.com/LambdAurora/AurorasLanterns/issues/2)).
+
+### 1.2.8
+
+- Fixed critical synchronization issues with wall lanterns.
+- Updated [Yumi Minecraft Libraries: Foundation].
+
 ## 1.3.0
 
 - Ported to Minecraft 1.21.8.
@@ -129,5 +143,15 @@
 ### 1.3.4
 
 - Updated Ukrainian translations ([#1](https://github.com/LambdAurora/AurorasLanterns/pull/1)).
+
+### 1.3.5
+
+- Fixed critical synchronization issues with wall lanterns.
+- Updated [Yumi Minecraft Libraries: Foundation].
+
+## 1.4.0
+
+- Ported to Minecraft 1.21.10.
+  - Copper Lanterns get their own wall variant, and the non-waxed will oxidize the same as regular copper lanterns.
 
 [Yumi Minecraft Libraries: Foundation]: https://github.com/YumiProject/yumi-minecraft-foundation-library "Yumi Minecraft Foundation Library page"

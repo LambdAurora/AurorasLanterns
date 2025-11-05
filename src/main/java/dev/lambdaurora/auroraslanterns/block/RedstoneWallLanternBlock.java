@@ -21,7 +21,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 @SuppressWarnings("deprecation")
 public class RedstoneWallLanternBlock extends WallLanternBlock<RedstoneLanternBlock> {
-	private final RedstoneLanternBehavior behavior = new RedstoneLanternBehavior(state -> state.get(FACING));
+	private final RedstoneLanternBehavior behavior = new RedstoneLanternBehavior(state -> state.getValue(FACING));
 
 	public RedstoneWallLanternBlock(RedstoneLanternBlock lantern, Properties properties) {
 		super(lantern, properties);

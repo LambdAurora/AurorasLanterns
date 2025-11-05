@@ -54,7 +54,7 @@ public final class RedstoneLanternBehavior {
 	}
 
 	public static boolean isLit(BlockState state) {
-		return state.get(LIT);
+		return state.getValue(LIT);
 	}
 
 	public void neighborChanged(BlockState state, Level world, BlockPos pos) {
@@ -69,7 +69,7 @@ public final class RedstoneLanternBehavior {
 			return Redstone.SIGNAL_NONE;
 		}
 
-		return state.get(LIT) && this.attachmentDirection.apply(state) != direction ? Redstone.SIGNAL_MAX : Redstone.SIGNAL_NONE;
+		return state.getValue(LIT) && this.attachmentDirection.apply(state) != direction ? Redstone.SIGNAL_MAX : Redstone.SIGNAL_NONE;
 	}
 
 	public int getStrongRedstonePower(BlockState state, BlockGetter world, BlockPos pos, Direction direction) {
@@ -98,7 +98,7 @@ public final class RedstoneLanternBehavior {
 
 		if (isLit(state)) {
 			if (shouldUnpower) {
-				world.setBlock(pos, state.with(LIT, false), Block.UPDATE_ALL);
+				world.setBlock(pos, state.setValue(LIT, false), Block.UPDATE_ALL);
 
 				if (this.isBurnedOut(world, pos, true)) {
 					world.levelEvent(LevelEvent.REDSTONE_TORCH_BURNOUT, pos, 0);
@@ -106,7 +106,7 @@ public final class RedstoneLanternBehavior {
 				}
 			}
 		} else if (!shouldUnpower && !this.isBurnedOut(world, pos, false)) {
-			world.setBlock(pos, state.with(LIT, true), Block.UPDATE_ALL);
+			world.setBlock(pos, state.setValue(LIT, true), Block.UPDATE_ALL);
 		}
 	}
 

@@ -11,6 +11,7 @@ package dev.lambdaurora.auroraslanterns.client.utils;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -27,8 +28,8 @@ import java.lang.invoke.MethodType;
  */
 @Environment(EnvType.CLIENT)
 public final class LBGHooks {
-	private static final MethodHandle PUSH;
-	private static final MethodHandle POP;
+	private static final @Nullable MethodHandle PUSH;
+	private static final @Nullable MethodHandle POP;
 
 	private LBGHooks() {
 		throw new UnsupportedOperationException("LBGHooks only contains static definitions.");

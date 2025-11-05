@@ -1,6 +1,6 @@
 {
 	"credit": "Made by LambdAurora",
-	"parent": "auroraslanterns:block/wall_lantern_attachment",
+	"parent": "auroraslanterns:block/wall_lantern/attachment",
 	"elements": [
 		{
 			"name": "bar",

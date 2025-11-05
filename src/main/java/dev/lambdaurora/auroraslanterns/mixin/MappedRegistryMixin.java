@@ -28,9 +28,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = MappedRegistry.class, priority = 1100)
 public abstract class MappedRegistryMixin<T> implements Registry<T>, RegistryEventStorage<T> {
-	@Shadow
-	public abstract int getRawId(@Nullable T value);
-
 	@Unique
 	private final Event<Identifier, RegistryEventStorage.Callback<T>> auroraslanterns$addEvent
 			= AurorasLanterns.EVENT_MANAGER.create(RegistryEventStorage.Callback.class);
@@ -47,6 +44,6 @@ public abstract class MappedRegistryMixin<T> implements Registry<T>, RegistryEve
 			ResourceKey<T> resourceKey, T object, Lifecycle lifecycle, CallbackInfoReturnable<Holder.Reference<T>> cir
 	) {
 		RegistryEventStorage.of(this).auroraslanterns$getAddEvent().invoker()
-				.onEntryAdded(resourceKey.value(), object);
+				.onEntryAdded(resourceKey.identifier(), object);
 	}
 }

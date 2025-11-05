@@ -33,7 +33,7 @@ public class BlockEntityMixin {
 	private static Optional auroraslanterns$backwardsCompat(
 			Registry<BlockEntity> instance, @NotNull Identifier id, Operation<Optional> original
 	) {
-		if (id.namespace().equals("aurorasdeco") && id.path().equals("lantern")) {
+		if (id.getNamespace().equals("aurorasdeco") && id.getPath().equals("lantern")) {
 			return Optional.of(AurorasLanternsRegistry.WALL_LANTERN_BLOCK_ENTITY_TYPE);
 		} else {
 			return original.call(instance, id);

@@ -26,7 +26,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LanternBlock;
 import net.minecraft.world.level.block.WeatheringCopper;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -87,7 +88,7 @@ public final class LanternRegistry {
 			var properties = WallLanternBlock.properties(block);
 
 			if (block instanceof WallLanternBlock.Provider<?, ?> provider) {
-				wallLanternBlock = ((WallLanternBlock.Provider<L, WallLanternBlock<L>>) provider)
+				wallLanternBlock = ((WallLanternBlock.Provider<L, @NonNull WallLanternBlock<L>>) provider)
 						.getWallLanternFactory()
 						.create(block, properties);
 			} else if (block instanceof WeatheringCopper) {
@@ -101,6 +102,7 @@ public final class LanternRegistry {
 					.auroraslanterns$addSupportedBlock(wallLanternBlock);
 		}
 
+		assert wallLanternBlock != null;
 		WALL_LANTERNS.put(wallLanternId, wallLanternBlock);
 		WALL_LANTERN_BLOCK_MAP.put(block, wallLanternBlock);
 
@@ -110,7 +112,7 @@ public final class LanternRegistry {
 	}
 
 	public static <L extends LanternBlock> WallLanternBlock<L> registerWallLantern(L block) {
-		return registerWallLantern(BuiltInRegistries.BLOCK, block, BuiltInRegistries.BLOCK.getId(block));
+		return registerWallLantern(BuiltInRegistries.BLOCK, block, BuiltInRegistries.BLOCK.getKey(block));
 	}
 
 	public static void tryRegisterWallLantern(Registry<Block> registry, Block block, Identifier id) {
@@ -119,8 +121,8 @@ public final class LanternRegistry {
 	}
 
 	private static Identifier getWallLanternId(Identifier lanternId) {
-		var namespace = lanternId.namespace();
-		var path = lanternId.path();
+		var namespace = lanternId.getNamespace();
+		var path = lanternId.getPath();
 		var wallLanternPath = "wall_lantern";
 
 		if (!namespace.equals("minecraft") && !namespace.equals("auroraslanterns"))

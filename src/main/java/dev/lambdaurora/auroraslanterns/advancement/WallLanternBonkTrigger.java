@@ -12,25 +12,24 @@ package dev.lambdaurora.auroraslanterns.advancement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import dev.lambdaurora.auroraslanterns.AurorasLanterns;
-import net.minecraft.advancements.critereon.*;
+import net.minecraft.advancements.criterion.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class WallLanternBonkTrigger extends SimpleCriterionTrigger<WallLanternBonkTrigger.TriggerInstance> {
 	public static final Identifier ID = AurorasLanterns.id("wall_lantern_bonk");
 
 	@Override
-	public @NotNull Identifier getId() {
+	public Identifier getId() {
 		return ID;
 	}
 
-	public @NotNull TriggerInstance createInstance(
+	public TriggerInstance createInstance(
 			JsonObject jsonObject, ContextAwarePredicate contextAwarePredicate, DeserializationContext deserializationContext
 	) {
 		Block block = deserializeBlock(jsonObject);
@@ -68,11 +67,11 @@ public class WallLanternBonkTrigger extends SimpleCriterionTrigger<WallLanternBo
 		}
 
 		@Override
-		public @NotNull JsonObject serializeToJson(SerializationContext serializationContext) {
+		public JsonObject serializeToJson(SerializationContext serializationContext) {
 			JsonObject json = super.serializeToJson(serializationContext);
 
 			if (this.block != null) {
-				json.addProperty("block", BuiltInRegistries.BLOCK.getId(this.block).toString());
+				json.addProperty("block", BuiltInRegistries.BLOCK.getKey(this.block).toString());
 			}
 
 			return json;

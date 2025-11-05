@@ -20,8 +20,8 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.FrameType;
 import net.minecraft.advancements.RequirementsStrategy;
-import net.minecraft.advancements.critereon.KilledTrigger;
-import net.minecraft.network.chat.Text;
+import net.minecraft.advancements.criterion.KilledTrigger;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
@@ -58,8 +58,8 @@ public final class AurorasLanternsStaticDatagen implements DataGeneratorEntrypoi
 			Advancement root = Advancement.Builder.advancement()
 					.display(
 							Items.MAP,
-							Text.translatable("advancements.adventure.root.title"),
-							Text.translatable("advancements.adventure.root.description"),
+							Component.translatable("advancements.adventure.root.title"),
+							Component.translatable("advancements.adventure.root.description"),
 							new Identifier("textures/gui/advancements/backgrounds/adventure.png"),
 							FrameType.TASK,
 							false,
@@ -75,10 +75,10 @@ public final class AurorasLanternsStaticDatagen implements DataGeneratorEntrypoi
 					.parent(root)
 					.display(
 							Blocks.LANTERN,
-							Text.translatable(
+							Component.translatable(
 									"advancements.%s.adventure.wall_lantern_bonk.title".formatted(AurorasLanterns.NAMESPACE)
 							),
-							Text.translatable(
+							Component.translatable(
 									"advancements.%s.adventure.wall_lantern_bonk.description".formatted(AurorasLanterns.NAMESPACE)
 							),
 							null,

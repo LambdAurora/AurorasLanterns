@@ -35,17 +35,17 @@ public class RedstoneLanternBlock
 		extends LanternBlock
 		implements WallLanternBlock.Provider<RedstoneLanternBlock, RedstoneWallLanternBlock> {
 	private final RedstoneLanternBehavior behavior
-			= new RedstoneLanternBehavior(state -> state.get(HANGING) ? Direction.DOWN : Direction.UP);
+			= new RedstoneLanternBehavior(state -> state.getValue(HANGING) ? Direction.DOWN : Direction.UP);
 
 	public RedstoneLanternBlock(Properties properties) {
 		super(properties);
 
-		this.setDefaultState(this.defaultState().with(RedstoneLanternBehavior.LIT, true));
+		this.registerDefaultState(this.defaultBlockState().setValue(RedstoneLanternBehavior.LIT, true));
 	}
 
 	@Override
-	protected void createStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		super.createStateDefinition(builder);
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		super.createBlockStateDefinition(builder);
 		builder.add(RedstoneLanternBehavior.LIT);
 	}
 

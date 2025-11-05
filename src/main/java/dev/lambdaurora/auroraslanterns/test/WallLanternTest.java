@@ -28,10 +28,10 @@ import static dev.lambdaurora.auroraslanterns.test.TestHelper.assertBlockState;
 public class WallLanternTest {
 	@GameTest(template = FabricGameTest.EMPTY_STRUCTURE, batch = "wall_lantern")
 	public void tagTest(GameTestHelper context) {
-		final var tag = TagKey.of(Registries.BLOCK, AurorasLanterns.id("wall_lanterns"));
+		final var tag = TagKey.create(Registries.BLOCK, AurorasLanterns.id("wall_lanterns"));
 
 		LanternRegistry.forEach((id, block) -> {
-			var state = block.defaultState();
+			var state = block.defaultBlockState();
 
 			context.assertTrue(
 					state.is(tag),
@@ -48,18 +48,18 @@ public class WallLanternTest {
 
 	@GameTest(template = AurorasLanterns.NAMESPACE + ":wall_lantern_attachment", batch = "wall_lantern")
 	public void wallLanternAttachment(GameTestHelper context) {
-		final var wallLantern = AurorasLanternsRegistry.WALL_LANTERN_BLOCK.defaultState()
-				.with(WallLanternBlock.EXTENSION, ExtensionType.LOW_WALL)
-				.with(WallLanternBlock.FACING, Direction.NORTH);
-		final var lanternPos = BlockPos.ofFloored(2, 3, 0);
+		final var wallLantern = AurorasLanternsRegistry.WALL_LANTERN_BLOCK.defaultBlockState()
+				.setValue(WallLanternBlock.EXTENSION, ExtensionType.LOW_WALL)
+				.setValue(WallLanternBlock.FACING, Direction.NORTH);
+		final var lanternPos = BlockPos.containing(2, 3, 0);
 
 		context.runAtTickTime(1, () -> {
 			assertBlockState(context, wallLantern, lanternPos);
 
-			context.pressButton(BlockPos.ofFloored(2, 4, 4));
+			context.pressButton(BlockPos.containing(2, 4, 4));
 
 			context.succeedOnTickWhen(3, () ->
-					assertBlockState(context, wallLantern.with(WallLanternBlock.EXTENSION, ExtensionType.WALL), lanternPos)
+					assertBlockState(context, wallLantern.setValue(WallLanternBlock.EXTENSION, ExtensionType.WALL), lanternPos)
 			);
 		});
 	}
