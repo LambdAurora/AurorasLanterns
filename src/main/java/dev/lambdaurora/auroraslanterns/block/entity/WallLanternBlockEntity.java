@@ -18,6 +18,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a Lantern Block Entity for the wall lanterns.
@@ -27,8 +28,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
  * @since 1.0.0
  */
 public class WallLanternBlockEntity extends SwayingBlockEntity {
-	private AABB lanternCollisionBoxX;
-	private AABB lanternCollisionBoxZ;
+	private @Nullable AABB lanternCollisionBoxX;
+	private @Nullable AABB lanternCollisionBoxZ;
 	public float prevAngle;
 	public float angle;
 

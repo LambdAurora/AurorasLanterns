@@ -71,6 +71,7 @@ dependencies {
 	modImplementation(libs.fabric.loader)
 	modImplementation(libs.fabric.api)
 
+	compileOnly(libs.jspecify)
 	modImplementation(libs.yumi.mc.foundation)
 	include(libs.yumi.mc.foundation)
 }

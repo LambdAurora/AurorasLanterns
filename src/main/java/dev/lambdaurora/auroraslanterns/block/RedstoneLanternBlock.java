@@ -24,7 +24,6 @@ import net.minecraft.world.level.block.LanternBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.redstone.Orientation;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -50,7 +49,7 @@ public class RedstoneLanternBlock
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public @NotNull MapCodec<LanternBlock> codec() {
+	public MapCodec<LanternBlock> codec() {
 		return (MapCodec) CODEC;
 	}
 

@@ -62,8 +62,7 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
@@ -80,7 +79,7 @@ public class WallLanternBlock<L extends LanternBlock> extends BaseEntityBlock im
 	public static final MapCodec<? extends WallLanternBlock<?>> CODEC = makeCodec(LanternBlock.class, WallLanternBlock::new);
 
 	static <L extends LanternBlock, W extends WallLanternBlock<? extends L>> MapCodec<W> makeCodec(
-			@NotNull Class<L> lanternClass, @NotNull Factory<L, W> instantiator
+			Class<L> lanternClass, Factory<L, W> instantiator
 	) {
 		return RecordCodecBuilder.mapCodec(
 				instance -> instance.group(
@@ -107,7 +106,7 @@ public class WallLanternBlock<L extends LanternBlock> extends BaseEntityBlock im
 	);
 	private static final double LANTERN_HANG_SHAPE_MIN_Y = LANTERN_HANG_SHAPE.min(Direction.Axis.Y);
 	public static final Map<Direction, Map<ExtensionType, VoxelShape>> ATTACHMENT_SHAPES;
-	private static final ThreadLocal<LanternBlock> ASSOCIATED_LANTERN_INIT = new ThreadLocal<>();
+	private static final ThreadLocal<@Nullable LanternBlock> ASSOCIATED_LANTERN_INIT = new ThreadLocal<>();
 
 	private static final VoxelShape HOLDER_SHAPE = box(
 			0.0, 8.0, 0.0,
@@ -138,14 +137,14 @@ public class WallLanternBlock<L extends LanternBlock> extends BaseEntityBlock im
 	}
 
 	@Override
-	protected @NotNull MapCodec<? extends WallLanternBlock<?>> codec() {
+	protected MapCodec<? extends WallLanternBlock<?>> codec() {
 		return CODEC;
 	}
 
 	/**
 	 * {@return the underlying lantern block of this wall lantern block}
 	 */
-	public @NotNull L getLanternBlock() {
+	public L getLanternBlock() {
 		return this.lanternBlock;
 	}
 
@@ -163,6 +162,7 @@ public class WallLanternBlock<L extends LanternBlock> extends BaseEntityBlock im
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		var lantern = ASSOCIATED_LANTERN_INIT.get();
 		ASSOCIATED_LANTERN_INIT.remove();
+		assert lantern != null;
 
 		var customBuilder = new CustomStateBuilder<>(builder);
 		customBuilder.exclude("hanging", "facing");
@@ -175,7 +175,7 @@ public class WallLanternBlock<L extends LanternBlock> extends BaseEntityBlock im
 	/* Shapes */
 
 	@Override
-	public @NotNull VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
 		var facing = state.getValue(WallLanternBlock.FACING);
 		var extension = state.getValue(WallLanternBlock.EXTENSION);
 		var lanternShape = this.getLanternState(state).getShape(world, pos);
@@ -238,12 +238,12 @@ public class WallLanternBlock<L extends LanternBlock> extends BaseEntityBlock im
 	}
 
 	@Override
-	public @NotNull BlockState rotate(BlockState state, Rotation rotation) {
+	public BlockState rotate(BlockState state, Rotation rotation) {
 		return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
 	}
 
 	@Override
-	public @NotNull BlockState mirror(BlockState state, Mirror mirror) {
+	public BlockState mirror(BlockState state, Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));
 	}
 
@@ -261,7 +261,7 @@ public class WallLanternBlock<L extends LanternBlock> extends BaseEntityBlock im
 	}
 
 	@Override
-	protected @NotNull BlockState updateShape(
+	protected BlockState updateShape(
 			BlockState state, LevelReader world, ScheduledTickAccess tickScheduler, BlockPos pos,
 			Direction direction, BlockPos posFrom, BlockState newState, RandomSource randomSource
 	) {
@@ -286,7 +286,7 @@ public class WallLanternBlock<L extends LanternBlock> extends BaseEntityBlock im
 	/* Interaction */
 
 	@Override
-	public @NotNull ItemStack getCloneItemStack(LevelReader world, BlockPos pos, BlockState state, boolean includeData) {
+	public ItemStack getCloneItemStack(LevelReader world, BlockPos pos, BlockState state, boolean includeData) {
 		return this.getLanternState(state).getCloneItemStack(world, pos, includeData);
 	}
 
@@ -297,7 +297,7 @@ public class WallLanternBlock<L extends LanternBlock> extends BaseEntityBlock im
 	}
 
 	@Override
-	protected @NotNull InteractionResult useWithoutItem(
+	protected InteractionResult useWithoutItem(
 			BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit
 	) {
 		return this.swing(world, state, hit, player, true)
@@ -386,7 +386,7 @@ public class WallLanternBlock<L extends LanternBlock> extends BaseEntityBlock im
 	/* Block Entity Stuff */
 
 	@Override
-	protected @NotNull RenderShape getRenderShape(BlockState state) {
+	protected RenderShape getRenderShape(BlockState state) {
 		return RenderShape.MODEL;
 	}
 
@@ -408,7 +408,7 @@ public class WallLanternBlock<L extends LanternBlock> extends BaseEntityBlock im
 	/* Fluid */
 
 	@Override
-	protected @NotNull FluidState getFluidState(BlockState state) {
+	protected FluidState getFluidState(BlockState state) {
 		return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
 	}
 

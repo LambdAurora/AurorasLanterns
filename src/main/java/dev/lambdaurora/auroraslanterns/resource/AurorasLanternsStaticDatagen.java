@@ -29,7 +29,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
@@ -117,12 +116,12 @@ public final class AurorasLanternsStaticDatagen implements DataGeneratorEntrypoi
 			}
 
 			@Override
-			protected @NotNull RecipeProvider createRecipeProvider(HolderLookup.Provider provider, RecipeOutput recipeOutput) {
+			protected RecipeProvider createRecipeProvider(HolderLookup.Provider provider, RecipeOutput recipeOutput) {
 				return new AurorasRecipeProvider(provider, recipeOutput);
 			}
 
 			@Override
-			public @NotNull String getName() {
+			public String getName() {
 				return "Aurora's Lanterns Recipes";
 			}
 		}

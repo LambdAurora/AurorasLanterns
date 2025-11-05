@@ -16,7 +16,6 @@ import net.minecraft.client.particle.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.RandomSource;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents the amethyst glint particle.
@@ -50,11 +49,11 @@ public class AmethystGlintParticle extends TextureSheetParticle {
 	}
 
 	@Override
-	public @NotNull ParticleRenderType getRenderType() {
+	public ParticleRenderType getRenderType() {
 		return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
 	}
 
-	public record Provider(@NotNull SpriteSet spriteProvider) implements ParticleProvider<SimpleParticleType> {
+	public record Provider(SpriteSet spriteProvider) implements ParticleProvider<SimpleParticleType> {
 		@Override
 		public Particle createParticle(
 				SimpleParticleType parameters, ClientLevel clientWorld, double x, double y, double z,

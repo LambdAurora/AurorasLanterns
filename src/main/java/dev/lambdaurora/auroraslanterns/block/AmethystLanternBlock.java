@@ -16,7 +16,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LanternBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an amethyst lantern block.
@@ -36,7 +35,7 @@ public class AmethystLanternBlock extends LanternBlock {
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public @NotNull MapCodec<LanternBlock> codec() {
+	public MapCodec<LanternBlock> codec() {
 		return (MapCodec) CODEC;
 	}
 

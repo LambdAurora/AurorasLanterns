@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Set;
 
@@ -26,7 +27,7 @@ public abstract class SwayingBlockEntity extends BlockEntity {
 	protected boolean naturalSway = false;
 	private int swingTicks;
 	private boolean swinging;
-	private Direction swingBaseDirection;
+	private @Nullable Direction swingBaseDirection;
 	private boolean colliding = false;
 	private final Set<Entity> collisions = new ObjectOpenHashSet<>();
 
@@ -79,7 +80,7 @@ public abstract class SwayingBlockEntity extends BlockEntity {
 		return this.swinging;
 	}
 
-	public Direction getSwingBaseDirection() {
+	public @Nullable Direction getSwingBaseDirection() {
 		return this.swingBaseDirection;
 	}
 

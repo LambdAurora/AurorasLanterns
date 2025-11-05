@@ -11,7 +11,6 @@ package dev.lambdaurora.auroraslanterns.block;
 
 import net.minecraft.world.level.block.LanternBlock;
 import net.minecraft.world.level.block.WeatheringCopper;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an oxidizable wall lantern block.
@@ -29,7 +28,7 @@ public class OxidizableWallLanternBlock<L extends LanternBlock & WeatheringCoppe
 	}
 
 	@Override
-	public @NotNull WeatherState getAge() {
+	public WeatherState getAge() {
 		return this.lanternBlock.getAge();
 	}
 }
