@@ -8,7 +8,7 @@ mappings-yalmm = "1"
 yumi-mc-foundation = "1.0.0-alpha.16+1.21.9"
 
 # Gradle
-gradle-licenser = "2.1.+"
+gradle-licenser = "2.2.+"
 gradle-loom = "1.13.+"
 gradle-lambdamcdev = "1.6.+"
 

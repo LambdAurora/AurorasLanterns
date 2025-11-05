@@ -137,7 +137,6 @@ jobs:
           game-version-filter: none
           dependencies: |
             fabric-api(required)
-            modmenu(optional)
           java: |
             21
             22
