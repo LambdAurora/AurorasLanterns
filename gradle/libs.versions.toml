@@ -1,8 +1,7 @@
 [versions]
-minecraft = "1.21.10"
-fabric-loader = "0.17.2"
-fabric-api = "0.134.1+1.21.10"
-mappings-yalmm = "1"
+minecraft = "25w45a"
+fabric-loader = "0.17.3"
+fabric-api = "0.138.2+1.21.11"
 
 # Dependencies
 yumi-mc-foundation = "1.0.0-alpha.16+1.21.9"
@@ -18,7 +17,6 @@ fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-l
 fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
 
 # Dependencies
-jspecify = { module = "org.jspecify:jspecify", version = "1.0.0" }
 yumi-mc-foundation = { module = "dev.yumi.mc.core:yumi-mc-foundation", version.ref = "yumi-mc-foundation" }
 
 [plugins]

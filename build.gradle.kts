@@ -66,12 +66,10 @@ dependencies {
 	mappings(loom.layered {
 		officialMojangMappings()
 		parchment("org.parchmentmc.data:parchment-1.21.10:2025.10.12@zip")
-		mappings("dev.lambdaurora:yalmm-mojbackward:${mcVersion}+build.${libs.versions.mappings.yalmm.get()}")
 	})
 	modImplementation(libs.fabric.loader)
 	modImplementation(libs.fabric.api)
 
-	compileOnly(libs.jspecify)
 	modImplementation(libs.yumi.mc.foundation)
 	include(libs.yumi.mc.foundation)
 }
@@ -192,7 +190,7 @@ tasks.register<TaskPublishCurseForge>("curseforge") {
 		.map { McVersionLookup.getCurseForgeEquivalent(it) }
 		.forEach { mainFile.addGameVersion(it) }
 	mainFile.addModLoader("Fabric", "Quilt")
-	mainFile.addJavaVersion("Java 17", "Java 18", "Java 19", "Java 20", "Java 21", "Java 22")
+	mainFile.addJavaVersion("Java 21", "Java 22")
 
 	mainFile.displayName = "${project.property("mod_name")} $VERSION (${McVersionLookup.getVersionTag(mcVersion)})"
 	mainFile.addRequirement("fabric-api")
