@@ -1,0 +1,8 @@
+{
+	"parent": "auroraslanterns:block/template/chandelier_two",
+	"textures": {
+		"attachment": "auroraslanterns:block/chandelier_iron_attachment",
+		"candle": "minecraft:block/lime_candle",
+		"chain": "minecraft:block/iron_chain"
+	}
+}

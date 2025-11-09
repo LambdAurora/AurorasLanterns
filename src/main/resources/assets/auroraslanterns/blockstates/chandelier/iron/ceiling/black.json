@@ -1,0 +1,28 @@
+{
+	"variants": {
+		"candles=1,lit=false": {
+			"model": "auroraslanterns:block/chandelier/iron/ceiling/1/black"
+		},
+		"candles=1,lit=true": {
+			"model": "auroraslanterns:block/chandelier/iron/ceiling/1/black_lit"
+		},
+		"candles=2,lit=false": {
+			"model": "auroraslanterns:block/chandelier/iron/ceiling/2/black"
+		},
+		"candles=2,lit=true": {
+			"model": "auroraslanterns:block/chandelier/iron/ceiling/2/black_lit"
+		},
+		"candles=3,lit=false": {
+			"model": "auroraslanterns:block/chandelier/iron/ceiling/3/black"
+		},
+		"candles=3,lit=true": {
+			"model": "auroraslanterns:block/chandelier/iron/ceiling/3/black_lit"
+		},
+		"candles=4,lit=false": {
+			"model": "auroraslanterns:block/chandelier/iron/ceiling/4/black"
+		},
+		"candles=4,lit=true": {
+			"model": "auroraslanterns:block/chandelier/iron/ceiling/4/black_lit"
+		}
+	}
+}

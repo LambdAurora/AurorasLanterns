@@ -12,6 +12,7 @@ package dev.lambdaurora.auroraslanterns;
 import dev.lambdaurora.auroraslanterns.accessor.BlockItemAccessor;
 import dev.lambdaurora.auroraslanterns.advancement.WallLanternBonkTrigger;
 import dev.lambdaurora.auroraslanterns.block.AmethystLanternBlock;
+import dev.lambdaurora.auroraslanterns.block.CeilingChandelierBlock;
 import dev.lambdaurora.auroraslanterns.block.RedstoneLanternBlock;
 import dev.lambdaurora.auroraslanterns.block.WallLanternBlock;
 import dev.lambdaurora.auroraslanterns.block.behavior.RedstoneLanternBehavior;
@@ -29,8 +30,10 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Util;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -39,6 +42,9 @@ import net.minecraft.world.level.block.LanternBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.function.Function;
 
 public final class AurorasLanternsRegistry {
@@ -85,6 +91,27 @@ public final class AurorasLanternsRegistry {
 					.lightLevel(state -> state.getValue(RedstoneLanternBehavior.LIT) ? 7 : 0)
 	);
 	public static final Item REDSTONE_LANTERN_ITEM = Items.registerBlock(REDSTONE_LANTERN_BLOCK);
+	//endregion
+
+	//region Chandeliers
+	public static final CeilingChandelierBlock IRON_CEILING_CHANDELIER_BLOCK = registerBlock(
+			AurorasLanterns.id("chandelier/iron/ceiling/normal"),
+			CeilingChandelierBlock::new,
+			CeilingChandelierBlock.properties(Blocks.CANDLE)
+	);
+	public static final Map<DyeColor, CeilingChandelierBlock> IRON_CEILING_CHANDELIER_BLOCKS = Util.make(() -> {
+		var map = new EnumMap<DyeColor, CeilingChandelierBlock>(DyeColor.class);
+
+		for (var dyeColor : DyeColor.values()) {
+			map.put(dyeColor, registerBlock(
+					AurorasLanterns.id("chandelier/iron/ceiling/" + dyeColor.getName()),
+					CeilingChandelierBlock::new,
+					CeilingChandelierBlock.properties(Blocks.CANDLE)
+			));
+		}
+
+		return Collections.unmodifiableMap(map);
+	});
 	//endregion
 
 	//region Wall Lanterns

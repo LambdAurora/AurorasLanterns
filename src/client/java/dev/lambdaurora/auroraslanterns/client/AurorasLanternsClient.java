@@ -43,8 +43,11 @@ public final class AurorasLanternsClient implements ClientModInitializer {
 
 		BlockRenderLayerMap.putBlocks(ChunkSectionLayer.CUTOUT,
 				AurorasLanternsRegistry.AMETHYST_LANTERN_BLOCK,
-				AurorasLanternsRegistry.REDSTONE_LANTERN_BLOCK
+				AurorasLanternsRegistry.REDSTONE_LANTERN_BLOCK,
+				AurorasLanternsRegistry.IRON_CEILING_CHANDELIER_BLOCK
 		);
+		AurorasLanternsRegistry.IRON_CEILING_CHANDELIER_BLOCKS.values()
+				.forEach(block -> BlockRenderLayerMap.putBlock(block, ChunkSectionLayer.CUTOUT));
 
 		LanternRegistry.forEachAndFuture((id, wallLanternBlock) -> {
 			BlockRenderLayerMap.putBlocks(ChunkSectionLayer.CUTOUT, wallLanternBlock);
