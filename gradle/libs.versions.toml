@@ -4,7 +4,7 @@ fabric-loader = "0.17.3"
 fabric-api = "0.138.2+1.21.11"
 
 # Dependencies
-yumi-mc-foundation = "1.0.0-alpha.16+1.21.9"
+yumi-mc-foundation = "1.0.0-beta.1+1.21.10"
 
 # Gradle
 gradle-licenser = "2.2.+"

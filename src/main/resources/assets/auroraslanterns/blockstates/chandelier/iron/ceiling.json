@@ -1,0 +1,16 @@
+{
+	"variants": {
+		"candles=1": {
+			"model": "auroraslanterns:block/chandelier/iron/ceiling/1"
+		},
+		"candles=2": {
+			"model": "auroraslanterns:block/chandelier/iron/ceiling/2"
+		},
+		"candles=3": {
+			"model": "auroraslanterns:block/chandelier/iron/ceiling/3"
+		},
+		"candles=4": {
+			"model": "auroraslanterns:block/chandelier/iron/ceiling/4"
+		}
+	}
+}

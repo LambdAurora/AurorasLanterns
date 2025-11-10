@@ -12,10 +12,11 @@ package dev.lambdaurora.auroraslanterns;
 import dev.lambdaurora.auroraslanterns.accessor.BlockItemAccessor;
 import dev.lambdaurora.auroraslanterns.advancement.WallLanternBonkTrigger;
 import dev.lambdaurora.auroraslanterns.block.AmethystLanternBlock;
-import dev.lambdaurora.auroraslanterns.block.CeilingChandelierBlock;
 import dev.lambdaurora.auroraslanterns.block.RedstoneLanternBlock;
 import dev.lambdaurora.auroraslanterns.block.WallLanternBlock;
 import dev.lambdaurora.auroraslanterns.block.behavior.RedstoneLanternBehavior;
+import dev.lambdaurora.auroraslanterns.block.chandelier.CeilingChandelierBlock;
+import dev.lambdaurora.auroraslanterns.block.entity.ChandelierBlockEntity;
 import dev.lambdaurora.auroraslanterns.block.entity.WallLanternBlockEntity;
 import dev.lambdaurora.auroraslanterns.compat.AurorasDecoDataUpper;
 import net.fabricmc.fabric.api.event.Event;
@@ -30,21 +31,18 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.util.Util;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LanternBlock;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.MapColor;
 
-import java.util.Collections;
-import java.util.EnumMap;
-import java.util.Map;
 import java.util.function.Function;
 
 public final class AurorasLanternsRegistry {
@@ -95,23 +93,18 @@ public final class AurorasLanternsRegistry {
 
 	//region Chandeliers
 	public static final CeilingChandelierBlock IRON_CEILING_CHANDELIER_BLOCK = registerBlock(
-			AurorasLanterns.id("chandelier/iron/ceiling/normal"),
+			AurorasLanterns.id("chandelier/iron/ceiling"),
 			CeilingChandelierBlock::new,
-			CeilingChandelierBlock.properties(Blocks.CANDLE)
+			ChandelierRegistry.getProperties(Blocks.CANDLE, SoundType.IRON, MapColor.METAL)
 	);
-	public static final Map<DyeColor, CeilingChandelierBlock> IRON_CEILING_CHANDELIER_BLOCKS = Util.make(() -> {
-		var map = new EnumMap<DyeColor, CeilingChandelierBlock>(DyeColor.class);
-
-		for (var dyeColor : DyeColor.values()) {
-			map.put(dyeColor, registerBlock(
-					AurorasLanterns.id("chandelier/iron/ceiling/" + dyeColor.getName()),
-					CeilingChandelierBlock::new,
-					CeilingChandelierBlock.properties(Blocks.CANDLE)
-			));
-		}
-
-		return Collections.unmodifiableMap(map);
-	});
+	public static final BlockEntityType<ChandelierBlockEntity> CHANDELIER_BLOCK_ENTITY_TYPE = Registry.register(
+			BuiltInRegistries.BLOCK_ENTITY_TYPE,
+			AurorasLanterns.id("chandelier"),
+			FabricBlockEntityTypeBuilder.create(
+					ChandelierBlockEntity::new,
+					IRON_CEILING_CHANDELIER_BLOCK
+			).build()
+	);
 	//endregion
 
 	//region Wall Lanterns

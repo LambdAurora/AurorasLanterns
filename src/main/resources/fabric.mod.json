@@ -23,7 +23,7 @@
 			"dev.lambdaurora.auroraslanterns.client.AurorasLanternsClient"
 		],
 		"fabric-datagen": [
-			"dev.lambdaurora.auroraslanterns.resource.AurorasLanternsStaticDatagen"
+			"dev.lambdaurora.auroraslanterns.client.resource.AurorasLanternsStaticDatagen"
 		],
 		"fabric-gametest": [
 			"dev.lambdaurora.auroraslanterns.test.RedstoneLanternTest",
@@ -39,7 +39,7 @@
 		"minecraft": "~1.21.11-",
 		"java": ">=21",
 		"fabric-api": ">=0.138.2",
-		"yumi_mc_core": ">=1.0.0-alpha.16"
+		"yumi_mc_core": ">=1.0.0-beta.1"
 	},
 	"custom": {
 		"modmenu": {

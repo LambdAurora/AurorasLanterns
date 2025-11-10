@@ -8,6 +8,7 @@
 		"BlockAccessor",
 		"BlockEntityTypeMixin",
 		"BlockItemMixin",
+		"FlintAndSteelItemMixin",
 		"NaturalSpawnerMixin",
 		"ReloadableResourceManagerMixin",
 		"StateDefinitionBuilderAccessor",

@@ -14,6 +14,7 @@ import dev.lambdaurora.auroraslanterns.AurorasLanterns;
 import dev.lambdaurora.auroraslanterns.AurorasLanternsRegistry;
 import dev.lambdaurora.auroraslanterns.LanternRegistry;
 import dev.lambdaurora.auroraslanterns.block.WallLanternBlock;
+import dev.lambdaurora.auroraslanterns.client.model.UnbakedChandelierModel;
 import dev.lambdaurora.auroraslanterns.client.particle.AmethystGlintParticle;
 import dev.lambdaurora.auroraslanterns.client.renderer.WallLanternBlockEntityRenderer;
 import dev.lambdaurora.auroraslanterns.resource.AurorasLanternsRuntimeDatagen;
@@ -22,6 +23,7 @@ import dev.yumi.mc.core.api.ModContainer;
 import dev.yumi.mc.core.api.entrypoint.client.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
@@ -46,8 +48,6 @@ public final class AurorasLanternsClient implements ClientModInitializer {
 				AurorasLanternsRegistry.REDSTONE_LANTERN_BLOCK,
 				AurorasLanternsRegistry.IRON_CEILING_CHANDELIER_BLOCK
 		);
-		AurorasLanternsRegistry.IRON_CEILING_CHANDELIER_BLOCKS.values()
-				.forEach(block -> BlockRenderLayerMap.putBlock(block, ChunkSectionLayer.CUTOUT));
 
 		LanternRegistry.forEachAndFuture((id, wallLanternBlock) -> {
 			BlockRenderLayerMap.putBlocks(ChunkSectionLayer.CUTOUT, wallLanternBlock);
@@ -57,6 +57,16 @@ public final class AurorasLanternsClient implements ClientModInitializer {
 				AurorasLanternsRegistry.WALL_LANTERN_BLOCK_ENTITY_TYPE,
 				WallLanternBlockEntityRenderer::new
 		);
+
+		ModelLoadingPlugin.register(pluginCtx -> {
+			pluginCtx.modifyBlockModelOnLoad().register((model, context) -> {
+				if (AurorasLanternsRegistry.CHANDELIER_BLOCK_ENTITY_TYPE.isValid(context.state())) {
+					return new UnbakedChandelierModel(model);
+				}
+
+				return model;
+			});
+		});
 
 		AurorasLanternsRuntimeDatagen.CLIENT_DATAGEN.register(registrar -> {
 			var pack = new InMemoryPackResources.Named(AurorasLanterns.id("generated").toString());
