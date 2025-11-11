@@ -1,6 +1,15 @@
 {
 	"block.auroraslanterns.amethyst_lantern": "Amethyst Lantern",
 	"block.auroraslanterns.redstone_lantern": "Redstone Lantern",
+	"item.auroraslanterns.chandelier.iron": "Iron Chandelier",
+	"item.auroraslanterns.chandelier.copper": "Copper Chandelier",
+	"item.auroraslanterns.chandelier.exposed_copper": "Exposed Copper Chandelier",
+	"item.auroraslanterns.chandelier.weathered_copper": "Weathered Copper Chandelier",
+	"item.auroraslanterns.chandelier.oxidized_copper": "Oxidized Copper Chandelier",
+	"item.auroraslanterns.chandelier.waxed_copper": "Waxed Copper Chandelier",
+	"item.auroraslanterns.chandelier.waxed_exposed_copper": "Waxed Exposed Copper Chandelier",
+	"item.auroraslanterns.chandelier.waxed_weathered_copper": "Waxed Weathered Copper Chandelier",
+	"item.auroraslanterns.chandelier.waxed_oxidized_copper": "Waxed Oxidized Copper Chandelier",
 	"subtitles.auroraslanterns.block.lantern.swing": "Lantern swings",
 	"advancements.auroraslanterns.adventure.wall_lantern_bonk.title": "Beware- Bonk!",
 	"advancements.auroraslanterns.adventure.wall_lantern_bonk.description": "Bonk into a Wall Lantern"

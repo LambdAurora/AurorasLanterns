@@ -15,10 +15,10 @@ import dev.lambdaurora.auroraslanterns.block.AmethystLanternBlock;
 import dev.lambdaurora.auroraslanterns.block.RedstoneLanternBlock;
 import dev.lambdaurora.auroraslanterns.block.WallLanternBlock;
 import dev.lambdaurora.auroraslanterns.block.behavior.RedstoneLanternBehavior;
-import dev.lambdaurora.auroraslanterns.block.chandelier.CeilingChandelierBlock;
 import dev.lambdaurora.auroraslanterns.block.entity.ChandelierBlockEntity;
 import dev.lambdaurora.auroraslanterns.block.entity.WallLanternBlockEntity;
 import dev.lambdaurora.auroraslanterns.compat.AurorasDecoDataUpper;
+import dev.lambdaurora.auroraslanterns.item.ChandelierItem;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.registry.RegistryEntryAddedCallback;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
@@ -31,6 +31,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Util;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -38,10 +39,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LanternBlock;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.MapColor;
 
 import java.util.function.Function;
 
@@ -92,18 +91,21 @@ public final class AurorasLanternsRegistry {
 	//endregion
 
 	//region Chandeliers
-	public static final CeilingChandelierBlock IRON_CEILING_CHANDELIER_BLOCK = registerBlock(
-			AurorasLanterns.id("chandelier/iron/ceiling"),
-			CeilingChandelierBlock::new,
-			ChandelierRegistry.getProperties(Blocks.CANDLE, SoundType.IRON, MapColor.METAL)
+	public static final ChandelierBlocks IRON_CHANDELIER_BLOCKS = ChandelierBlocks.create("iron");
+	public static final Item IRON_CHANDELIER_ITEM = Items.registerItem(
+			ResourceKey.create(Registries.ITEM, AurorasLanterns.id("chandelier/iron")),
+			properties -> new ChandelierItem(IRON_CHANDELIER_BLOCKS, properties)
 	);
 	public static final BlockEntityType<ChandelierBlockEntity> CHANDELIER_BLOCK_ENTITY_TYPE = Registry.register(
 			BuiltInRegistries.BLOCK_ENTITY_TYPE,
 			AurorasLanterns.id("chandelier"),
-			FabricBlockEntityTypeBuilder.create(
-					ChandelierBlockEntity::new,
-					IRON_CEILING_CHANDELIER_BLOCK
-			).build()
+			Util.make(() -> {
+				var builder = FabricBlockEntityTypeBuilder.create(
+						ChandelierBlockEntity::new
+				);
+				IRON_CHANDELIER_BLOCKS.forEach(builder::addBlock);
+				return builder.build();
+			})
 	);
 	//endregion
 

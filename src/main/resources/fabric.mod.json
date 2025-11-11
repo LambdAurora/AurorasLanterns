@@ -23,7 +23,7 @@
 			"dev.lambdaurora.auroraslanterns.client.AurorasLanternsClient"
 		],
 		"fabric-datagen": [
-			"dev.lambdaurora.auroraslanterns.client.resource.AurorasLanternsStaticDatagen"
+			"dev.lambdaurora.auroraslanterns.client.resource.datagen.AurorasLanternsStaticDatagen"
 		],
 		"fabric-gametest": [
 			"dev.lambdaurora.auroraslanterns.test.RedstoneLanternTest",
@@ -32,7 +32,11 @@
 	},
 	"accessWidener": "auroraslanterns.accesswidener",
 	"mixins": [
-		"auroraslanterns.mixins.json"
+		"auroraslanterns.mixins.json",
+		{
+			"config": "auroraslanterns.client.mixins.json",
+			"environment": "client"
+		}
 	],
 	"depends": {
 		"fabricloader": ">=0.17.2",

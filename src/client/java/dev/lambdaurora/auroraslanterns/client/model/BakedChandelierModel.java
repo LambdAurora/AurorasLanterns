@@ -10,7 +10,8 @@
 package dev.lambdaurora.auroraslanterns.client.model;
 
 import dev.lambdaurora.auroraslanterns.AurorasLanternsRegistry;
-import dev.lambdaurora.auroraslanterns.block.entity.ChandelierBlockEntity;
+import dev.lambdaurora.auroraslanterns.block.chandelier.AbstractChandelierBlock;
+import dev.lambdaurora.auroraslanterns.block.chandelier.AbstractChandelierBlock.Candle;
 import net.fabricmc.fabric.api.client.model.loading.v1.wrapper.WrapperBlockStateModel;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
@@ -21,14 +22,15 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Map;
 import java.util.function.Predicate;
 
 public final class BakedChandelierModel extends WrapperBlockStateModel {
-	private final ChandelierModelData modelData;
+	private final Map<Candle, BlockStateModel[]> candles;
 
-	public BakedChandelierModel(BlockStateModel wrapped, ChandelierModelData modelData) {
+	public BakedChandelierModel(BlockStateModel wrapped, Map<Candle, BlockStateModel[]> candles) {
 		super(wrapped);
-		this.modelData = modelData;
+		this.candles = candles;
 	}
 
 	@Override
@@ -42,13 +44,19 @@ public final class BakedChandelierModel extends WrapperBlockStateModel {
 	) {
 		super.emitQuads(emitter, blockView, pos, state, random, cullTest);
 
-		if (AurorasLanternsRegistry.CHANDELIER_BLOCK_ENTITY_TYPE.isValid(state)) {
-			var data = (ChandelierBlockEntity.Candle[]) blockView.getBlockEntityRenderData(pos);
+		if (AurorasLanternsRegistry.CHANDELIER_BLOCK_ENTITY_TYPE.isValid(state)
+				&& state.getBlock() instanceof AbstractChandelierBlock chandelierBlock
+		) {
+			var data = (Candle[]) blockView.getBlockEntityRenderData(pos);
 			if (data == null) return;
 
-			for (int i = 0; i < data.length; i++) {
+			for (int i = 0; i < Math.min(data.length, chandelierBlock.holders()); i++) {
 				var candle = data[i];
-				this.modelData.models().get(candle)[data.length - 1][i].get(state).emitQuads(emitter, blockView, pos, state, random, cullTest);
+				var entry = this.candles.get(candle);
+
+				if (entry != null && entry[i] != null) {
+					entry[i].emitQuads(emitter, blockView, pos, state, random, cullTest);
+				}
 			}
 		}
 	}

@@ -1,0 +1,52 @@
+{
+	"credit": "Made by LambdAurora",
+	"parent": "minecraft:block/block",
+	"textures": {
+		"particle": "#candle"
+	},
+	"elements": [
+		{
+			"name": "body",
+			"from": [ 7, 7, 5 ],
+			"to": [ 9, 10, 7 ],
+			"faces": {
+				"north": {"uv": [ 0, 8, 2, 11 ], "texture": "#candle"},
+				"east": {"uv": [ 0, 8, 2, 11 ], "texture": "#candle"},
+				"south": {"uv": [ 0, 8, 2, 11 ], "texture": "#candle"},
+				"west": {"uv": [ 0, 8, 2, 11 ], "texture": "#candle"},
+				"up": {"uv": [ 0, 6, 2, 8 ], "texture": "#candle"}
+			}
+		},
+		{
+			"from": [ 7.5, 10, 6 ],
+			"to": [ 8.5, 11, 6 ],
+			"rotation": {"angle": 45, "axis": "y", "origin": [ 8, 11, 6 ]},
+			"faces": {
+				"north": {"uv": [ 0, 5, 1, 6 ], "texture": "#candle"},
+				"south": {"uv": [ 0, 5, 1, 6 ], "texture": "#candle"}
+			}
+		},
+		{
+			"from": [ 7.5, 10, 6 ],
+			"to": [ 8.5, 11, 6 ],
+			"rotation": {"angle": -45, "axis": "y", "origin": [ 8, 11, 6 ]},
+			"faces": {
+				"north": {"uv": [ 0, 5, 1, 6 ], "texture": "#candle"},
+				"south": {"uv": [ 0, 5, 1, 6 ], "texture": "#candle"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "candle",
+			"origin": [ 8, 8, 8 ],
+			"children": [
+				{
+					"name": "middle",
+					"origin": [ 8, 8, 8 ],
+					"children": [ 0, 1, 2 ]
+				}
+			]
+		}
+	]
+}

@@ -9,6 +9,7 @@
 
 package dev.lambdaurora.auroraslanterns.block.chandelier;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -31,23 +32,35 @@ import org.jspecify.annotations.Nullable;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 /**
- * Represents wall candles.
+ * Represents a wall-mounted chandelier block.
  *
  * @author LambdAurora
  * @version 1.5.0
  * @since 1.5.0
  */
-public class WallChandelierBlock extends CandleBlock {
+public class WallChandelierBlock extends AbstractChandelierBlock {
+	public static final MapCodec<WallChandelierBlock> CODEC = makeCodec(WallChandelierBlock::new);
 	public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
 
 	private static final VoxelShape HOLDER_SHAPE = box(0.0, 0.0, 0.0, 16.0, 8.0, 16.0);
 
-	public WallChandelierBlock(Properties properties) {
-		super(properties);
+	public WallChandelierBlock(int holders, Properties properties) {
+		super(holders, properties);
 
 		this.registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH));
+	}
+
+	@Override
+	public MapCodec<WallChandelierBlock> codec() {
+		return CODEC;
+	}
+
+	@Override
+	public AttachmentType attachmentType() {
+		return AttachmentType.WALL;
 	}
 
 	@Override
@@ -55,11 +68,17 @@ public class WallChandelierBlock extends CandleBlock {
 		super.createBlockStateDefinition(builder.add(FACING));
 	}
 
+	@Override
+	public BlockState copyStates(BlockState current, BlockState target) {
+		return super.copyStates(current, target)
+				.setValue(FACING, current.getValue(FACING));
+	}
+
 	/* Shape */
 
 	@Override
 	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-		return SHAPES[Math.clamp(state.getValue(CANDLES) - 1, 0, 3)].get(state.getValue(FACING));
+		return SHAPES[Math.clamp(this.holders() - 1, 0, 3)].get(state.getValue(FACING));
 	}
 
 	/* Placement */
@@ -75,7 +94,6 @@ public class WallChandelierBlock extends CandleBlock {
 		);
 	}
 
-	@SuppressWarnings({"NullableProblems", "ConstantValue"})
 	@Override
 	public @Nullable BlockState getStateForPlacement(BlockPlaceContext ctx) {
 		var state = super.getStateForPlacement(ctx);
@@ -123,8 +141,8 @@ public class WallChandelierBlock extends CandleBlock {
 	/* Client */
 
 	@Override
-	protected Iterable<Vec3> getParticleOffsets(BlockState state) {
-		return CANDLES_TO_PARTICLE_OFFSETS[Math.clamp(state.getValue(CANDLES) - 1, 0, 3)].get(state.getValue(FACING));
+	protected Stream<Vec3> getParticleOffsets(BlockState state) {
+		return CANDLES_TO_PARTICLE_OFFSETS[Math.clamp(this.holders() - 1, 0, 3)].get(state.getValue(FACING)).stream();
 	}
 
 	@SuppressWarnings("unchecked")

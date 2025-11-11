@@ -1,0 +1,20 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "auroraslanterns:block/chandelier/candle/ceiling/candle_2_2"
+      },
+      "when": {
+        "lit_candles": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "auroraslanterns:block/chandelier/candle/ceiling/candle_2_2_lit"
+      },
+      "when": {
+        "lit_candles": "!0"
+      }
+    }
+  ]
+}

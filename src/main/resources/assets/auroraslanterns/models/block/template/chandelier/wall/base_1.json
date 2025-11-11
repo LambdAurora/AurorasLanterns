@@ -1,0 +1,51 @@
+{
+	"credit": "Made by LambdAurora",
+	"parent": "minecraft:block/block",
+	"textures": {
+		"particle": "#attachment"
+	},
+	"elements": [
+		{
+			"from": [ 6, 2, 0 ],
+			"to": [ 10, 6, 1 ],
+			"faces": {
+				"north": {"uv": [ 1, 1, 5, 5 ], "texture": "#attachment", "cullface": "north"},
+				"east": {"uv": [ 5, 1, 6, 5 ], "texture": "#attachment"},
+				"south": {"uv": [ 1, 1, 5, 5 ], "texture": "#attachment"},
+				"west": {"uv": [ 0, 1, 1, 5 ], "texture": "#attachment"},
+				"up": {"uv": [ 1, 0, 5, 1 ], "texture": "#attachment"},
+				"down": {"uv": [ 1, 5, 5, 6 ], "texture": "#attachment"}
+			}
+		},
+		{
+			"from": [ 7, 3, 1 ],
+			"to": [ 9, 5, 5 ],
+			"faces": {
+				"east": {"uv": [ 2, 10, 6, 12 ], "texture": "#attachment"},
+				"south": {"uv": [ 9, 0, 11, 2 ], "texture": "#attachment"},
+				"west": {"uv": [ 2, 14, 6, 16 ], "texture": "#attachment"},
+				"up": {"uv": [ 11, 2, 13, 6 ], "texture": "#attachment"},
+				"down": {"uv": [ 9, 2, 11, 6 ], "texture": "#attachment"}
+			}
+		},
+		{
+			"from": [ 6, 5, 2 ],
+			"to": [ 10, 6, 6 ],
+			"faces": {
+				"north": {"uv": [ 1, 0, 5, 1 ], "texture": "#attachment"},
+				"east": {"uv": [ 1, 0, 5, 1 ], "texture": "#attachment"},
+				"south": {"uv": [ 1, 5, 5, 6 ], "texture": "#attachment"},
+				"west": {"uv": [ 1, 4, 5, 5 ], "texture": "#attachment"},
+				"up": {"uv": [ 1, 1, 5, 5 ], "texture": "#attachment"},
+				"down": {"uv": [ 1, 1, 5, 5 ], "texture": "#attachment"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "attachment",
+			"origin": [ 8, 8, 8 ],
+			"children": [ 0, 1, 2 ]
+		}
+	]
+}

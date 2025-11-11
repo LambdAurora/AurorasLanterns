@@ -1,0 +1,6 @@
+{
+  "parent": "auroraslanterns:block/template/chandelier/wall/candle_3_1",
+  "textures": {
+    "candle": "minecraft:block/green_candle"
+  }
+}

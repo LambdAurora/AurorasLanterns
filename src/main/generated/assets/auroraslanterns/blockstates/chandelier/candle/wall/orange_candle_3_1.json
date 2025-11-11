@@ -1,0 +1,82 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "auroraslanterns:block/chandelier/candle/wall/orange_candle_3_1",
+        "y": 180
+      },
+      "when": {
+        "facing": "north",
+        "lit_candles": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "auroraslanterns:block/chandelier/candle/wall/orange_candle_3_1_lit",
+        "y": 180
+      },
+      "when": {
+        "facing": "north",
+        "lit_candles": "!0"
+      }
+    },
+    {
+      "apply": {
+        "model": "auroraslanterns:block/chandelier/candle/wall/orange_candle_3_1"
+      },
+      "when": {
+        "facing": "south",
+        "lit_candles": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "auroraslanterns:block/chandelier/candle/wall/orange_candle_3_1_lit"
+      },
+      "when": {
+        "facing": "south",
+        "lit_candles": "!0"
+      }
+    },
+    {
+      "apply": {
+        "model": "auroraslanterns:block/chandelier/candle/wall/orange_candle_3_1",
+        "y": 90
+      },
+      "when": {
+        "facing": "west",
+        "lit_candles": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "auroraslanterns:block/chandelier/candle/wall/orange_candle_3_1_lit",
+        "y": 90
+      },
+      "when": {
+        "facing": "west",
+        "lit_candles": "!0"
+      }
+    },
+    {
+      "apply": {
+        "model": "auroraslanterns:block/chandelier/candle/wall/orange_candle_3_1",
+        "y": 270
+      },
+      "when": {
+        "facing": "east",
+        "lit_candles": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "auroraslanterns:block/chandelier/candle/wall/orange_candle_3_1_lit",
+        "y": 270
+      },
+      "when": {
+        "facing": "east",
+        "lit_candles": "!0"
+      }
+    }
+  ]
+}

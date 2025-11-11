@@ -27,17 +27,25 @@ val targetJavaVersion = Integer.parseInt(project.property("java_version").toStri
 
 repositories {
 	mavenCentral()
-	maven {
-		name = "ParchmentMC"
-		url = uri("https://maven.parchmentmc.org/")
-		content {
+	exclusiveContent {
+		forRepository {
+			maven {
+				name = "ParchmentMC"
+				url = uri("https://maven.parchmentmc.org/")
+			}
+		}
+		filter {
 			includeGroup("org.parchmentmc.data")
 		}
 	}
-	maven {
-		name = "Gegy"
-		url = uri("https://maven.gegy.dev/releases/")
-		content {
+	exclusiveContent {
+		forRepository {
+			maven {
+				name = "Gegy"
+				url = uri("https://maven.gegy.dev/releases/")
+			}
+		}
+		filter {
 			includeGroupAndSubgroups("dev.lambdaurora")
 		}
 	}

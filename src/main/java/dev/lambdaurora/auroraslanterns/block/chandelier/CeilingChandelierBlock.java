@@ -10,7 +10,6 @@
 package dev.lambdaurora.auroraslanterns.block.chandelier;
 
 import com.mojang.serialization.MapCodec;
-import dev.lambdaurora.auroraslanterns.AurorasLanternsRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -18,30 +17,26 @@ import net.minecraft.util.Util;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.CandleBlock;
-import net.minecraft.world.level.block.ChainBlock;
 import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
- * Represents a chandelier.
+ * Represents a ceiling chandelier block.
  *
  * @author LambdAurora
  * @version 1.5.0
  * @since 1.5.0
  */
-public class CeilingChandelierBlock extends CandleBlock implements EntityBlock {
-	public static final MapCodec<CeilingChandelierBlock> CODEC = simpleCodec(CeilingChandelierBlock::new);
+public class CeilingChandelierBlock extends AbstractChandelierBlock implements EntityBlock {
+	public static final MapCodec<CeilingChandelierBlock> CODEC = makeCodec(CeilingChandelierBlock::new);
 	public static final VoxelShape ONE_CANDLE_SHAPE = box(5.0, 3.0, 5.0, 11.0, 13.0, 11.0);
 	public static final VoxelShape TWO_CANDLE_SHAPE = box(2.0, 3.0, 6.0, 14.0, 12.0, 10.0);
 	public static final VoxelShape THREE_CANDLE_SHAPE = box(2.0, 3.0, 2.0, 14.0, 12.0, 14.0);
@@ -71,21 +66,25 @@ public class CeilingChandelierBlock extends CandleBlock implements EntityBlock {
 
 	private static final VoxelShape HOLDER_SHAPE = box(6.0, 0.0, 6.0, 10.0, 1.0, 10.0);
 
-	public CeilingChandelierBlock(Properties properties) {
-		super(properties);
+	public CeilingChandelierBlock(int holders, Properties properties) {
+		super(holders, properties);
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public MapCodec<CandleBlock> codec() {
-		return (MapCodec) CODEC;
+	public MapCodec<CeilingChandelierBlock> codec() {
+		return CODEC;
+	}
+
+	@Override
+	public AttachmentType attachmentType() {
+		return AttachmentType.CEILING;
 	}
 
 	/* Shapes */
 
 	@Override
 	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-		return switch (state.getValue(CANDLES)) {
+		return switch (this.holders()) {
 			case 1 -> ONE_CANDLE_SHAPE;
 			case 2 -> TWO_CANDLE_SHAPE;
 			case 3, 4 -> THREE_CANDLE_SHAPE;
@@ -96,17 +95,8 @@ public class CeilingChandelierBlock extends CandleBlock implements EntityBlock {
 	/* Placement */
 
 	@Override
-	public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
-		var upPos = pos.above();
-		var upState = world.getBlockState(upPos);
-
-		if (upState.getBlock() instanceof ChainBlock && upState.getValue(ChainBlock.AXIS) == Direction.Axis.Y)
-			return true;
-
-		return !Shapes.joinIsNotEmpty(
-				upState.getBlockSupportShape(world, upPos).getFaceShape(Direction.DOWN),
-				HOLDER_SHAPE, BooleanOp.ONLY_SECOND
-		);
+	public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+		return Block.canSupportCenter(level, pos.above(), Direction.DOWN);
 	}
 
 	/* Updates */
@@ -123,14 +113,7 @@ public class CeilingChandelierBlock extends CandleBlock implements EntityBlock {
 	/* Client */
 
 	@Override
-	protected Iterable<Vec3> getParticleOffsets(BlockState state) {
-		return CANDLES_TO_PARTICLE_OFFSETS[Math.clamp(state.getValue(CANDLES) - 1, 0, 3)];
-	}
-
-	/* Block entity */
-
-	@Override
-	public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-		return AurorasLanternsRegistry.CHANDELIER_BLOCK_ENTITY_TYPE.create(pos, state);
+	protected Stream<Vec3> getParticleOffsets(BlockState state) {
+		return CANDLES_TO_PARTICLE_OFFSETS[Math.clamp(this.holders() - 1, 0, 3)].stream();
 	}
 }

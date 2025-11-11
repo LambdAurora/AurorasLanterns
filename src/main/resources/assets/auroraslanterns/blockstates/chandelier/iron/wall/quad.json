@@ -1,0 +1,19 @@
+{
+	"variants": {
+		"facing=north": {
+			"model": "auroraslanterns:block/chandelier/iron/wall/4",
+			"y": 180
+		},
+		"facing=south": {
+			"model": "auroraslanterns:block/chandelier/iron/wall/4"
+		},
+		"facing=west": {
+			"model": "auroraslanterns:block/chandelier/iron/wall/4",
+			"y": 90
+		},
+		"facing=east": {
+			"model": "auroraslanterns:block/chandelier/iron/wall/4",
+			"y": 270
+		}
+	}
+}

@@ -1,6 +1,9 @@
 {
 	"replace": false,
 	"values": [
-		"auroraslanterns:chandelier/iron/ceiling"
+		"auroraslanterns:chandelier/iron/ceiling/single",
+		"auroraslanterns:chandelier/iron/ceiling/duo",
+		"auroraslanterns:chandelier/iron/ceiling/trio",
+		"auroraslanterns:chandelier/iron/ceiling/quad"
 	]
 }
