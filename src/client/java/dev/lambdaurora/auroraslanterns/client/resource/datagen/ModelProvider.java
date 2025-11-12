@@ -10,23 +10,19 @@
 package dev.lambdaurora.auroraslanterns.client.resource.datagen;
 
 import com.google.common.collect.Maps;
-import com.mojang.math.Quadrant;
 import dev.lambdaurora.auroraslanterns.AurorasLanterns;
 import dev.lambdaurora.auroraslanterns.AurorasLanternsRegistry;
 import dev.lambdaurora.auroraslanterns.block.chandelier.AbstractChandelierBlock;
-import dev.lambdaurora.auroraslanterns.client.model.ChandelierModelData;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.blockstates.BlockModelDefinitionGenerator;
-import net.minecraft.client.data.models.blockstates.MultiPartGenerator;
 import net.minecraft.client.data.models.model.ModelTemplate;
 import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.data.models.model.TextureSlot;
 import net.minecraft.client.renderer.block.model.BlockModelDefinition;
-import net.minecraft.client.renderer.block.model.multipart.KeyValueCondition;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
@@ -129,29 +125,6 @@ final class ModelProvider extends FabricModelProvider {
 						templates.get(templateIndex), candleName, normalMapping, litMapping, generators
 				);
 
-				this.blockStates.put(
-						ChandelierModelData.blockStateId(candleName),
-						MultiPartGenerator.multiPart(AurorasLanternsRegistry.IRON_CHANDELIER_BLOCKS.ceiling().get(holders))
-								.with(
-										new KeyValueCondition(Map.of(
-												"lit_candles",
-												new KeyValueCondition.Terms(List.of(
-														new KeyValueCondition.Term("0", false)
-												))
-										)),
-										models.unlit()
-								)
-								.with(
-										new KeyValueCondition(Map.of(
-												"lit_candles",
-												new KeyValueCondition.Terms(List.of(
-														new KeyValueCondition.Term("0", true)
-												))
-										)),
-										models.lit()
-								)
-				);
-
 				templateIndex++;
 			}
 		}
@@ -171,115 +144,6 @@ final class ModelProvider extends FabricModelProvider {
 
 				var models = ChandelierCandleModels.create(
 						WALL_CHANDELIER_CANDLE_TEMPLATES.get(templateIndex), candleName, normalMapping, litMapping, generators
-				);
-
-				this.blockStates.put(
-						ChandelierModelData.blockStateId(candleName),
-						MultiPartGenerator.multiPart(AurorasLanternsRegistry.IRON_CHANDELIER_BLOCKS.wall().get(holders))
-								.with(
-										new KeyValueCondition(Map.of(
-												"lit_candles",
-												new KeyValueCondition.Terms(List.of(
-														new KeyValueCondition.Term("0", false)
-												)),
-												"facing",
-												new KeyValueCondition.Terms(List.of(
-														new KeyValueCondition.Term("north", false)
-												))
-										)),
-										models.unlit().with(variant -> variant.withYRot(Quadrant.R180))
-								)
-								.with(
-										new KeyValueCondition(Map.of(
-												"lit_candles",
-												new KeyValueCondition.Terms(List.of(
-														new KeyValueCondition.Term("0", true)
-												)),
-												"facing",
-												new KeyValueCondition.Terms(List.of(
-														new KeyValueCondition.Term("north", false)
-												))
-										)),
-										models.lit().with(variant -> variant.withYRot(Quadrant.R180))
-								)
-								.with(
-										new KeyValueCondition(Map.of(
-												"lit_candles",
-												new KeyValueCondition.Terms(List.of(
-														new KeyValueCondition.Term("0", false)
-												)),
-												"facing",
-												new KeyValueCondition.Terms(List.of(
-														new KeyValueCondition.Term("south", false)
-												))
-										)),
-										models.unlit()
-								)
-								.with(
-										new KeyValueCondition(Map.of(
-												"lit_candles",
-												new KeyValueCondition.Terms(List.of(
-														new KeyValueCondition.Term("0", true)
-												)),
-												"facing",
-												new KeyValueCondition.Terms(List.of(
-														new KeyValueCondition.Term("south", false)
-												))
-										)),
-										models.lit()
-								)
-								.with(
-										new KeyValueCondition(Map.of(
-												"lit_candles",
-												new KeyValueCondition.Terms(List.of(
-														new KeyValueCondition.Term("0", false)
-												)),
-												"facing",
-												new KeyValueCondition.Terms(List.of(
-														new KeyValueCondition.Term("west", false)
-												))
-										)),
-										models.unlit().with(variant -> variant.withYRot(Quadrant.R90))
-								)
-								.with(
-										new KeyValueCondition(Map.of(
-												"lit_candles",
-												new KeyValueCondition.Terms(List.of(
-														new KeyValueCondition.Term("0", true)
-												)),
-												"facing",
-												new KeyValueCondition.Terms(List.of(
-														new KeyValueCondition.Term("west", false)
-												))
-										)),
-										models.lit().with(variant -> variant.withYRot(Quadrant.R90))
-								)
-								.with(
-										new KeyValueCondition(Map.of(
-												"lit_candles",
-												new KeyValueCondition.Terms(List.of(
-														new KeyValueCondition.Term("0", false)
-												)),
-												"facing",
-												new KeyValueCondition.Terms(List.of(
-														new KeyValueCondition.Term("east", false)
-												))
-										)),
-										models.unlit().with(variant -> variant.withYRot(Quadrant.R270))
-								)
-								.with(
-										new KeyValueCondition(Map.of(
-												"lit_candles",
-												new KeyValueCondition.Terms(List.of(
-														new KeyValueCondition.Term("0", true)
-												)),
-												"facing",
-												new KeyValueCondition.Terms(List.of(
-														new KeyValueCondition.Term("east", false)
-												))
-										)),
-										models.lit().with(variant -> variant.withYRot(Quadrant.R270))
-								)
 				);
 
 				templateIndex++;

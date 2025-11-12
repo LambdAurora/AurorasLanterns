@@ -57,9 +57,9 @@ public class CeilingChandelierBlock extends AbstractChandelierBlock implements E
 				),
 				List.of(
 						new Vec3(0.75, highestPoint, 0.25),
-						new Vec3(0.25, second, 0.25),
+						new Vec3(0.75, second, 0.75),
 						new Vec3(0.25, third, 0.75),
-						new Vec3(0.75, second, 0.75)
+						new Vec3(0.25, second, 0.25)
 				)
 		};
 	});

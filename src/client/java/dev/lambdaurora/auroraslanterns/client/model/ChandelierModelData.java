@@ -12,6 +12,7 @@ package dev.lambdaurora.auroraslanterns.client.model;
 
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
+import com.mojang.math.Quadrant;
 import com.mojang.serialization.JsonOps;
 import dev.lambdaurora.auroraslanterns.AurorasLanterns;
 import dev.lambdaurora.auroraslanterns.ChandelierBlocks;
@@ -19,6 +20,12 @@ import dev.lambdaurora.auroraslanterns.block.chandelier.AbstractChandelierBlock.
 import dev.lambdaurora.auroraslanterns.block.chandelier.AbstractChandelierBlock.Candle;
 import net.minecraft.client.renderer.block.model.BlockModelDefinition;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.renderer.block.model.SingleVariant;
+import net.minecraft.client.renderer.block.model.Variant;
+import net.minecraft.client.renderer.block.model.multipart.Condition;
+import net.minecraft.client.renderer.block.model.multipart.KeyValueCondition;
+import net.minecraft.client.renderer.block.model.multipart.Selector;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.world.level.block.state.BlockState;
@@ -26,14 +33,25 @@ import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public record ChandelierModelData(
 		Map<BlockState, Map<Candle, BlockStateModel.@Nullable UnbakedRoot[]>> models
 ) {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ChandelierModelData.class);
+	public static final KeyValueCondition.Terms UNLIT_CONDITION_TERMS = new KeyValueCondition.Terms(List.of(
+			new KeyValueCondition.Term("0", false)
+	));
+	public static final Condition UNLIT_CONDITION = new KeyValueCondition(Map.of(
+			"lit_candles", UNLIT_CONDITION_TERMS
+	));
+	public static final KeyValueCondition.Terms LIT_CONDITION_TERMS = new KeyValueCondition.Terms(List.of(
+			new KeyValueCondition.Term("0", true)
+	));
+	public static final Condition LIT_CONDITION = new KeyValueCondition(Map.of(
+			"lit_candles",
+			LIT_CONDITION_TERMS
+	));
 
 	public static Identifier blockStateId(String name) {
 		return AurorasLanterns.id("chandelier/candle/" + name);
@@ -71,10 +89,9 @@ public record ChandelierModelData(
 				for (int currentCandle = 1; currentCandle <= candles; currentCandle++) {
 					String suffix = candles == 1 ? "" : ("_" + currentCandle);
 
-					var blockStateId = blockStateId(
-							attachmentType.id() + "/" + name + "_" + candles + suffix
-					);
-					var resourceId = blockStateId.withPath(path -> "blockstates/" + path + ".json");
+					String path = attachmentType.id() + "/" + name + "_" + candles + suffix;
+					var blockStateId = blockStateId(path);
+					var resourceId = blockStateId.withPath(p -> "blockstates/" + p + ".json");
 
 					var resourceCandidate = sharedState.resourceManager().getResource(resourceId);
 
@@ -90,16 +107,113 @@ public record ChandelierModelData(
 						} catch (Exception e) {
 							LOGGER.error("Failed to load chandelier candle block state definition {}.", blockStateId, e);
 						}
-
-						i++;
 					} else {
-						LOGGER.error("Missing chandelier candle block state definition {}.", blockStateId);
+						entries[i] = new PendingEntry(
+								generateBlockModelDefinition(path, attachmentType),
+								blockStateId.toString()
+						);
 					}
+
+					i++;
 				}
 			}
 		}
 
 		return map;
+	}
+
+	private static BlockModelDefinition generateBlockModelDefinition(
+			String path, AttachmentType attachmentType
+	) {
+		return attachmentType != AttachmentType.WALL
+				? generateSimpleBlockModelDefinition(path)
+				: generateWallBlockModelDefinition(path);
+	}
+
+	private static BlockModelDefinition generateSimpleBlockModelDefinition(String path) {
+		return new BlockModelDefinition(Optional.empty(), Optional.of(new BlockModelDefinition.MultiPartDefinition(
+				List.of(
+						new Selector(
+								Optional.of(UNLIT_CONDITION),
+								new SingleVariant.Unbaked(new Variant(modelId(path)))
+						),
+						new Selector(
+								Optional.of(LIT_CONDITION),
+								new SingleVariant.Unbaked(new Variant(modelId(path + "_lit")))
+						)
+				)
+		)));
+	}
+
+	private static BlockModelDefinition generateWallBlockModelDefinition(String path) {
+		var unlitVariant = new Variant(modelId(path));
+		var litVariant = new Variant(modelId(path + "_lit"));
+		return new BlockModelDefinition(Optional.empty(), Optional.of(new BlockModelDefinition.MultiPartDefinition(
+				List.of(
+						new Selector(
+								Optional.of(new KeyValueCondition(Map.of(
+										"lit_candles", UNLIT_CONDITION_TERMS,
+										"facing", makeFacingTerms(Direction.NORTH)
+								))),
+								new SingleVariant.Unbaked(unlitVariant.withYRot(Quadrant.R180))
+						),
+						new Selector(
+								Optional.of(new KeyValueCondition(Map.of(
+										"lit_candles", LIT_CONDITION_TERMS,
+										"facing", makeFacingTerms(Direction.NORTH)
+								))),
+								new SingleVariant.Unbaked(litVariant.withYRot(Quadrant.R180))
+						),
+						new Selector(
+								Optional.of(new KeyValueCondition(Map.of(
+										"lit_candles", UNLIT_CONDITION_TERMS,
+										"facing", makeFacingTerms(Direction.SOUTH)
+								))),
+								new SingleVariant.Unbaked(unlitVariant)
+						),
+						new Selector(
+								Optional.of(new KeyValueCondition(Map.of(
+										"lit_candles", LIT_CONDITION_TERMS,
+										"facing", makeFacingTerms(Direction.SOUTH)
+								))),
+								new SingleVariant.Unbaked(litVariant)
+						),
+						new Selector(
+								Optional.of(new KeyValueCondition(Map.of(
+										"lit_candles", UNLIT_CONDITION_TERMS,
+										"facing", makeFacingTerms(Direction.WEST)
+								))),
+								new SingleVariant.Unbaked(unlitVariant.withYRot(Quadrant.R90))
+						),
+						new Selector(
+								Optional.of(new KeyValueCondition(Map.of(
+										"lit_candles", LIT_CONDITION_TERMS,
+										"facing", makeFacingTerms(Direction.WEST)
+								))),
+								new SingleVariant.Unbaked(litVariant.withYRot(Quadrant.R90))
+						),
+						new Selector(
+								Optional.of(new KeyValueCondition(Map.of(
+										"lit_candles", UNLIT_CONDITION_TERMS,
+										"facing", makeFacingTerms(Direction.EAST)
+								))),
+								new SingleVariant.Unbaked(unlitVariant.withYRot(Quadrant.R270))
+						),
+						new Selector(
+								Optional.of(new KeyValueCondition(Map.of(
+										"lit_candles", LIT_CONDITION_TERMS,
+										"facing", makeFacingTerms(Direction.EAST)
+								))),
+								new SingleVariant.Unbaked(litVariant.withYRot(Quadrant.R270))
+						)
+				)
+		)));
+	}
+
+	private static KeyValueCondition.Terms makeFacingTerms(Direction direction) {
+		return new KeyValueCondition.Terms(List.of(
+				new KeyValueCondition.Term(direction.getName(), false)
+		));
 	}
 
 	@SuppressWarnings("deprecation")
@@ -144,7 +258,9 @@ public record ChandelierModelData(
 
 	@FunctionalInterface
 	interface ModelConsumer {
-		void accept(BlockState state, Candle candle, int holders, int index, BlockStateModel.UnbakedRoot model);
+		void accept(
+				BlockState state, Candle candle, int holders, int index, BlockStateModel.UnbakedRoot model
+		);
 	}
 
 	record PendingEntry(BlockModelDefinition definition, String source) {
