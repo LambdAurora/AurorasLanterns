@@ -12,7 +12,7 @@ package dev.lambdaurora.auroraslanterns.mixin;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.monster.Giant;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.Pillager;
+import net.minecraft.world.entity.monster.illager.Pillager;
 import net.minecraft.world.level.LevelReader;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
