@@ -32,8 +32,8 @@ import java.util.stream.Stream;
  * Represents a ceiling chandelier block.
  *
  * @author LambdAurora
- * @version 1.5.0
- * @since 1.5.0
+ * @version 2.0.0
+ * @since 2.0.0
  */
 public class CeilingChandelierBlock extends AbstractChandelierBlock implements EntityBlock {
 	public static final MapCodec<CeilingChandelierBlock> CODEC = makeCodec(CeilingChandelierBlock::new);
@@ -71,7 +71,7 @@ public class CeilingChandelierBlock extends AbstractChandelierBlock implements E
 	}
 
 	@Override
-	public MapCodec<CeilingChandelierBlock> codec() {
+	public MapCodec<? extends CeilingChandelierBlock> codec() {
 		return CODEC;
 	}
 

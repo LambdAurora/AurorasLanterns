@@ -10,6 +10,7 @@
 package dev.lambdaurora.auroraslanterns.block.entity;
 
 import dev.lambdaurora.auroraslanterns.AurorasLanternsRegistry;
+import dev.lambdaurora.auroraslanterns.block.chandelier.AbstractChandelierBlock;
 import dev.lambdaurora.auroraslanterns.block.chandelier.AbstractChandelierBlock.Candle;
 import net.fabricmc.fabric.api.blockview.v2.RenderDataBlockEntity;
 import net.minecraft.core.BlockPos;
@@ -45,8 +46,8 @@ import java.util.function.Predicate;
  * Represents a chandelier block entity.
  *
  * @author LambdAurora
- * @version 1.5.0
- * @since 1.5.0
+ * @version 2.0.0
+ * @since 2.0.0
  */
 public class ChandelierBlockEntity extends BlockEntity implements RenderDataBlockEntity {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ChandelierBlockEntity.class);

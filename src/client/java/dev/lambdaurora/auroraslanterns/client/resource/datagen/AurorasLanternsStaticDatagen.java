@@ -11,6 +11,7 @@ package dev.lambdaurora.auroraslanterns.client.resource.datagen;
 
 import dev.lambdaurora.auroraslanterns.AurorasLanterns;
 import dev.lambdaurora.auroraslanterns.AurorasLanternsRegistry;
+import dev.lambdaurora.auroraslanterns.ChandelierBlocks;
 import dev.lambdaurora.auroraslanterns.advancement.WallLanternBonkTrigger;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
@@ -54,7 +55,7 @@ public final class AurorasLanternsStaticDatagen implements DataGeneratorEntrypoi
 			this.add(AurorasLanternsRegistry.AMETHYST_LANTERN_BLOCK, this::createSingleItemTable);
 			this.add(AurorasLanternsRegistry.REDSTONE_LANTERN_BLOCK, this::createSingleItemTable);
 
-			AurorasLanternsRegistry.IRON_CHANDELIER_BLOCKS.forEach(block -> {
+			ChandelierBlocks.streamAll().flatMap(ChandelierBlocks::stream).forEach(block -> {
 				this.add(block, b -> this.createSingleItemTable(b, ConstantValue.exactly(block.holders())));
 			});
 		}
@@ -115,6 +116,25 @@ public final class AurorasLanternsStaticDatagen implements DataGeneratorEntrypoi
 					.unlockedBy("has_iron_nugget", has(Items.IRON_NUGGET))
 					.unlockedBy("has_redstone_torch", has(Items.REDSTONE_TORCH))
 					.unlockedBy("has_self", has(AurorasLanternsRegistry.REDSTONE_LANTERN_ITEM))
+					.save(this.output);
+
+			this.shaped(RecipeCategory.DECORATIONS, AurorasLanternsRegistry.IRON_CHANDELIER_ITEM, 8)
+					.define('N', Items.IRON_NUGGET)
+					.define('I', Items.IRON_INGOT)
+					.pattern("N")
+					.pattern("I")
+					.unlockedBy("has_nugget", has(Items.IRON_NUGGET))
+					.unlockedBy("has_ingot", has(Items.IRON_INGOT))
+					.unlockedBy("has_self", has(AurorasLanternsRegistry.IRON_CHANDELIER_ITEM))
+					.save(this.output);
+			this.shaped(RecipeCategory.DECORATIONS, AurorasLanternsRegistry.COPPER_CHANDELIER_ITEM, 8)
+					.define('N', Items.COPPER_NUGGET)
+					.define('I', Items.COPPER_INGOT)
+					.pattern("N")
+					.pattern("I")
+					.unlockedBy("has_nugget", has(Items.IRON_NUGGET))
+					.unlockedBy("has_ingot", has(Items.IRON_INGOT))
+					.unlockedBy("has_self", has(AurorasLanternsRegistry.COPPER_CHANDELIER_ITEM))
 					.save(this.output);
 		}
 

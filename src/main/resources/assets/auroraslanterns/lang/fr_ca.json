@@ -1,6 +1,15 @@
 {
 	"block.auroraslanterns.amethyst_lantern": "Lanterne d'améthyste",
 	"block.auroraslanterns.redstone_lantern": "Lanterne de redstone",
+	"item.auroraslanterns.chandelier.iron": "Lustre en fer",
+	"item.auroraslanterns.chandelier.copper": "Lustre en cuivre",
+	"item.auroraslanterns.chandelier.exposed_copper": "Lustre en cuivre exposé",
+	"item.auroraslanterns.chandelier.weathered_copper": "Lustre en cuivre érodé",
+	"item.auroraslanterns.chandelier.oxidized_copper": "Lustre en cuivre oxydé",
+	"item.auroraslanterns.chandelier.waxed_copper": "Lustre en cuivre ciré",
+	"item.auroraslanterns.chandelier.waxed_exposed_copper": "Lustre en cuivre exposé ciré",
+	"item.auroraslanterns.chandelier.waxed_weathered_copper": "Lustre en cuivre érodé ciré",
+	"item.auroraslanterns.chandelier.waxed_oxidized_copper": "Lustre en cuivre oxydé ciré",
 	"subtitles.auroraslanterns.block.lantern.swing": "Balancement de lanterne",
 	"advancements.auroraslanterns.adventure.wall_lantern_bonk.title": "Attention- Bonk!",
 	"advancements.auroraslanterns.adventure.wall_lantern_bonk.description": "Cogne sur une lanterne murale"

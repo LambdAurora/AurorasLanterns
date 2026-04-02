@@ -96,6 +96,39 @@ public final class AurorasLanternsRegistry {
 			ResourceKey.create(Registries.ITEM, AurorasLanterns.id("chandelier/iron")),
 			properties -> new ChandelierItem(IRON_CHANDELIER_BLOCKS, properties)
 	);
+	public static final OxidizableChandelierBlocks COPPER_CHANDELIER_BLOCKS = OxidizableChandelierBlocks.create("copper");
+	public static final Item COPPER_CHANDELIER_ITEM = Items.registerItem(
+			ResourceKey.create(Registries.ITEM, AurorasLanterns.id("chandelier/copper")),
+			properties -> new ChandelierItem(COPPER_CHANDELIER_BLOCKS.unaffected(), properties)
+	);
+	public static final Item EXPOSED_COPPER_CHANDELIER_ITEM = Items.registerItem(
+			ResourceKey.create(Registries.ITEM, AurorasLanterns.id("chandelier/exposed_copper")),
+			properties -> new ChandelierItem(COPPER_CHANDELIER_BLOCKS.exposed(), properties)
+	);
+	public static final Item WEATHERED_COPPER_CHANDELIER_ITEM = Items.registerItem(
+			ResourceKey.create(Registries.ITEM, AurorasLanterns.id("chandelier/weathered_copper")),
+			properties -> new ChandelierItem(COPPER_CHANDELIER_BLOCKS.weathered(), properties)
+	);
+	public static final Item OXIDIZED_COPPER_CHANDELIER_ITEM = Items.registerItem(
+			ResourceKey.create(Registries.ITEM, AurorasLanterns.id("chandelier/oxidized_copper")),
+			properties -> new ChandelierItem(COPPER_CHANDELIER_BLOCKS.oxidized(), properties)
+	);
+	public static final Item WAXED_COPPER_CHANDELIER_ITEM = Items.registerItem(
+			ResourceKey.create(Registries.ITEM, AurorasLanterns.id("chandelier/waxed_copper")),
+			properties -> new ChandelierItem(COPPER_CHANDELIER_BLOCKS.waxed(), properties)
+	);
+	public static final Item WAXED_EXPOSED_COPPER_CHANDELIER_ITEM = Items.registerItem(
+			ResourceKey.create(Registries.ITEM, AurorasLanterns.id("chandelier/waxed_exposed_copper")),
+			properties -> new ChandelierItem(COPPER_CHANDELIER_BLOCKS.waxedExposed(), properties)
+	);
+	public static final Item WAXED_WEATHERED_COPPER_CHANDELIER_ITEM = Items.registerItem(
+			ResourceKey.create(Registries.ITEM, AurorasLanterns.id("chandelier/waxed_weathered_copper")),
+			properties -> new ChandelierItem(COPPER_CHANDELIER_BLOCKS.waxedWeathered(), properties)
+	);
+	public static final Item WAXED_OXIDIZED_COPPER_CHANDELIER_ITEM = Items.registerItem(
+			ResourceKey.create(Registries.ITEM, AurorasLanterns.id("chandelier/waxed_oxidized_copper")),
+			properties -> new ChandelierItem(COPPER_CHANDELIER_BLOCKS.waxedOxidized(), properties)
+	);
 	public static final BlockEntityType<ChandelierBlockEntity> CHANDELIER_BLOCK_ENTITY_TYPE = Registry.register(
 			BuiltInRegistries.BLOCK_ENTITY_TYPE,
 			AurorasLanterns.id("chandelier"),
@@ -104,6 +137,7 @@ public final class AurorasLanternsRegistry {
 						ChandelierBlockEntity::new
 				);
 				IRON_CHANDELIER_BLOCKS.forEach(builder::addBlock);
+				COPPER_CHANDELIER_BLOCKS.forEach(builder::addBlock);
 				return builder.build();
 			})
 	);
@@ -181,6 +215,8 @@ public final class AurorasLanternsRegistry {
 		BuiltInRegistries.ITEM.forEach(AurorasLanternsRegistry::handleRegisteredItem);
 		RegistryEntryAddedCallback.event(BuiltInRegistries.ITEM)
 				.register((rawId, id, item) -> handleRegisteredItem(item));
+
+		OxidizableChandelierBlocks.registerWeatheringStates(COPPER_CHANDELIER_BLOCKS);
 
 		AurorasDecoDataUpper.init();
 	}

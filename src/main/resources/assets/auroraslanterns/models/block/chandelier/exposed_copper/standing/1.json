@@ -1,0 +1,7 @@
+{
+	"parent": "auroraslanterns:block/template/chandelier/standing/base_1",
+	"textures": {
+		"attachment": "auroraslanterns:block/chandelier_exposed_copper_attachment",
+		"chain": "minecraft:block/exposed_copper_chain"
+	}
+}

@@ -38,8 +38,8 @@ import java.util.stream.Stream;
  * Represents a wall-mounted chandelier block.
  *
  * @author LambdAurora
- * @version 1.5.0
- * @since 1.5.0
+ * @version 2.0.0
+ * @since 2.0.0
  */
 public class WallChandelierBlock extends AbstractChandelierBlock {
 	public static final MapCodec<WallChandelierBlock> CODEC = makeCodec(WallChandelierBlock::new);
@@ -54,7 +54,7 @@ public class WallChandelierBlock extends AbstractChandelierBlock {
 	}
 
 	@Override
-	public MapCodec<WallChandelierBlock> codec() {
+	public MapCodec<? extends WallChandelierBlock> codec() {
 		return CODEC;
 	}
 

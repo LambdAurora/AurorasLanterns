@@ -64,8 +64,8 @@ import java.util.stream.Stream;
  * Represents a chandelier block.
  *
  * @author LambdAurora
- * @version 1.5.0
- * @since 1.5.0
+ * @version 2.0.0
+ * @since 2.0.0
  */
 public abstract class AbstractChandelierBlock extends Block
 		implements EntityBlock, SimpleWaterloggedBlock {
@@ -247,7 +247,11 @@ public abstract class AbstractChandelierBlock extends Block
 			if (stack.isEmpty() && isLit) {
 				this.extinguish(player, state, level, pos);
 				return InteractionResult.SUCCESS;
-			} else if (stack.is(ConventionalItemTags.IGNITER_TOOLS) && !isLit && chandelier.getCandlesCount() > 0) {
+			} else if (stack.is(ConventionalItemTags.IGNITER_TOOLS)
+					&& !isLit
+					&& chandelier.getCandlesCount() > 0
+					&& this.canBeLit(level, pos, state)
+			) {
 				level.playSound(
 						player, pos,
 						SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS,
@@ -265,6 +269,10 @@ public abstract class AbstractChandelierBlock extends Block
 				);
 
 				if (level instanceof ServerLevel serverLevel && chandelier.placeCandle(serverLevel, player, stack)) {
+					if (this.getLit(state) > 0) {
+						this.setLit(level, state, pos, true);
+					}
+
 					return InteractionResult.SUCCESS_SERVER;
 				}
 

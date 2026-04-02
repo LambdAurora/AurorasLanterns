@@ -61,6 +61,7 @@ public class ChandelierItem extends BlockItem {
 		for (Direction direction : context.getNearestLookingDirections()) {
 			BlockState possibleState = switch (direction) {
 				case UP -> this.chandeliers.ceiling().get(holders).getStateForPlacement(context);
+				case DOWN -> this.chandeliers.standing().get(holders).getStateForPlacement(context);
 				default -> wallState;
 			};
 			if (possibleState != null && possibleState.canSurvive(level, pos)) {

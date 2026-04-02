@@ -102,6 +102,10 @@ final class ModelProvider extends FabricModelProvider {
 		generators.generateFlatItem(AurorasLanternsRegistry.AMETHYST_LANTERN_ITEM, ModelTemplates.FLAT_ITEM);
 		generators.generateFlatItem(AurorasLanternsRegistry.REDSTONE_LANTERN_ITEM, ModelTemplates.FLAT_ITEM);
 		generators.generateFlatItem(AurorasLanternsRegistry.IRON_CHANDELIER_ITEM, ModelTemplates.FLAT_ITEM);
+		generators.generateFlatItem(AurorasLanternsRegistry.COPPER_CHANDELIER_ITEM, ModelTemplates.FLAT_ITEM);
+		generators.generateFlatItem(AurorasLanternsRegistry.EXPOSED_COPPER_CHANDELIER_ITEM, ModelTemplates.FLAT_ITEM);
+		generators.generateFlatItem(AurorasLanternsRegistry.WEATHERED_COPPER_CHANDELIER_ITEM, ModelTemplates.FLAT_ITEM);
+		generators.generateFlatItem(AurorasLanternsRegistry.OXIDIZED_COPPER_CHANDELIER_ITEM, ModelTemplates.FLAT_ITEM);
 	}
 
 	@Override

@@ -15,6 +15,7 @@ import com.google.common.collect.ImmutableBiMap;
 import dev.lambdaurora.auroraslanterns.block.chandelier.AbstractChandelierBlock;
 import dev.lambdaurora.auroraslanterns.block.chandelier.AbstractChandelierBlock.AttachmentType;
 import dev.lambdaurora.auroraslanterns.block.chandelier.CeilingChandelierBlock;
+import dev.lambdaurora.auroraslanterns.block.chandelier.StandingChandelierBlock;
 import dev.lambdaurora.auroraslanterns.block.chandelier.WallChandelierBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.MapColor;
@@ -26,9 +27,20 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+/**
+ * Represents a set of chandelier blocks.
+ *
+ * @param ceiling the ceiling chandelier blocks
+ * @param wall the wall chandelier blocks
+ * @param standing the standing chandelier blocks
+ * @author LambdAurora
+ * @version 2.0.0
+ * @since 2.0.0
+ */
 public record ChandelierBlocks(
-		AttachmentEntry<CeilingChandelierBlock> ceiling,
-		AttachmentEntry<WallChandelierBlock> wall
+		AttachmentEntry<? extends CeilingChandelierBlock> ceiling,
+		AttachmentEntry<? extends WallChandelierBlock> wall,
+		AttachmentEntry<? extends StandingChandelierBlock> standing
 ) {
 	private static final List<ChandelierBlocks> ALL = new ArrayList<>();
 	public static final Supplier<BiMap<AbstractChandelierBlock, AbstractChandelierBlock>> NEXT_BY_BLOCK
@@ -37,6 +49,7 @@ public record ChandelierBlocks(
 		ALL.forEach(blocks -> {
 			builder.putAll(blocks.ceiling.cycleMapping());
 			builder.putAll(blocks.wall.cycleMapping());
+			builder.putAll(blocks.standing.cycleMapping());
 		});
 		return builder.build();
 	});
@@ -44,9 +57,24 @@ public record ChandelierBlocks(
 	public static ChandelierBlocks create(
 			String type
 	) {
+		return create(
+				type,
+				CeilingChandelierBlock::new,
+				WallChandelierBlock::new,
+				StandingChandelierBlock::new
+		);
+	}
+
+	static ChandelierBlocks create(
+			String type,
+			AbstractChandelierBlock.Factory<? extends CeilingChandelierBlock> ceilingFactory,
+			AbstractChandelierBlock.Factory<? extends WallChandelierBlock> wallFactory,
+			AbstractChandelierBlock.Factory<? extends StandingChandelierBlock> standingFactory
+	) {
 		var chandeliers = new ChandelierBlocks(
-				AttachmentEntry.create(type, "ceiling", CeilingChandelierBlock::new),
-				AttachmentEntry.create(type, "wall", WallChandelierBlock::new)
+				AttachmentEntry.create(type, "ceiling", ceilingFactory),
+				AttachmentEntry.create(type, "wall", wallFactory),
+				AttachmentEntry.create(type, "standing", standingFactory)
 		);
 		ALL.add(chandeliers);
 		return chandeliers;
@@ -60,13 +88,14 @@ public record ChandelierBlocks(
 		return switch (attachmentType) {
 			case CEILING -> this.ceiling;
 			case WALL -> this.wall;
-			case STANDING -> throw new UnsupportedOperationException();
+			case STANDING -> this.standing;
 		};
 	}
 
 	public void forEach(Consumer<? super AbstractChandelierBlock> consumer) {
 		this.ceiling.forEach(consumer);
 		this.wall.forEach(consumer);
+		this.standing.forEach(consumer);
 	}
 
 	public Stream<AbstractChandelierBlock> stream() {

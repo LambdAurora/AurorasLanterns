@@ -1,0 +1,134 @@
+{
+	"credit": "Made by LambdAurora",
+	"parent": "minecraft:block/block",
+	"textures": {
+		"particle": "#attachment"
+	},
+	"elements": [
+		{
+			"from": [6, 5, 2],
+			"to": [10, 6, 6],
+			"faces": {
+				"north": {"uv": [1, 0, 5, 1], "texture": "#attachment"},
+				"east": {"uv": [1, 0, 5, 1], "texture": "#attachment"},
+				"south": {"uv": [1, 5, 5, 6], "texture": "#attachment"},
+				"west": {"uv": [1, 4, 5, 5], "texture": "#attachment"},
+				"up": {"uv": [1, 1, 5, 5], "texture": "#attachment"},
+				"down": {"uv": [1, 1, 5, 5], "texture": "#attachment"}
+			}
+		},
+		{
+			"from": [2, 5, 10],
+			"to": [6, 6, 14],
+			"faces": {
+				"north": {"uv": [1, 0, 5, 1], "texture": "#attachment"},
+				"east": {"uv": [1, 0, 5, 1], "texture": "#attachment"},
+				"south": {"uv": [1, 5, 5, 6], "texture": "#attachment"},
+				"west": {"uv": [1, 4, 5, 5], "texture": "#attachment"},
+				"up": {"uv": [1, 1, 5, 5], "texture": "#attachment"},
+				"down": {"uv": [1, 1, 5, 5], "texture": "#attachment"}
+			}
+		},
+		{
+			"from": [10, 5, 10],
+			"to": [14, 6, 14],
+			"faces": {
+				"north": {"uv": [1, 0, 5, 1], "texture": "#attachment"},
+				"east": {"uv": [1, 0, 5, 1], "texture": "#attachment"},
+				"south": {"uv": [1, 5, 5, 6], "texture": "#attachment"},
+				"west": {"uv": [1, 4, 5, 5], "texture": "#attachment"},
+				"up": {"uv": [1, 1, 5, 5], "texture": "#attachment"},
+				"down": {"uv": [1, 1, 5, 5], "texture": "#attachment"}
+			}
+		},
+		{
+			"from": [7, 3, 3],
+			"to": [9, 5, 9],
+			"faces": {
+				"north": {"uv": [0, 10, 2, 12], "texture": "#attachment"},
+				"east": {"uv": [0, 10, 6, 12], "texture": "#attachment"},
+				"south": {"uv": [0, 12, 2, 14], "texture": "#attachment"},
+				"west": {"uv": [1, 12, 7, 14], "texture": "#attachment"},
+				"up": {"uv": [9, 2, 11, 8], "texture": "#attachment"},
+				"down": {"uv": [13, 2, 15, 8], "texture": "#attachment"}
+			}
+		},
+		{
+			"from": [2, 3, 7],
+			"to": [8, 5, 9],
+			"rotation": {"angle": 45, "axis": "y", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [1, 10, 7, 12], "texture": "#attachment"},
+				"east": {"uv": [0, 12, 2, 14], "texture": "#attachment"},
+				"south": {"uv": [1, 12, 7, 14], "texture": "#attachment"},
+				"west": {"uv": [0, 10, 2, 12], "texture": "#attachment"},
+				"up": {"uv": [10, 2, 12, 8], "rotation": 270, "texture": "#attachment"},
+				"down": {"uv": [11, 2, 13, 8], "rotation": 90, "texture": "#attachment"}
+			}
+		},
+		{
+			"from": [8, 3, 7],
+			"to": [14, 5, 9],
+			"rotation": {"angle": -45, "axis": "y", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [1, 12, 7, 14], "texture": "#attachment"},
+				"east": {"uv": [0, 10, 2, 12], "texture": "#attachment"},
+				"south": {"uv": [1, 10, 7, 12], "texture": "#attachment"},
+				"west": {"uv": [0, 12, 2, 14], "texture": "#attachment"},
+				"up": {"uv": [9, 2, 11, 8], "rotation": 90, "texture": "#attachment"},
+				"down": {"uv": [11, 2, 13, 8], "rotation": 270, "texture": "#attachment"}
+			}
+		},
+		{
+			"from": [7, 5, 7],
+			"to": [9, 6, 9],
+			"faces": {
+				"north": {"uv": [13, 2, 15, 3], "texture": "#attachment"},
+				"east": {"uv": [7, 2, 9, 3], "texture": "#attachment"},
+				"south": {"uv": [11, 2, 13, 3], "texture": "#attachment"},
+				"west": {"uv": [9, 2, 11, 3], "texture": "#attachment"},
+				"up": {"uv": [9, 0, 11, 2], "texture": "#attachment"}
+			}
+		},
+		{
+			"from": [6, 0, 6],
+			"to": [10, 1, 10],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, -5, 4]},
+			"faces": {
+				"north": {"uv": [1, 0, 5, 1], "texture": "#attachment"},
+				"east": {"uv": [1, 0, 5, 1], "texture": "#attachment"},
+				"south": {"uv": [1, 5, 5, 6], "texture": "#attachment"},
+				"west": {"uv": [1, 4, 5, 5], "texture": "#attachment"},
+				"up": {"uv": [1, 1, 5, 5], "texture": "#attachment"},
+				"down": {"uv": [1, 1, 5, 5], "texture": "#attachment", "cullface": "down"}
+			}
+		},
+		{
+			"from": [7, 1, 7],
+			"to": [9, 3, 9],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, -2, 6]},
+			"faces": {
+				"north": {"uv": [9, 4, 11, 6], "texture": "#attachment"},
+				"east": {"uv": [9, 4, 11, 6], "texture": "#attachment"},
+				"south": {"uv": [9, 4, 11, 6], "texture": "#attachment"},
+				"west": {"uv": [9, 4, 11, 6], "texture": "#attachment"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "attachment",
+			"origin": [8, 8, 8],
+			"scope": 0,
+			"color": 0,
+			"children": [0, 1, 2, 3, 4, 5, 6]
+		},
+		{
+			"name": "base",
+			"origin": [8, 8, 8],
+			"scope": 0,
+			"color": 0,
+			"children": [7, 8]
+		}
+	]
+}

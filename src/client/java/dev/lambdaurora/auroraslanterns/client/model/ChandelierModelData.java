@@ -70,6 +70,7 @@ public record ChandelierModelData(
 				};
 		resolve(sharedState, AttachmentType.CEILING, collector);
 		resolve(sharedState, AttachmentType.WALL, collector);
+		resolve(sharedState, AttachmentType.STANDING, collector);
 		return new ChandelierModelData(Collections.unmodifiableMap(map));
 	}
 
