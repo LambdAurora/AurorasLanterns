@@ -150,4 +150,16 @@
 - Ported to Minecraft 1.21.10.
   - Copper Lanterns get their own wall variant, and the non-waxed will oxidize the same as regular copper lanterns.
 
+## 2.0.0
+
+- Ported to Minecraft 1.21.11.
+- Added chandeliers.
+  - Have iron and copper variants.
+  - The copper variants can oxidized and be waxed.
+  - A chandelier can have up to 4 holders.
+  - Each holder can be given a candle.
+  - Candle colors can be mismatched.
+  - Aurora's Decorations chandeliers will be upgraded to candles due to high differences.
+- Updated [Yumi Minecraft Libraries: Foundation].
+
 [Yumi Minecraft Libraries: Foundation]: https://github.com/YumiProject/yumi-minecraft-foundation-library "Yumi Minecraft Foundation Library page"
