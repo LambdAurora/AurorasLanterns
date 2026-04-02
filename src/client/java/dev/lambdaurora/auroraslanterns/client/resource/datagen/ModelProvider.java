@@ -14,7 +14,7 @@ import dev.lambdaurora.auroraslanterns.AurorasLanterns;
 import dev.lambdaurora.auroraslanterns.AurorasLanternsRegistry;
 import dev.lambdaurora.auroraslanterns.block.chandelier.AbstractChandelierBlock;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.blockstates.BlockModelDefinitionGenerator;
@@ -22,7 +22,8 @@ import net.minecraft.client.data.models.model.ModelTemplate;
 import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.data.models.model.TextureSlot;
-import net.minecraft.client.renderer.block.model.BlockModelDefinition;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelDispatcher;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
@@ -76,7 +77,7 @@ final class ModelProvider extends FabricModelProvider {
 	private final PackOutput.PathProvider blockStatesPathProvider;
 	private final Map<Identifier, BlockModelDefinitionGenerator> blockStates = new HashMap<>();
 
-	public ModelProvider(FabricDataOutput output) {
+	public ModelProvider(FabricPackOutput output) {
 		super(output);
 		this.blockStatesPathProvider = output.createPathProvider(PackOutput.Target.RESOURCE_PACK, "blockstates");
 	}
@@ -86,9 +87,9 @@ final class ModelProvider extends FabricModelProvider {
 		for (var candle : AbstractChandelierBlock.Candle.BY_NAME.values()) {
 			var name = candle.vanillaPrefix() + "candle";
 			var normalMapping = new TextureMapping()
-					.put(CANDLE_SLOT, Identifier.withDefaultNamespace("block/" + name));
+					.put(CANDLE_SLOT, new Material(Identifier.withDefaultNamespace("block/" + name)));
 			var litMapping = normalMapping.copyAndUpdate(
-					CANDLE_SLOT, Identifier.withDefaultNamespace("block/" + name + "_lit")
+					CANDLE_SLOT, new Material(Identifier.withDefaultNamespace("block/" + name + "_lit"))
 			);
 
 			this.doCandle(CEILING_CHANDELIER_CANDLE_TEMPLATES, "ceiling/" + name, normalMapping, litMapping, generators);
@@ -156,10 +157,10 @@ final class ModelProvider extends FabricModelProvider {
 	}
 
 	public CompletableFuture<?> saveCustomBlockStates(CachedOutput output) {
-		Map<Identifier, BlockModelDefinition> map = Maps.transformValues(
+		Map<Identifier, BlockStateModelDispatcher> map = Maps.transformValues(
 				this.blockStates, BlockModelDefinitionGenerator::create
 		);
-		return DataProvider.saveAll(output, BlockModelDefinition.CODEC, this.blockStatesPathProvider::json, map);
+		return DataProvider.saveAll(output, BlockStateModelDispatcher.CODEC, this.blockStatesPathProvider::json, map);
 	}
 
 	@Override

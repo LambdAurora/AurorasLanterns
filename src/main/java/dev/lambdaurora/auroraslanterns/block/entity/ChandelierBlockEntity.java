@@ -10,9 +10,8 @@
 package dev.lambdaurora.auroraslanterns.block.entity;
 
 import dev.lambdaurora.auroraslanterns.AurorasLanternsRegistry;
-import dev.lambdaurora.auroraslanterns.block.chandelier.AbstractChandelierBlock;
 import dev.lambdaurora.auroraslanterns.block.chandelier.AbstractChandelierBlock.Candle;
-import net.fabricmc.fabric.api.blockview.v2.RenderDataBlockEntity;
+import net.fabricmc.fabric.api.blockgetter.v2.RenderDataBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;

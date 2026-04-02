@@ -92,18 +92,18 @@ public record OxidizableChandelierBlocks(
 			AttachmentEntry<?> weathered,
 			AttachmentEntry<?> oxidized
 	) {
-		OxidizableBlocksRegistry.registerOxidizableBlockPair(unaffected.single(), exposed.single());
-		OxidizableBlocksRegistry.registerOxidizableBlockPair(unaffected.duo(), exposed.duo());
-		OxidizableBlocksRegistry.registerOxidizableBlockPair(unaffected.trio(), exposed.trio());
-		OxidizableBlocksRegistry.registerOxidizableBlockPair(unaffected.quad(), exposed.quad());
-		OxidizableBlocksRegistry.registerOxidizableBlockPair(exposed.single(), weathered.single());
-		OxidizableBlocksRegistry.registerOxidizableBlockPair(exposed.duo(), weathered.duo());
-		OxidizableBlocksRegistry.registerOxidizableBlockPair(exposed.trio(), weathered.trio());
-		OxidizableBlocksRegistry.registerOxidizableBlockPair(exposed.quad(), weathered.quad());
-		OxidizableBlocksRegistry.registerOxidizableBlockPair(weathered.single(), oxidized.single());
-		OxidizableBlocksRegistry.registerOxidizableBlockPair(weathered.duo(), oxidized.duo());
-		OxidizableBlocksRegistry.registerOxidizableBlockPair(weathered.trio(), oxidized.trio());
-		OxidizableBlocksRegistry.registerOxidizableBlockPair(weathered.quad(), oxidized.quad());
+		OxidizableBlocksRegistry.registerNextStage(unaffected.single(), exposed.single());
+		OxidizableBlocksRegistry.registerNextStage(unaffected.duo(), exposed.duo());
+		OxidizableBlocksRegistry.registerNextStage(unaffected.trio(), exposed.trio());
+		OxidizableBlocksRegistry.registerNextStage(unaffected.quad(), exposed.quad());
+		OxidizableBlocksRegistry.registerNextStage(exposed.single(), weathered.single());
+		OxidizableBlocksRegistry.registerNextStage(exposed.duo(), weathered.duo());
+		OxidizableBlocksRegistry.registerNextStage(exposed.trio(), weathered.trio());
+		OxidizableBlocksRegistry.registerNextStage(exposed.quad(), weathered.quad());
+		OxidizableBlocksRegistry.registerNextStage(weathered.single(), oxidized.single());
+		OxidizableBlocksRegistry.registerNextStage(weathered.duo(), oxidized.duo());
+		OxidizableBlocksRegistry.registerNextStage(weathered.trio(), oxidized.trio());
+		OxidizableBlocksRegistry.registerNextStage(weathered.quad(), oxidized.quad());
 	}
 
 	private static void registerWaxableStates(
@@ -118,10 +118,10 @@ public record OxidizableChandelierBlocks(
 			AttachmentEntry<?> unwaxed,
 			AttachmentEntry<?> waxed
 	) {
-		OxidizableBlocksRegistry.registerWaxableBlockPair(unwaxed.single(), waxed.single());
-		OxidizableBlocksRegistry.registerWaxableBlockPair(unwaxed.duo(), waxed.duo());
-		OxidizableBlocksRegistry.registerWaxableBlockPair(unwaxed.trio(), waxed.trio());
-		OxidizableBlocksRegistry.registerWaxableBlockPair(unwaxed.quad(), waxed.quad());
+		OxidizableBlocksRegistry.registerWaxable(unwaxed.single(), waxed.single());
+		OxidizableBlocksRegistry.registerWaxable(unwaxed.duo(), waxed.duo());
+		OxidizableBlocksRegistry.registerWaxable(unwaxed.trio(), waxed.trio());
+		OxidizableBlocksRegistry.registerWaxable(unwaxed.quad(), waxed.quad());
 	}
 
 	public void forEach(Consumer<? super AbstractChandelierBlock> consumer) {

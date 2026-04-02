@@ -16,13 +16,13 @@ import dev.yumi.commons.TriState;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.packs.AbstractPackResources;
 import net.minecraft.server.packs.PackLocationInfo;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.metadata.MetadataSectionType;
 import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.server.packs.resources.IoSupplier;
+import net.minecraft.server.packs.resources.ResourceMetadata;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Unmodifiable;
 import org.jspecify.annotations.Nullable;
@@ -120,10 +120,8 @@ public abstract class InMemoryPackResources implements MutablePackResources {
 				return null;
 			} else {
 				try {
-					return AbstractPackResources.getMetadataFromStream(
-							metadataSectionType, new ByteArrayInputStream(json.toString().getBytes(StandardCharsets.UTF_8)),
-							this.location()
-					);
+					return ResourceMetadata.fromJsonStream(new ByteArrayInputStream(json.toString().getBytes(StandardCharsets.UTF_8)))
+							.getSection(metadataSectionType).orElse(null);
 				} catch (Exception e) {
 					LOGGER.error("Couldn't load {} metadata from pack \"{}\":", metadataSectionType.name(), this.packId(), e);
 					return null;
@@ -135,7 +133,7 @@ public abstract class InMemoryPackResources implements MutablePackResources {
 		if (resource == null) return null;
 
 		try (var stream = resource.get();) {
-			return AbstractPackResources.getMetadataFromStream(metadataSectionType, stream, this.location());
+			return ResourceMetadata.fromJsonStream(stream).getSection(metadataSectionType).orElse(null);
 		}
 	}
 

@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientPacketListener.class)
 public class ClientPacketListenerMixin {
-	@Inject(method = "method_38542", at = @At("RETURN"))
+	@Inject(method = "lambda$handleBlockEntityData$0", at = @At("RETURN"))
 	private void auroraslanterns$handleBlockEntityData$handleChandelier(
 			ClientboundBlockEntityDataPacket clientboundBlockEntityDataPacket, BlockEntity blockEntity,
 			CallbackInfo ci

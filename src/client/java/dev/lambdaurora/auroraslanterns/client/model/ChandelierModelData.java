@@ -18,13 +18,13 @@ import dev.lambdaurora.auroraslanterns.AurorasLanterns;
 import dev.lambdaurora.auroraslanterns.ChandelierBlocks;
 import dev.lambdaurora.auroraslanterns.block.chandelier.AbstractChandelierBlock.AttachmentType;
 import dev.lambdaurora.auroraslanterns.block.chandelier.AbstractChandelierBlock.Candle;
-import net.minecraft.client.renderer.block.model.BlockModelDefinition;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
-import net.minecraft.client.renderer.block.model.SingleVariant;
-import net.minecraft.client.renderer.block.model.Variant;
-import net.minecraft.client.renderer.block.model.multipart.Condition;
-import net.minecraft.client.renderer.block.model.multipart.KeyValueCondition;
-import net.minecraft.client.renderer.block.model.multipart.Selector;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelDispatcher;
+import net.minecraft.client.renderer.block.dispatch.SingleVariant;
+import net.minecraft.client.renderer.block.dispatch.Variant;
+import net.minecraft.client.renderer.block.dispatch.multipart.Condition;
+import net.minecraft.client.renderer.block.dispatch.multipart.KeyValueCondition;
+import net.minecraft.client.renderer.block.dispatch.multipart.Selector;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
@@ -101,7 +101,7 @@ public record ChandelierModelData(
 							var json = JsonParser.parseReader(reader);
 
 							entries[i] = new PendingEntry(
-									BlockModelDefinition.CODEC.parse(JsonOps.INSTANCE, json)
+									BlockStateModelDispatcher.CODEC.parse(JsonOps.INSTANCE, json)
 											.getOrThrow(JsonParseException::new),
 									blockStateId.toString()
 							);
@@ -123,7 +123,7 @@ public record ChandelierModelData(
 		return map;
 	}
 
-	private static BlockModelDefinition generateBlockModelDefinition(
+	private static BlockStateModelDispatcher generateBlockModelDefinition(
 			String path, AttachmentType attachmentType
 	) {
 		return attachmentType != AttachmentType.WALL
@@ -131,8 +131,8 @@ public record ChandelierModelData(
 				: generateWallBlockModelDefinition(path);
 	}
 
-	private static BlockModelDefinition generateSimpleBlockModelDefinition(String path) {
-		return new BlockModelDefinition(Optional.empty(), Optional.of(new BlockModelDefinition.MultiPartDefinition(
+	private static BlockStateModelDispatcher generateSimpleBlockModelDefinition(String path) {
+		return new BlockStateModelDispatcher(Optional.empty(), Optional.of(new BlockStateModelDispatcher.MultiPartDefinition(
 				List.of(
 						new Selector(
 								Optional.of(UNLIT_CONDITION),
@@ -146,10 +146,10 @@ public record ChandelierModelData(
 		)));
 	}
 
-	private static BlockModelDefinition generateWallBlockModelDefinition(String path) {
+	private static BlockStateModelDispatcher generateWallBlockModelDefinition(String path) {
 		var unlitVariant = new Variant(modelId(path));
 		var litVariant = new Variant(modelId(path + "_lit"));
-		return new BlockModelDefinition(Optional.empty(), Optional.of(new BlockModelDefinition.MultiPartDefinition(
+		return new BlockStateModelDispatcher(Optional.empty(), Optional.of(new BlockStateModelDispatcher.MultiPartDefinition(
 				List.of(
 						new Selector(
 								Optional.of(new KeyValueCondition(Map.of(
@@ -264,6 +264,6 @@ public record ChandelierModelData(
 		);
 	}
 
-	record PendingEntry(BlockModelDefinition definition, String source) {
+	record PendingEntry(BlockStateModelDispatcher definition, String source) {
 	}
 }

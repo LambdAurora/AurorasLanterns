@@ -18,7 +18,7 @@ plugins {
 base.archivesName.set(project.property("mod_namespace") as String)
 
 val mcVersion = libs.versions.minecraft.get()
-val compatibleMcVersions: Set<String> = setOf()
+val compatibleMcVersions: Set<String> = setOf("26.1")
 val VERSION = project.property("mod_version") as String
 version = "$VERSION+$mcVersion"
 
@@ -27,17 +27,6 @@ val targetJavaVersion = Integer.parseInt(project.property("java_version").toStri
 
 repositories {
 	mavenCentral()
-	exclusiveContent {
-		forRepository {
-			maven {
-				name = "ParchmentMC"
-				url = uri("https://maven.parchmentmc.org/")
-			}
-		}
-		filter {
-			includeGroup("org.parchmentmc.data")
-		}
-	}
 	exclusiveContent {
 		forRepository {
 			maven {
@@ -52,7 +41,7 @@ repositories {
 }
 
 loom {
-	accessWidenerPath = file("src/main/resources/auroraslanterns.accesswidener")
+	accessWidenerPath = file("src/main/resources/auroraslanterns.classtweaker")
 	splitEnvironmentSourceSets()
 	mixin {
 		useLegacyMixinAp = false
@@ -70,15 +59,10 @@ fabricApi {
 
 dependencies {
 	minecraft(libs.minecraft)
-	@Suppress("UnstableApiUsage")
-	mappings(loom.layered {
-		officialMojangMappings()
-		parchment("org.parchmentmc.data:parchment-1.21.10:2025.10.12@zip")
-	})
-	modImplementation(libs.fabric.loader)
-	modImplementation(libs.fabric.api)
+	implementation(libs.fabric.loader)
+	implementation(libs.fabric.api)
 
-	modImplementation(libs.yumi.mc.foundation)
+	implementation(libs.yumi.mc.foundation)
 	include(libs.yumi.mc.foundation)
 }
 
@@ -119,7 +103,7 @@ license {
 }
 
 val README = ModUtils.parseReadme(
-	project, "https://raw.githubusercontent.com/LambdAurora/AurorasLanterns/1.21.8/\$2"
+	project, "https://raw.githubusercontent.com/LambdAurora/AurorasLanterns/26.1/\$2"
 )
 val CHANGELOG_CONTENT = ModUtils.fetchChangelog(project, VERSION)
 
@@ -136,14 +120,14 @@ val packageModrinth by tasks.registering(PackageModrinthTask::class) {
 	)
 	this.changelog.set(CHANGELOG_CONTENT)
 	this.readme.set(README)
-	this.files.setFrom(tasks.remapJar.get())
+	this.files.setFrom(tasks.jar.get())
 }
 
 modrinth {
 	projectId.set(project.property("modrinth_id") as String)
 	versionName.set("${project.property("mod_name")} $VERSION (${McVersionLookup.getVersionTag(mcVersion)})")
 	versionType.set(ModUtils.fetchVersionType(VERSION, mcVersion))
-	uploadFile.set(tasks.remapJar)
+	uploadFile.set(tasks.jar)
 	loaders.set(listOf("fabric", "quilt"))
 	gameVersions.set(listOf(mcVersion) + compatibleMcVersions)
 	dependencies.set(
@@ -191,7 +175,7 @@ tasks.register<TaskPublishCurseForge>("curseforge") {
 		return@register
 	}
 
-	val mainFile = upload(project.property("curseforge_id"), tasks.remapJar.get())
+	val mainFile = upload(project.property("curseforge_id"), tasks.jar.get())
 	mainFile.releaseType = ModUtils.fetchVersionType(VERSION, mcVersion)
 	mainFile.addGameVersion(McVersionLookup.getCurseForgeEquivalent(mcVersion))
 	compatibleMcVersions.stream()

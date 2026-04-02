@@ -47,7 +47,7 @@ public class AmethystGlintParticle extends SingleQuadParticle {
 	}
 
 	@Override
-	protected int getLightColor(float tint) {
+	protected int getLightCoords(float tint) {
 		return 0xf000f0;
 	}
 

@@ -156,14 +156,14 @@ public final class LanternRegistry {
 
 				if (next instanceof LanternBlock nextLantern) {
 					var nextWallLantern = WALL_LANTERN_BLOCK_MAP.get(nextLantern);
-					OxidizableBlocksRegistry.registerOxidizableBlockPair(block, nextWallLantern);
+					OxidizableBlocksRegistry.registerNextStage(block, nextWallLantern);
 				}
 			}
 
 			var nextWaxable = HoneycombItem.WAXABLES.get().get(block.getLanternBlock());
 			if (nextWaxable instanceof LanternBlock waxedLantern) {
 				var waxedWallLantern = WALL_LANTERN_BLOCK_MAP.get(waxedLantern);
-				OxidizableBlocksRegistry.registerWaxableBlockPair(block, waxedWallLantern);
+				OxidizableBlocksRegistry.registerWaxable(block, waxedWallLantern);
 			}
 		});
 	}

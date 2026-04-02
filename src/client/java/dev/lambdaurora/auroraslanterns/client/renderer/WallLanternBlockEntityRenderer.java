@@ -17,10 +17,12 @@ import dev.lambdaurora.auroraslanterns.client.utils.LBGHooks;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.block.BlockModelResolver;
+import net.minecraft.client.renderer.block.model.BlockDisplayContext;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -30,7 +32,12 @@ import org.jetbrains.annotations.Nullable;
 @Environment(EnvType.CLIENT)
 public class WallLanternBlockEntityRenderer
 		implements BlockEntityRenderer<WallLanternBlockEntity, WallLanternBlockEntityRenderState> {
-	public WallLanternBlockEntityRenderer(BlockEntityRendererProvider.Context ctx) {}
+	public static final BlockDisplayContext BLOCK_DISPLAY_CONTEXT = BlockDisplayContext.create();
+	private final BlockModelResolver blockModelResolver;
+
+	public WallLanternBlockEntityRenderer(BlockEntityRendererProvider.Context ctx) {
+		this.blockModelResolver = ctx.blockModelResolver();
+	}
 
 	@Override
 	public int getViewDistance() {
@@ -73,6 +80,8 @@ public class WallLanternBlockEntityRenderer
 		var lanternShapeMaxY = lanternShape.max(Direction.Axis.Y);
 		var lanternShapeMinY = lanternShape.min(Direction.Axis.Y);
 		state.size = lanternShapeMaxY - lanternShapeMinY;
+
+		this.blockModelResolver.update(state.lanternModelState, state.lanternState, BLOCK_DISPLAY_CONTEXT);
 	}
 
 	@Override
@@ -112,7 +121,7 @@ public class WallLanternBlockEntityRenderer
 		matrices.translate(-8.f / 16.f, -1.f / 16.f - lantern.size, -8.f / 16.f);
 
 		LBGHooks.pushDisableBetterLayer();
-		collector.submitBlock(matrices, lanternState, lantern.lightCoords, OverlayTexture.NO_OVERLAY, 0);
+		lantern.lanternModelState.submit(matrices, collector, lantern.lightCoords, OverlayTexture.NO_OVERLAY, 0);
 		LBGHooks.popDisableBetterLayer();
 		matrices.popPose();
 	}

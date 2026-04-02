@@ -15,9 +15,9 @@ import dev.lambdaurora.auroraslanterns.ChandelierBlocks;
 import dev.lambdaurora.auroraslanterns.advancement.WallLanternBonkTrigger;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricAdvancementProvider;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootSubProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
@@ -45,8 +45,8 @@ public final class AurorasLanternsStaticDatagen implements DataGeneratorEntrypoi
 		pack.addProvider(ModelProvider::new);
 	}
 
-	private static class LootDataProvider extends FabricBlockLootTableProvider {
-		public LootDataProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registryLookup) {
+	private static class LootDataProvider extends FabricBlockLootSubProvider {
+		public LootDataProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registryLookup) {
 			super(output, registryLookup);
 		}
 
@@ -63,7 +63,7 @@ public final class AurorasLanternsStaticDatagen implements DataGeneratorEntrypoi
 
 	private static class AdvancementProvider extends FabricAdvancementProvider {
 		public AdvancementProvider(
-				FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registryLookup
+				FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registryLookup
 		) {
 			super(output, registryLookup);
 		}
@@ -139,7 +139,7 @@ public final class AurorasLanternsStaticDatagen implements DataGeneratorEntrypoi
 		}
 
 		private static class Runner extends FabricRecipeProvider {
-			public Runner(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+			public Runner(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
 				super(output, registriesFuture);
 			}
 

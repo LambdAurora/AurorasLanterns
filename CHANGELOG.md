@@ -152,7 +152,7 @@
 
 ## 2.0.0
 
-- Ported to Minecraft 1.21.11.
+- Ported to Minecraft 26.1.
 - Added chandeliers.
   - Have iron and copper variants.
   - The copper variants can oxidized and be waxed.

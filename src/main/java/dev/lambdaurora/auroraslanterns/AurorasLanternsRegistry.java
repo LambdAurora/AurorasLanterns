@@ -22,7 +22,7 @@ import dev.lambdaurora.auroraslanterns.item.ChandelierItem;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.registry.RegistryEntryAddedCallback;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
-import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
+import net.fabricmc.fabric.api.object.builder.v1.world.poi.PoiHelper;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -169,7 +169,7 @@ public final class AurorasLanternsRegistry {
 	//endregion
 
 	//region POI
-	public static final PoiType AMETHYST_LANTERN_POI = PointOfInterestHelper.register(
+	public static final PoiType AMETHYST_LANTERN_POI = PoiHelper.register(
 			AurorasLanterns.id("amethyst_lantern"),
 			0, 2,
 			AMETHYST_LANTERN_BLOCK, AMETHYST_WALL_LANTERN_BLOCK

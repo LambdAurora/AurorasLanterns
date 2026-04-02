@@ -12,12 +12,11 @@ package dev.lambdaurora.auroraslanterns.client;
 import com.mojang.logging.LogUtils;
 import dev.lambdaurora.auroraslanterns.AurorasLanterns;
 import dev.lambdaurora.auroraslanterns.AurorasLanternsRegistry;
-import dev.lambdaurora.auroraslanterns.ChandelierBlocks;
 import dev.lambdaurora.auroraslanterns.LanternRegistry;
 import dev.lambdaurora.auroraslanterns.block.WallLanternBlock;
 import dev.lambdaurora.auroraslanterns.block.chandelier.AbstractChandelierBlock;
-import dev.lambdaurora.auroraslanterns.client.model.UnbakedChandelierModel;
 import dev.lambdaurora.auroraslanterns.client.model.ChandelierModelData;
+import dev.lambdaurora.auroraslanterns.client.model.UnbakedChandelierModel;
 import dev.lambdaurora.auroraslanterns.client.particle.AmethystGlintParticle;
 import dev.lambdaurora.auroraslanterns.client.renderer.WallLanternBlockEntityRenderer;
 import dev.lambdaurora.auroraslanterns.resource.AurorasLanternsRuntimeDatagen;
@@ -27,10 +26,8 @@ import dev.yumi.mc.core.api.entrypoint.client.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.model.loading.v1.PreparableModelLoadingPlugin;
-import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.particle.v1.ParticleProviderRegistry;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
-import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.server.packs.PackType;
 import org.slf4j.Logger;
 
@@ -43,25 +40,9 @@ public final class AurorasLanternsClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient(ModContainer mod) {
-		ParticleFactoryRegistry.getInstance().register(
+		ParticleProviderRegistry.getInstance().register(
 				AurorasLanternsRegistry.AMETHYST_GLINT_PARTICLE_TYPE, AmethystGlintParticle.Provider::new
 		);
-
-		BlockRenderLayerMap.putBlocks(ChunkSectionLayer.CUTOUT,
-				AurorasLanternsRegistry.AMETHYST_LANTERN_BLOCK,
-				AurorasLanternsRegistry.REDSTONE_LANTERN_BLOCK
-		);
-
-		ChandelierBlocks.streamAll().map(ChandelierBlocks::ceiling)
-				.forEach(blocks ->
-						blocks.forEach(block ->
-								BlockRenderLayerMap.putBlock(block, ChunkSectionLayer.CUTOUT)
-						)
-				);
-
-		LanternRegistry.forEachAndFuture((id, wallLanternBlock) -> {
-			BlockRenderLayerMap.putBlocks(ChunkSectionLayer.CUTOUT, wallLanternBlock);
-		});
 
 		BlockEntityRenderers.register(
 				AurorasLanternsRegistry.WALL_LANTERN_BLOCK_ENTITY_TYPE,
