@@ -8,6 +8,6 @@
  */
 
 @NullMarked
-package dev.lambdaurora.auroraslanterns.client.utils;
+package dev.lambdaurora.auroraslanterns.client.util;
 
 import org.jspecify.annotations.NullMarked;

@@ -13,7 +13,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import dev.lambdaurora.auroraslanterns.block.WallLanternBlock;
 import dev.lambdaurora.auroraslanterns.block.entity.WallLanternBlockEntity;
-import dev.lambdaurora.auroraslanterns.client.utils.LBGHooks;
+import dev.lambdaurora.auroraslanterns.client.util.LBGHooks;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.SubmitNodeCollector;
