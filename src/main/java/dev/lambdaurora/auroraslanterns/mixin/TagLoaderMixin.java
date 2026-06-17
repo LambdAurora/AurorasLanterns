@@ -38,10 +38,10 @@ public class TagLoaderMixin {
 	private void auroraslanterns$onLoadTags(
 			ResourceManager resourceManager,
 			CallbackInfoReturnable<Map<Identifier, List<TagLoader.EntryWithSource>>> cir,
-			@Local Map<Identifier, List<TagLoader.EntryWithSource>> entries
+			@Local(name = "builders") Map<Identifier, List<TagLoader.EntryWithSource>> builders
 	) {
 		if (this.directory.equals(Registries.tagsDirPath(Registries.BLOCK))) {
-			var list = entries.computeIfAbsent(AurorasLanterns.id("wall_lanterns"), id -> new ArrayList<>());
+			var list = builders.computeIfAbsent(AurorasLanterns.id("wall_lanterns"), id -> new ArrayList<>());
 			LanternRegistry.streamIds()
 					.map(id -> new TagLoader.EntryWithSource(TagEntry.element(id), "auroraslanterns:generated"))
 					.forEach(list::add);

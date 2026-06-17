@@ -410,12 +410,12 @@ public abstract class AbstractChandelierBlock extends Block
 		Map<String, Candle> BY_NAME = Util.make(() -> {
 			var map = new HashMap<String, Candle>();
 			map.put(Candle.Normal.INSTANCE.name(), Candle.Normal.INSTANCE);
-			Candle.Colored.BY_COLOR.values().forEach(color -> map.put(color.name(), color));
+			Candle.Colored.BY_COLOR.forEach(color -> map.put(color.name(), color));
 			return Map.copyOf(map);
 		});
 		Map<Item, Candle> BY_ITEM = Util.make(() -> Stream.concat(
 				Stream.of(Candle.Normal.INSTANCE),
-				Candle.Colored.BY_COLOR.values().stream()
+				Candle.Colored.BY_COLOR.asList().stream()
 		).collect(Collectors.toMap(Candle::item, Function.identity())));
 
 		String name();
@@ -444,24 +444,7 @@ public abstract class AbstractChandelierBlock extends Block
 		}
 
 		record Colored(DyeColor color, Item item) implements Candle {
-			public static Map<DyeColor, Colored> BY_COLOR = Util.make(() -> Map.ofEntries(
-					Map.entry(DyeColor.WHITE, new Colored(DyeColor.WHITE, Items.WHITE_CANDLE)),
-					Map.entry(DyeColor.ORANGE, new Colored(DyeColor.ORANGE, Items.ORANGE_CANDLE)),
-					Map.entry(DyeColor.MAGENTA, new Colored(DyeColor.MAGENTA, Items.MAGENTA_CANDLE)),
-					Map.entry(DyeColor.LIGHT_BLUE, new Colored(DyeColor.LIGHT_BLUE, Items.LIGHT_BLUE_CANDLE)),
-					Map.entry(DyeColor.YELLOW, new Colored(DyeColor.YELLOW, Items.YELLOW_CANDLE)),
-					Map.entry(DyeColor.LIME, new Colored(DyeColor.LIME, Items.LIME_CANDLE)),
-					Map.entry(DyeColor.PINK, new Colored(DyeColor.PINK, Items.PINK_CANDLE)),
-					Map.entry(DyeColor.GRAY, new Colored(DyeColor.GRAY, Items.GRAY_CANDLE)),
-					Map.entry(DyeColor.LIGHT_GRAY, new Colored(DyeColor.LIGHT_GRAY, Items.LIGHT_GRAY_CANDLE)),
-					Map.entry(DyeColor.CYAN, new Colored(DyeColor.CYAN, Items.CYAN_CANDLE)),
-					Map.entry(DyeColor.PURPLE, new Colored(DyeColor.PURPLE, Items.PURPLE_CANDLE)),
-					Map.entry(DyeColor.BLUE, new Colored(DyeColor.BLUE, Items.BLUE_CANDLE)),
-					Map.entry(DyeColor.BROWN, new Colored(DyeColor.BROWN, Items.BROWN_CANDLE)),
-					Map.entry(DyeColor.GREEN, new Colored(DyeColor.GREEN, Items.GREEN_CANDLE)),
-					Map.entry(DyeColor.RED, new Colored(DyeColor.RED, Items.RED_CANDLE)),
-					Map.entry(DyeColor.BLACK, new Colored(DyeColor.BLACK, Items.BLACK_CANDLE)))
-			);
+			public static final ColorCollection<Colored> BY_COLOR = ColorCollection.zipMap(ColorCollection.VALUES, Items.DYED_CANDLE, Colored::new);
 
 			@Override
 			public String name() {

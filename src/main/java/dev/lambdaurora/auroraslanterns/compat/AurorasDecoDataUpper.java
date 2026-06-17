@@ -9,7 +9,7 @@
 
 package dev.lambdaurora.auroraslanterns.compat;
 
-import dev.lambdaurora.auroraslanterns.AurorasLanternsRegistry;
+import dev.lambdaurora.auroraslanterns.AurorasLanternsIds;
 import dev.lambdaurora.auroraslanterns.LanternRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -30,12 +30,12 @@ public final class AurorasDecoDataUpper {
 
 	public static void init() {
 		final var amethystLanternId = id("amethyst_lantern");
-		BuiltInRegistries.BLOCK.addAlias(amethystLanternId, AurorasLanternsRegistry.AMETHYST_LANTERN_ID);
-		BuiltInRegistries.ITEM.addAlias(amethystLanternId, AurorasLanternsRegistry.AMETHYST_LANTERN_ID);
+		BuiltInRegistries.BLOCK.addAlias(amethystLanternId, AurorasLanternsIds.AMETHYST_LANTERN_ID);
+		BuiltInRegistries.ITEM.addAlias(amethystLanternId, AurorasLanternsIds.AMETHYST_LANTERN_ID);
 
 		final var redstoneLanternId = id("redstone_lantern");
-		BuiltInRegistries.BLOCK.addAlias(redstoneLanternId, AurorasLanternsRegistry.REDSTONE_LANTERN_ID);
-		BuiltInRegistries.ITEM.addAlias(redstoneLanternId, AurorasLanternsRegistry.REDSTONE_LANTERN_ID);
+		BuiltInRegistries.BLOCK.addAlias(redstoneLanternId, AurorasLanternsIds.REDSTONE_LANTERN_ID);
+		BuiltInRegistries.ITEM.addAlias(redstoneLanternId, AurorasLanternsIds.REDSTONE_LANTERN_ID);
 
 		LanternRegistry.forEachAndFuture((id, block) -> {
 			BuiltInRegistries.BLOCK.addAlias(id(id.getPath()), id);

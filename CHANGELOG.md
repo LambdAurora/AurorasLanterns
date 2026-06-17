@@ -162,4 +162,9 @@
   - Aurora's Decorations chandeliers will be upgraded to candles due to high differences.
 - Updated [Yumi Minecraft Libraries: Foundation].
 
+## 2.1.0
+
+- Ported to Minecraft 26.2.
+- Updated [Yumi Minecraft Libraries: Foundation].
+
 [Yumi Minecraft Libraries: Foundation]: https://github.com/YumiProject/yumi-minecraft-foundation-library "Yumi Minecraft Foundation Library page"
