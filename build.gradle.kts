@@ -15,10 +15,11 @@ plugins {
 	id("net.darkhax.curseforgegradle").version("1.1.+")
 }
 
-base.archivesName.set(project.property("mod_namespace") as String)
+lambdamcdev.namespace.set(project.property("mod_namespace") as String)
+base.archivesName.set(lambdamcdev.namespace)
 
 val mcVersion = libs.versions.minecraft.get()
-val compatibleMcVersions: Set<String> = setOf("26.1")
+val compatibleMcVersions: Set<String> = setOf("26.1", "26.1.1")
 val VERSION = project.property("mod_version") as String
 version = "$VERSION+$mcVersion"
 
@@ -100,6 +101,8 @@ tasks.jar {
 
 license {
 	rule(file("metadata/HEADER"))
+
+	include("**/*.java")
 }
 
 val README = ModUtils.parseReadme(
@@ -198,7 +201,7 @@ publishing {
 
 			pom {
 				name.set(project.property("mod_name") as String)
-				description.set("")
+				description.set(project.property("mod_description") as String)
 			}
 		}
 	}
