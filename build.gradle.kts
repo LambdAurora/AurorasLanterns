@@ -20,7 +20,7 @@ lambdamcdev.namespace.set(project.property("mod_namespace") as String)
 base.archivesName.set(lambdamcdev.namespace)
 
 val mcVersion = libs.versions.minecraft.get()
-val compatibleMcVersions: Set<String> = setOf()
+val compatibleMcVersions: Set<String> = setOf("26.1", "26.1.1")
 val VERSION = project.property("mod_version") as String
 val supportNeoforge = (project.property("support_neoforge") as String).toBoolean()
 version = "$VERSION+$mcVersion"
