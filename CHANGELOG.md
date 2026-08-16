@@ -162,9 +162,20 @@
   - Aurora's Decorations chandeliers will be upgraded to candles due to high differences.
 - Updated [Yumi Minecraft Libraries: Foundation].
 
+### 2.0.1
+
+- Added NeoForge support. Requires [Forgified Fabric API].
+  - NeoForge support will be limited to versions that has [Forgified Fabric API] available.
+- Updated Korean translations ([#8](https://github.com/LambdAurora/AurorasLanterns/pull/8)).
+
 ## 2.1.0
 
 - Ported to Minecraft 26.2.
 - Updated [Yumi Minecraft Libraries: Foundation].
 
+### 2.1.1
+
+- Updated Korean translations ([#8](https://github.com/LambdAurora/AurorasLanterns/pull/8)).
+
 [Yumi Minecraft Libraries: Foundation]: https://github.com/YumiProject/yumi-minecraft-foundation-library "Yumi Minecraft Foundation Library page"
+[Forgified Fabric API]: https://modrinth.com/mod/forgified-fabric-api
