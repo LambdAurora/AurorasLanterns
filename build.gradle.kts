@@ -28,6 +28,13 @@ version = "$VERSION+$mcVersion"
 // This field defines the Java version your mod target.
 val targetJavaVersion = Integer.parseInt(project.property("java_version").toString())
 
+if (supportNeoforge) {
+	sourceSets.create("neoforge") {
+		this.compileClasspath += sourceSets.main.get().compileClasspath
+		this.runtimeClasspath += sourceSets.main.get().runtimeClasspath
+	}
+}
+
 repositories {
 	mavenCentral()
 	exclusiveContent {
@@ -39,6 +46,21 @@ repositories {
 		}
 		filter {
 			includeGroupAndSubgroups("dev.lambdaurora")
+		}
+	}
+
+	if (supportNeoforge) {
+		exclusiveContent {
+			forRepository {
+				maven {
+					name = "NeoForge"
+					url = uri("https://maven.neoforged.net/releases/")
+				}
+			}
+			filter {
+				includeGroupAndSubgroups("net.neoforged")
+				includeGroupAndSubgroups("cpw.mods")
+			}
 		}
 	}
 }
@@ -67,6 +89,12 @@ dependencies {
 
 	implementation(libs.yumi.mc.foundation)
 	include(libs.yumi.mc.foundation)
+
+	if (supportNeoforge) {
+		"neoforgeCompileOnly"(libs.neoforge.loader)
+		"neoforgeCompileOnly"(variantOf(libs.neoforge.api) { classifier("universal") })
+		"neoforgeImplementation"(sourceSets.main.get().output)
+	}
 }
 
 java {
@@ -127,7 +155,11 @@ lambdamcdev {
 				fmj.copyTo(this)
 				withLoaderVersion("[2,)")
 				withBlurIcon(false)
-				withYumiEntrypoints("yumi:init", "dev.lambdaurora.auroraslanterns.AurorasLanterns")
+				withYumiEntrypoints(
+					"yumi:init",
+					"dev.lambdaurora.auroraslanterns.AurorasLanterns",
+					"dev.lambdaurora.auroraslanterns.platform.neoforge.NeoAurorasLanterns",
+				)
 				withYumiEntrypoints("yumi:client_init", "dev.lambdaurora.auroraslanterns.client.AurorasLanternsClient")
 				withAccessTransformer("META-INF/accesstransformer.cfg")
 				withMixins("${namespace.get()}.mixins.json", "${namespace.get()}.client.mixins.json")
@@ -197,12 +229,16 @@ if (supportNeoforge) {
 		from(generateJarJarMetadataTask.map { it.outputFile }) {
 			into("META-INF/jarjar")
 		}
+		from(sourceSets.named("neoforge").map { it.output })
 		from(convertAWtoATTask) {
 			into("META-INF")
 		}
 	}
 
 	tasks.named<Jar>("sourcesJar") {
+		val neoforge = sourceSets.named("neoforge")
+		this.from(neoforge.map { it.java.sourceDirectories })
+		this.from(neoforge.map { it.resources.sourceDirectories })
 		this.from(convertAWtoATTask) {
 			into("META-INF")
 		}

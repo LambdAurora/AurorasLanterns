@@ -207,12 +207,12 @@ public final class AurorasLanternsRegistry {
 				.toList() // Ensure we operate on an immutable copy of the known blocks.
 				.forEach(holder -> handleRegisteredBlock(holder.key().identifier(), holder.value()));
 		var blockEvent = RegistryEntryAddedCallback.event(BuiltInRegistries.BLOCK);
-		blockEvent.register(phaseId, (rawId, id, block) -> handleRegisteredBlock(id, block));
+		blockEvent.register(phaseId, (_, id, block) -> handleRegisteredBlock(id, block));
 		blockEvent.addPhaseOrdering(Event.DEFAULT_PHASE, phaseId);
 
 		BuiltInRegistries.ITEM.forEach(AurorasLanternsRegistry::handleRegisteredItem);
 		RegistryEntryAddedCallback.event(BuiltInRegistries.ITEM)
-				.register((rawId, id, item) -> handleRegisteredItem(item));
+				.register((_, _, item) -> handleRegisteredItem(item));
 
 		OxidizableChandelierBlocks.registerWeatheringStates(COPPER_CHANDELIER_BLOCKS);
 
