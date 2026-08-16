@@ -246,7 +246,7 @@ if (supportNeoforge) {
 }
 
 val README = ModUtils.parseReadme(
-	project, "https://raw.githubusercontent.com/LambdAurora/AurorasLanterns/26.1/\$2"
+	project, "https://raw.githubusercontent.com/LambdAurora/AurorasLanterns/26.2/\$2"
 )
 val CHANGELOG_CONTENT = ModUtils.fetchChangelog(project, VERSION)
 
