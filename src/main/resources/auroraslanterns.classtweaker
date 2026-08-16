@@ -7,6 +7,6 @@ accessible method net/minecraft/world/level/block/AbstractCandleBlock addParticl
 accessible method net/minecraft/core/particles/SimpleParticleType <init> (Z)V
 
 accessible method net/minecraft/world/item/Items registerItem (Lnet/minecraft/resources/ResourceKey;Ljava/util/function/Function;)Lnet/minecraft/world/item/Item;
-accessible method net/minecraft/world/item/Items registerBlock (Lnet/minecraft/references/BlockItemId;Lnet/minecraft/world/level/block/Block;)Lnet/minecraft/world/item/Item;
+accessible method net/minecraft/world/item/Items registerBlock (Lnet/minecraft/world/level/block/Block;)Lnet/minecraft/world/item/Item;
 
 accessible field net/minecraft/client/renderer/blockentity/state/BlockEntityRenderState blockState Lnet/minecraft/world/level/block/state/BlockState;

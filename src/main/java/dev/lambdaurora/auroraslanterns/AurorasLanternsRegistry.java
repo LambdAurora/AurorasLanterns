@@ -78,14 +78,14 @@ public final class AurorasLanternsRegistry {
 			Block.Properties.ofFullCopy(Blocks.LANTERN)
 					.lightLevel(state -> 14)
 	);
-	public static final Item AMETHYST_LANTERN_ITEM = Items.registerBlock(AurorasLanternsIds.AMETHYST_LANTERN, AMETHYST_LANTERN_BLOCK);
+	public static final Item AMETHYST_LANTERN_ITEM = Items.registerBlock(AMETHYST_LANTERN_BLOCK);
 
 	public static final RedstoneLanternBlock REDSTONE_LANTERN_BLOCK = registerBlock(AurorasLanternsIds.REDSTONE_LANTERN_ID,
 			RedstoneLanternBlock::new,
 			Block.Properties.ofFullCopy(Blocks.LANTERN)
 					.lightLevel(state -> state.getValue(RedstoneLanternBehavior.LIT) ? 7 : 0)
 	);
-	public static final Item REDSTONE_LANTERN_ITEM = Items.registerBlock(AurorasLanternsIds.REDSTONE_LANTERN, REDSTONE_LANTERN_BLOCK);
+	public static final Item REDSTONE_LANTERN_ITEM = Items.registerBlock(REDSTONE_LANTERN_BLOCK);
 	//endregion
 
 	//region Chandeliers

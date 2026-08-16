@@ -9,7 +9,6 @@
 
 package dev.lambdaurora.auroraslanterns;
 
-import net.minecraft.references.BlockItemId;
 import net.minecraft.resources.Identifier;
 
 /**
@@ -21,8 +20,6 @@ import net.minecraft.resources.Identifier;
  */
 public final class AurorasLanternsIds {
 	public static final Identifier AMETHYST_LANTERN_ID = AurorasLanterns.id("amethyst_lantern");
-	public static final BlockItemId AMETHYST_LANTERN = BlockItemId.create(AMETHYST_LANTERN_ID, AMETHYST_LANTERN_ID);
 
 	public static final Identifier REDSTONE_LANTERN_ID = AurorasLanterns.id("redstone_lantern");
-	public static final BlockItemId REDSTONE_LANTERN = BlockItemId.create(REDSTONE_LANTERN_ID, REDSTONE_LANTERN_ID);
 }

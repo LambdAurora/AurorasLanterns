@@ -24,12 +24,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ClientPacketListenerMixin {
 	@Inject(method = "lambda$handleBlockEntityData$0", at = @At("RETURN"))
 	private void auroraslanterns$handleBlockEntityData$handleChandelier(
-			ClientboundBlockEntityDataPacket packet, BlockEntity blockEntity,
+			ClientboundBlockEntityDataPacket clientboundBlockEntityDataPacket, BlockEntity blockEntity,
 			CallbackInfo ci
 	) {
 		if (blockEntity instanceof ChandelierBlockEntity chandelier) {
 			var pos = chandelier.getBlockPos();
-			Minecraft.getInstance().levelExtractor.setSectionDirty(
+			Minecraft.getInstance().levelRenderer.setSectionDirty(
 					SectionPos.blockToSectionCoord(pos.getX()),
 					SectionPos.blockToSectionCoord(pos.getY()),
 					SectionPos.blockToSectionCoord(pos.getZ())
