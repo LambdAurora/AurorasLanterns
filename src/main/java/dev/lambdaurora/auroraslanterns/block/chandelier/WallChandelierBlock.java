@@ -9,7 +9,6 @@
 
 package dev.lambdaurora.auroraslanterns.block.chandelier;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -34,15 +33,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-/**
- * Represents a wall-mounted chandelier block.
- *
- * @author LambdAurora
- * @version 2.0.0
- * @since 2.0.0
- */
+/// Represents a wall-mounted chandelier block.
+///
+/// @author LambdAurora
+/// @version 2.2.0
+/// @since 2.0.0
 public class WallChandelierBlock extends AbstractChandelierBlock {
-	public static final MapCodec<WallChandelierBlock> CODEC = makeCodec(WallChandelierBlock::new);
 	public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
 
 	private static final VoxelShape HOLDER_SHAPE = box(0.0, 0.0, 0.0, 16.0, 8.0, 16.0);
@@ -51,11 +47,6 @@ public class WallChandelierBlock extends AbstractChandelierBlock {
 		super(holders, properties);
 
 		this.registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH));
-	}
-
-	@Override
-	public MapCodec<? extends WallChandelierBlock> codec() {
-		return CODEC;
 	}
 
 	@Override

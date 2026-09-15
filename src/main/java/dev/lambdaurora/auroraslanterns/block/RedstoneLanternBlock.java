@@ -9,7 +9,6 @@
 
 package dev.lambdaurora.auroraslanterns.block;
 
-import com.mojang.serialization.MapCodec;
 import dev.lambdaurora.auroraslanterns.block.behavior.RedstoneLanternBehavior;
 import dev.lambdaurora.auroraslanterns.util.Utils;
 import net.minecraft.core.BlockPos;
@@ -26,18 +25,14 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.redstone.Orientation;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * Represents a redstone lantern block.
- *
- * @author LambdAurora
- * @version 1.2.0
- * @since 1.0.0
- */
+/// Represents a redstone lantern block.
+///
+/// @author LambdAurora
+/// @version 2.2.0
+/// @since 1.0.0
 public class RedstoneLanternBlock
 		extends LanternBlock
 		implements WallLanternBlock.Provider<RedstoneLanternBlock, RedstoneWallLanternBlock> {
-	public static final MapCodec<RedstoneLanternBlock> CODEC = simpleCodec(RedstoneLanternBlock::new);
-
 	private final RedstoneLanternBehavior behavior
 			= new RedstoneLanternBehavior(state -> state.getValue(HANGING) ? Direction.DOWN : Direction.UP);
 
@@ -45,12 +40,6 @@ public class RedstoneLanternBlock
 		super(properties);
 
 		this.registerDefaultState(this.defaultBlockState().setValue(RedstoneLanternBehavior.LIT, true));
-	}
-
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	@Override
-	public MapCodec<LanternBlock> codec() {
-		return (MapCodec) CODEC;
 	}
 
 	@Override

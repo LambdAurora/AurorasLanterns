@@ -12,24 +12,22 @@ package dev.lambdaurora.auroraslanterns.advancement;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.lambdaurora.auroraslanterns.AurorasLanternsRegistry;
-import net.minecraft.advancements.predicates.ContextAwarePredicate;
-import net.minecraft.advancements.predicates.entity.EntityPredicate;
 import net.minecraft.advancements.triggers.Criterion;
 import net.minecraft.advancements.triggers.SimpleCriterionTrigger;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 import java.util.Optional;
 
-/**
- * Represents the Wall Lantern player collision (aka bonk) advancement trigger.
- *
- * @author LambdAurora
- * @version 1.1.0
- * @since 1.0.1
- */
+/// Represents the Wall Lantern player collision (aka bonk) advancement trigger.
+///
+/// @author LambdAurora
+/// @version 2.2.0
+/// @since 1.0.1
 public class WallLanternBonkTrigger extends SimpleCriterionTrigger<WallLanternBonkTrigger.TriggerInstance> {
 	@Override
 	public Codec<TriggerInstance> codec() {
@@ -41,11 +39,11 @@ public class WallLanternBonkTrigger extends SimpleCriterionTrigger<WallLanternBo
 	}
 
 	public record TriggerInstance(
-			Optional<ContextAwarePredicate> player,
+			Optional<Holder<LootItemCondition>> player,
 			Optional<Block> block
 	) implements SimpleCriterionTrigger.SimpleInstance {
 		public static final Codec<TriggerInstance> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(TriggerInstance::player),
+				LootItemCondition.CODEC.optionalFieldOf("player").forGetter(TriggerInstance::player),
 				BuiltInRegistries.BLOCK.byNameCodec().optionalFieldOf("block").forGetter(TriggerInstance::block)
 		).apply(instance, TriggerInstance::new));
 
