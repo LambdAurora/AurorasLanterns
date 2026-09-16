@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "auroraslanterns:chandelier/copper"
+        "recipes": "auroraslanterns:chandelier/copper"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -2,24 +2,22 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "functions": [
+          "modifier": [
             {
-              "add": false,
-              "count": 3.0,
-              "function": "minecraft:set_count"
+              "type": "minecraft:set_count",
+              "count": 3
             },
             {
-              "function": "minecraft:explosion_decay"
+              "type": "minecraft:explosion_decay"
             }
           ],
           "name": "auroraslanterns:chandelier/copper"
         }
       ],
-      "rolls": 1.0
+      "rolls": 1
     }
   ]
 }

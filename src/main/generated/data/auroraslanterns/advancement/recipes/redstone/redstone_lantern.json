@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "auroraslanterns:redstone_lantern"
+        "recipes": "auroraslanterns:redstone_lantern"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
