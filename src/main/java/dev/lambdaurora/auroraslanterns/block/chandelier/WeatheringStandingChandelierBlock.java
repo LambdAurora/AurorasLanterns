@@ -11,13 +11,11 @@ package dev.lambdaurora.auroraslanterns.block.chandelier;
 
 import com.mojang.serialization.MapCodec;
 
-/**
- * Represents a weathering standing chandelier block.
- *
- * @author LambdAurora
- * @version 2.0.0
- * @since 2.0.0
- */
+/// Represents a weathering standing chandelier block.
+///
+/// @author LambdAurora
+/// @version 2.0.0
+/// @since 2.0.0
 public class WeatheringStandingChandelierBlock extends StandingChandelierBlock implements WeatheringChandelierBlock {
 	public static final MapCodec<WeatheringStandingChandelierBlock> CODEC = WeatheringChandelierBlock.makeCodec(WeatheringStandingChandelierBlock::new, propertiesCodec());
 

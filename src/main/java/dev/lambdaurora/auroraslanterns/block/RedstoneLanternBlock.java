@@ -26,13 +26,11 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.redstone.Orientation;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * Represents a redstone lantern block.
- *
- * @author LambdAurora
- * @version 1.2.0
- * @since 1.0.0
- */
+/// Represents a redstone lantern block.
+///
+/// @author LambdAurora
+/// @version 1.2.0
+/// @since 1.0.0
 public class RedstoneLanternBlock
 		extends LanternBlock
 		implements WallLanternBlock.Provider<RedstoneLanternBlock, RedstoneWallLanternBlock> {

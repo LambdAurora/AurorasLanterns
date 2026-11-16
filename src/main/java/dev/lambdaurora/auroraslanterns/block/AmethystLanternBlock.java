@@ -17,13 +17,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LanternBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * Represents an amethyst lantern block.
- *
- * @author LambdAurora
- * @version 1.1.0
- * @since 1.0.0
- */
+/// Represents an amethyst lantern block.
+///
+/// @author LambdAurora
+/// @version 1.1.0
+/// @since 1.0.0
 public class AmethystLanternBlock extends LanternBlock {
 	public static final MapCodec<AmethystLanternBlock> CODEC = simpleCodec(AmethystLanternBlock::new);
 

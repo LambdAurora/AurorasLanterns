@@ -60,13 +60,11 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-/**
- * Represents a chandelier block.
- *
- * @author LambdAurora
- * @version 2.0.0
- * @since 2.0.0
- */
+/// Represents a chandelier block.
+///
+/// @author LambdAurora
+/// @version 2.0.0
+/// @since 2.0.0
 public abstract class AbstractChandelierBlock extends Block
 		implements EntityBlock, SimpleWaterloggedBlock {
 	public static final IntegerProperty HOLDERS = IntegerProperty.create("holders", 1, 4);

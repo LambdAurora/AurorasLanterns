@@ -177,5 +177,10 @@
 
 - Updated Korean translations ([#8](https://github.com/LambdAurora/AurorasLanterns/pull/8)).
 
+## 2.2.0
+
+- Ported to Minecraft 26.3.
+- Updated [Yumi Minecraft Libraries: Foundation].
+
 [Yumi Minecraft Libraries: Foundation]: https://github.com/YumiProject/yumi-minecraft-foundation-library "Yumi Minecraft Foundation Library page"
 [Forgified Fabric API]: https://modrinth.com/mod/forgified-fabric-api

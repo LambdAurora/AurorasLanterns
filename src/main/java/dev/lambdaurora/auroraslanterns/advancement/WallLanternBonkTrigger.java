@@ -23,13 +23,11 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Optional;
 
-/**
- * Represents the Wall Lantern player collision (aka bonk) advancement trigger.
- *
- * @author LambdAurora
- * @version 1.1.0
- * @since 1.0.1
- */
+/// Represents the Wall Lantern player collision (aka bonk) advancement trigger.
+///
+/// @author LambdAurora
+/// @version 1.1.0
+/// @since 1.0.1
 public class WallLanternBonkTrigger extends SimpleCriterionTrigger<WallLanternBonkTrigger.TriggerInstance> {
 	@Override
 	public Codec<TriggerInstance> codec() {

@@ -29,7 +29,6 @@ import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 
 import java.util.concurrent.CompletableFuture;
@@ -73,7 +72,7 @@ public final class AurorasLanternsStaticDatagen implements DataGeneratorEntrypoi
 			consumer.accept(Advancement.Builder.advancement()
 					.parent(new AdvancementHolder(Identifier.withDefaultNamespace("adventure/root"), null))
 					.display(
-							Blocks.LANTERN,
+							Items.LANTERN,
 							Component.translatable(
 									"advancements.%s.adventure.wall_lantern_bonk.title".formatted(AurorasLanterns.NAMESPACE)
 							),
@@ -144,8 +143,8 @@ public final class AurorasLanternsStaticDatagen implements DataGeneratorEntrypoi
 			}
 
 			@Override
-			protected RecipeProvider createRecipeProvider(HolderLookup.Provider provider, RecipeOutput recipeOutput) {
-				return new AurorasRecipeProvider(provider, recipeOutput);
+			protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, RecipeOutput recipeOutput) {
+				return new AurorasRecipeProvider(registries, recipeOutput);
 			}
 
 			@Override

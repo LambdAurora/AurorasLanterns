@@ -28,13 +28,11 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import java.util.List;
 import java.util.stream.Stream;
 
-/**
- * Represents a standing chandelier block.
- *
- * @author LambdAurora
- * @version 2.0.0
- * @since 2.0.0
- */
+/// Represents a standing chandelier block.
+///
+/// @author LambdAurora
+/// @version 2.0.0
+/// @since 2.0.0
 public class StandingChandelierBlock extends AbstractChandelierBlock implements EntityBlock {
 	public static final MapCodec<StandingChandelierBlock> CODEC = makeCodec(StandingChandelierBlock::new);
 	public static final VoxelShape ONE_CANDLE_SHAPE = box(6.0, 0.0, 6.0, 10.0, 12.0, 10.0);

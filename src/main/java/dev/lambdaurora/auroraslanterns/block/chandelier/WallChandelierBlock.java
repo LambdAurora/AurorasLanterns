@@ -34,13 +34,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-/**
- * Represents a wall-mounted chandelier block.
- *
- * @author LambdAurora
- * @version 2.0.0
- * @since 2.0.0
- */
+/// Represents a wall-mounted chandelier block.
+///
+/// @author LambdAurora
+/// @version 2.0.0
+/// @since 2.0.0
 public class WallChandelierBlock extends AbstractChandelierBlock {
 	public static final MapCodec<WallChandelierBlock> CODEC = makeCodec(WallChandelierBlock::new);
 	public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;

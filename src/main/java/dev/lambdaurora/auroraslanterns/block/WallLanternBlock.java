@@ -66,14 +66,12 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
-/**
- * Represents a wall lantern.
- *
- * @param <L> the type of the underlying lantern
- * @author LambdAurora
- * @version 1.4.0
- * @since 1.0.0
- */
+/// Represents a wall lantern.
+///
+/// @param <L> the type of the underlying lantern
+/// @author LambdAurora
+/// @version 1.4.0
+/// @since 1.0.0
 @SuppressWarnings("deprecation")
 public class WallLanternBlock<L extends LanternBlock> extends BaseEntityBlock implements SimpleWaterloggedBlock {
 	public static final MapCodec<? extends WallLanternBlock<?>> CODEC = makeCodec(LanternBlock.class, WallLanternBlock::new);
