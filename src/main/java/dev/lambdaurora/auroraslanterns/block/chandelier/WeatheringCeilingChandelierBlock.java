@@ -10,11 +10,16 @@
 package dev.lambdaurora.auroraslanterns.block.chandelier;
 
 import com.mojang.serialization.MapCodec;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.block.WeatheringCopper;
+import net.minecraft.world.level.block.state.BlockState;
 
 /// Represents a weathering ceiling chandelier block.
 ///
 /// @author LambdAurora
-/// @version 2.0.0
+/// @version 2.2.1
 /// @since 2.0.0
 public class WeatheringCeilingChandelierBlock extends CeilingChandelierBlock implements WeatheringChandelierBlock {
 	public static final MapCodec<WeatheringCeilingChandelierBlock> CODEC = WeatheringChandelierBlock.makeCodec(WeatheringCeilingChandelierBlock::new, propertiesCodec());
@@ -29,6 +34,16 @@ public class WeatheringCeilingChandelierBlock extends CeilingChandelierBlock imp
 	@Override
 	public MapCodec<WeatheringCeilingChandelierBlock> codec() {
 		return CODEC;
+	}
+
+	@Override
+	public void randomTick(final BlockState state, final ServerLevel level, final BlockPos pos, final RandomSource random) {
+		this.changeOverTime(state, level, pos, random);
+	}
+
+	@Override
+	public boolean isRandomlyTicking(final BlockState state) {
+		return WeatheringCopper.getNext(state.getBlock()).isPresent();
 	}
 
 	@Override
