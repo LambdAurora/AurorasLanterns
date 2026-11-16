@@ -9,6 +9,8 @@
 
 package dev.lambdaurora.auroraslanterns.block.chandelier;
 
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.lambdaurora.auroraslanterns.AurorasLanternsRegistry;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 import net.minecraft.core.BlockPos;
@@ -19,6 +21,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.Util;
 import net.minecraft.world.InteractionHand;
@@ -60,7 +63,7 @@ import java.util.stream.Stream;
 /// Represents a chandelier block.
 ///
 /// @author LambdAurora
-/// @version 2.2.0
+/// @version 2.0.0
 /// @since 2.0.0
 public abstract class AbstractChandelierBlock extends Block
 		implements EntityBlock, SimpleWaterloggedBlock {
@@ -70,6 +73,16 @@ public abstract class AbstractChandelierBlock extends Block
 	public static final IntegerProperty TRIO_LIT_CANDLES = IntegerProperty.create("lit_candles", 0, 3);
 	public static final IntegerProperty QUAD_LIT_CANDLES = IntegerProperty.create("lit_candles", 0, 4);
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+
+	static <C extends AbstractChandelierBlock> MapCodec<C> makeCodec(Factory<C> instantiator) {
+		return RecordCodecBuilder.mapCodec(
+				instance -> instance.group(
+								ExtraCodecs.intRange(1, 4).fieldOf("holders").forGetter(AbstractChandelierBlock::holders),
+								propertiesCodec()
+						)
+						.apply(instance, instantiator::create)
+		);
+	}
 
 	private static final ThreadLocal<@Nullable Integer> HOLDERS_INIT = new ThreadLocal<>();
 
@@ -362,7 +375,7 @@ public abstract class AbstractChandelierBlock extends Block
 				.mapColor(mapColor)
 				.sound(soundType)
 				.noOcclusion()
-				.pushReaction(PushReaction.POPPED)
+				.pushReaction(PushReaction.DESTROY)
 				.lightLevel(state -> Math.clamp(3L * state.getValue(getLitCandlesProperty(holders)) + 2, 0, 15));
 	}
 

@@ -9,6 +9,7 @@
 
 package dev.lambdaurora.auroraslanterns.block;
 
+import com.mojang.serialization.MapCodec;
 import dev.lambdaurora.auroraslanterns.block.behavior.RedstoneLanternBehavior;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -22,10 +23,18 @@ import net.minecraft.world.level.redstone.Orientation;
 import org.jetbrains.annotations.Nullable;
 
 public class RedstoneWallLanternBlock extends WallLanternBlock<RedstoneLanternBlock> {
+	public static final MapCodec<? extends RedstoneWallLanternBlock> CODEC
+			= makeCodec(RedstoneLanternBlock.class, RedstoneWallLanternBlock::new);
+
 	private final RedstoneLanternBehavior behavior = new RedstoneLanternBehavior(state -> state.getValue(FACING));
 
 	public RedstoneWallLanternBlock(RedstoneLanternBlock lantern, Properties properties) {
 		super(lantern, properties);
+	}
+
+	@Override
+	protected MapCodec<? extends RedstoneWallLanternBlock> codec() {
+		return CODEC;
 	}
 
 	/* Updates */

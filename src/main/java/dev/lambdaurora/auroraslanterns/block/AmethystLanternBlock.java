@@ -9,6 +9,7 @@
 
 package dev.lambdaurora.auroraslanterns.block;
 
+import com.mojang.serialization.MapCodec;
 import dev.lambdaurora.auroraslanterns.AurorasLanternsRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
@@ -19,13 +20,21 @@ import net.minecraft.world.level.block.state.BlockState;
 /// Represents an amethyst lantern block.
 ///
 /// @author LambdAurora
-/// @version 2.2.0
+/// @version 1.1.0
 /// @since 1.0.0
 public class AmethystLanternBlock extends LanternBlock {
+	public static final MapCodec<AmethystLanternBlock> CODEC = simpleCodec(AmethystLanternBlock::new);
+
 	public static final int EFFECT_RADIUS = 32;
 
 	public AmethystLanternBlock(Properties properties) {
 		super(properties);
+	}
+
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	@Override
+	public MapCodec<LanternBlock> codec() {
+		return (MapCodec) CODEC;
 	}
 
 	/* Visual */

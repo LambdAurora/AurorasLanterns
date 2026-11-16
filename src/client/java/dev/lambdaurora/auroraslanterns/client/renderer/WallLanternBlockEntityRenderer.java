@@ -97,9 +97,9 @@ public class WallLanternBlockEntityRenderer
 
 		matrices.translate(8.f / 16.f, 12.f / 16.f, 8.f / 16.f);
 		if (roll != 0.f)
-			matrices.rotate(Axis.ZP.rotation(roll));
+			matrices.mulPose(Axis.ZP.rotation(roll));
 		if (pitch != 0.f)
-			matrices.rotate(Axis.XP.rotation(pitch));
+			matrices.mulPose(Axis.XP.rotation(pitch));
 
 		var facing = lantern.blockState.getValue(WallLanternBlock.FACING);
 		int lanternRotation = switch (facing) {
@@ -116,7 +116,7 @@ public class WallLanternBlockEntityRenderer
 				(-facing.getStepZ() * extension) / 16.f
 		);
 
-		matrices.rotate(Axis.YN.rotationDegrees(lanternRotation));
+		matrices.mulPose(Axis.YN.rotationDegrees(lanternRotation));
 
 		matrices.translate(-8.f / 16.f, -1.f / 16.f - lantern.size, -8.f / 16.f);
 

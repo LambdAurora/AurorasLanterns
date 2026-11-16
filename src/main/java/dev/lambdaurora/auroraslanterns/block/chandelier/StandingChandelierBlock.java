@@ -9,6 +9,7 @@
 
 package dev.lambdaurora.auroraslanterns.block.chandelier;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -30,9 +31,10 @@ import java.util.stream.Stream;
 /// Represents a standing chandelier block.
 ///
 /// @author LambdAurora
-/// @version 2.2.0
+/// @version 2.0.0
 /// @since 2.0.0
 public class StandingChandelierBlock extends AbstractChandelierBlock implements EntityBlock {
+	public static final MapCodec<StandingChandelierBlock> CODEC = makeCodec(StandingChandelierBlock::new);
 	public static final VoxelShape ONE_CANDLE_SHAPE = box(6.0, 0.0, 6.0, 10.0, 12.0, 10.0);
 	public static final VoxelShape TWO_CANDLE_SHAPE = box(2.0, 0.0, 6.0, 14.0, 12.0, 10.0);
 	public static final VoxelShape THREE_CANDLE_SHAPE = box(2.0, 0.0, 2.0, 14.0, 12.0, 14.0);
@@ -62,6 +64,11 @@ public class StandingChandelierBlock extends AbstractChandelierBlock implements 
 
 	public StandingChandelierBlock(int holders, Properties properties) {
 		super(holders, properties);
+	}
+
+	@Override
+	public MapCodec<? extends StandingChandelierBlock> codec() {
+		return CODEC;
 	}
 
 	@Override

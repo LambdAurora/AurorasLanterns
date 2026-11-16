@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipes": "auroraslanterns:amethyst_lantern"
+        "recipe": "auroraslanterns:amethyst_lantern"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -11,6 +11,9 @@ package dev.lambdaurora.auroraslanterns.block;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.lambdaurora.auroraslanterns.AurorasLanterns;
 import dev.lambdaurora.auroraslanterns.AurorasLanternsRegistry;
 import dev.lambdaurora.auroraslanterns.ExtensionType;
@@ -21,6 +24,7 @@ import dev.lambdaurora.auroraslanterns.mixin.BlockAccessor;
 import dev.lambdaurora.auroraslanterns.util.CustomStateBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -66,10 +70,31 @@ import java.util.Map;
 ///
 /// @param <L> the type of the underlying lantern
 /// @author LambdAurora
-/// @version 2.2.0
+/// @version 1.4.0
 /// @since 1.0.0
 @SuppressWarnings("deprecation")
 public class WallLanternBlock<L extends LanternBlock> extends BaseEntityBlock implements SimpleWaterloggedBlock {
+	public static final MapCodec<? extends WallLanternBlock<?>> CODEC = makeCodec(LanternBlock.class, WallLanternBlock::new);
+
+	static <L extends LanternBlock, W extends WallLanternBlock<? extends L>> MapCodec<W> makeCodec(
+			Class<L> lanternClass, Factory<L, W> instantiator
+	) {
+		return RecordCodecBuilder.mapCodec(
+				instance -> instance.group(
+								BuiltInRegistries.BLOCK.byNameCodec().fieldOf("lantern")
+										.flatXmap(
+												block -> lanternClass.isInstance(block)
+														? DataResult.success(lanternClass.cast(block))
+														: DataResult.error(() -> "Lantern must be of type LanternBlock"),
+												DataResult::success
+										)
+										.forGetter(lantern -> lantern.lanternBlock),
+								propertiesCodec()
+						)
+						.apply(instance, instantiator::create)
+		);
+	}
+
 	public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
 	public static final EnumProperty<ExtensionType> EXTENSION = EnumProperty.create("extension", ExtensionType.class);
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -107,6 +132,11 @@ public class WallLanternBlock<L extends LanternBlock> extends BaseEntityBlock im
 		}
 
 		this.animateTickBehavior = AnimateTickBehavior.lanternBehavior(lanternBlock);
+	}
+
+	@Override
+	protected MapCodec<? extends WallLanternBlock<?>> codec() {
+		return CODEC;
 	}
 
 	/**
@@ -440,7 +470,7 @@ public class WallLanternBlock<L extends LanternBlock> extends BaseEntityBlock im
 
 	public static Properties properties(Block lanternBlock) {
 		return Properties.ofFullCopy(lanternBlock)
-				.pushReaction(PushReaction.POPPED)
+				.pushReaction(PushReaction.DESTROY)
 				.overrideDescription(lanternBlock.getDescriptionId())
 				.overrideLootTable(lanternBlock.getLootTable());
 	}

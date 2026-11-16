@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipes": "auroraslanterns:chandelier/iron"
+        "recipe": "auroraslanterns:chandelier/iron"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

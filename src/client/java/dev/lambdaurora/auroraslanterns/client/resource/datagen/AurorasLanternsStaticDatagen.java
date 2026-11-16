@@ -24,13 +24,12 @@ import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementType;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
-import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
@@ -56,7 +55,7 @@ public final class AurorasLanternsStaticDatagen implements DataGeneratorEntrypoi
 			this.add(AurorasLanternsRegistry.REDSTONE_LANTERN_BLOCK, this::createSingleItemTable);
 
 			ChandelierBlocks.streamAll().flatMap(ChandelierBlocks::stream).forEach(block -> {
-				this.add(block, b -> this.createSingleItemTable(b, ContextIntProviders.exactly(block.holders())));
+				this.add(block, b -> this.createSingleItemTable(b, ConstantValue.exactly(block.holders())));
 			});
 		}
 	}
@@ -80,6 +79,7 @@ public final class AurorasLanternsStaticDatagen implements DataGeneratorEntrypoi
 							Component.translatable(
 									"advancements.%s.adventure.wall_lantern_bonk.description".formatted(AurorasLanterns.NAMESPACE)
 							),
+							null,
 							AdvancementType.TASK,
 							true,
 							true,
@@ -92,8 +92,8 @@ public final class AurorasLanternsStaticDatagen implements DataGeneratorEntrypoi
 	}
 
 	private static class AurorasRecipeProvider extends RecipeProvider {
-		public AurorasRecipeProvider(final BootstrapContext<Recipe<?>> recipeOutput, final BootstrapContext<Advancement> advancementOutput) {
-			super(recipeOutput, advancementOutput);
+		public AurorasRecipeProvider(HolderLookup.Provider provider, RecipeOutput recipeOutput) {
+			super(provider, recipeOutput);
 		}
 
 		@Override
@@ -143,8 +143,8 @@ public final class AurorasLanternsStaticDatagen implements DataGeneratorEntrypoi
 			}
 
 			@Override
-			protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, BootstrapContext<Recipe<?>> recipes, BootstrapContext<Advancement> advancements) {
-				return new AurorasRecipeProvider(recipes, advancements);
+			protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, RecipeOutput recipeOutput) {
+				return new AurorasRecipeProvider(registries, recipeOutput);
 			}
 
 			@Override

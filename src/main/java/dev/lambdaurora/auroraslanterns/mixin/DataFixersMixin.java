@@ -17,7 +17,7 @@ import dev.lambdaurora.auroraslanterns.AurorasLanternsRegistry;
 import dev.lambdaurora.auroraslanterns.compat.AurorasDecoDataUpper;
 import net.minecraft.util.datafix.DataFixers;
 import net.minecraft.util.datafix.fixes.BlockEntityRenameFix;
-import net.minecraft.util.datafix.fixes.LegacyBlockRenameFix;
+import net.minecraft.util.datafix.fixes.BlockRenameFix;
 import net.minecraft.util.datafix.schemas.NamespacedSchema;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -52,7 +52,7 @@ public class DataFixersMixin {
 						return oldName;
 					}
 			));
-			builder.addFixer(LegacyBlockRenameFix.create(schema, "Rename Aurora's Decorations chandeliers to candles.",
+			builder.addFixer(BlockRenameFix.create(schema, "Rename Aurora's Decorations chandeliers to candles.",
 					oldName -> {
 						var name = NamespacedSchema.ensureNamespaced(oldName);
 

@@ -5,19 +5,19 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "modifier": [
+          "functions": [
             {
-              "type": "minecraft:set_count",
-              "count": 1
+              "count": 1.0,
+              "function": "minecraft:set_count"
             },
             {
-              "type": "minecraft:explosion_decay"
+              "function": "minecraft:explosion_decay"
             }
           ],
           "name": "auroraslanterns:chandelier/waxed_exposed_copper"
         }
       ],
-      "rolls": 1
+      "rolls": 1.0
     }
   ]
 }
